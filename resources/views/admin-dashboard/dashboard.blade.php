@@ -1,4 +1,4 @@
-@include('header')
+@include('main.header')
 <!--MAIN AREA -->
 <h1>THIS IS DASHBOARD</h1>
-@include('footer')
+@include('main.footer')

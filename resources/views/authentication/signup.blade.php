@@ -10,9 +10,23 @@
 @else
     <div class="signup-style">
         <h2>Sign Up</h2>
+
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <form action="/signup" method="POST"> @csrf
-            <input name="name" type="text" placeholder="name"><br> <input name="email" type="text"
-                placeholder="email"><br> <input name="password" type="password" placeholder="password"><br>
+            <input name="first_name" type="text" placeholder="First Name" value="{{ old('first_name') }}"><br>
+            <input name="last_name" type="text" placeholder="Last Name" value="{{ old('last_name') }}"><br>
+            <input name="email" type="text" placeholder="email" value="{{ old('email') }}"><br>
+            <input name="password" type="password" placeholder="password"><br>
+            <!-- Add a confirm password field -->
             <button>Sign Up</button>
         </form>
     </div>

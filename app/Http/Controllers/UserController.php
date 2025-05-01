@@ -12,7 +12,8 @@ class UserController extends Controller
     {
         //Get data sent from HTML form
         $incomingFields = $request->validate([
-            'name' => ['required', 'min:3', 'max:255'],
+            'first_name' => ['required', 'min:2', 'max:30'],
+            'last_name' => ['required', 'min:2', 'max:30'],
             'email' => ['required', 'email', Rule::unique('users', 'email')],
             'password' => ['required', 'min:3', 'max:200']
         ]);
@@ -40,7 +41,7 @@ class UserController extends Controller
         }
 
         //Check if login user is admin or normal user
-        if (auth()->user()->role == 'admin') {
+        if (auth()->user()->role == 'Admin') {
             return redirect('/dashboard');
         } else {
             return redirect('/signup'); //redirect back to signup page.
