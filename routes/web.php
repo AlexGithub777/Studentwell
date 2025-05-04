@@ -124,9 +124,10 @@ Route::get('/support-resources', function () {
 
 // Forum Routes
 Route::get('/forum', function (Request $request) {
-    $posts = Post::all();//Query all posts from "posts" table and assign to $posts variable
+    //$posts = Post::all();//Query all posts from "posts" table and assign to $posts variable
     //pass the data $posts & $keywords to VIEW
-    return view('forum.forum', ['posts' => $posts]);
+    //return view('forum.forum', ['posts' => $posts]);
+    return view('forum.forum');
 });
 
 Route::get('/forum/{id}', function ($id) {

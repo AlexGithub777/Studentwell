@@ -1,12 +1,15 @@
-/* CSS variables for colors */
 :root {
     --main-colour: #d3ffd1;
     --secondary-colour: #1e1e76;
-    --highlight-colour: #ff6347;
+    --highlight-colour: #f0f0f0;
     --text-colour-light: #ffffff;
+    --background-colour: #f8f9fa;
 }
 
-/* Header bar */
+body {
+    font-family: "Inter", sans-serif;
+}
+
 .main-header {
     background-color: var(--main-colour);
     display: flex;
@@ -14,17 +17,15 @@
     padding: 10px 15px;
     position: relative;
     z-index: 100;
-    height: 60px; /* height of header */
+    height: 60px;
 }
 
-/* Center the brand/logo */
 .navbar-brand-container {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
 }
 
-/* Navbar Brand / Logo */
 .navbar-brand {
     color: var(--secondary-colour);
     font-weight: 700;
@@ -32,7 +33,6 @@
     text-decoration: none;
 }
 
-/* Hamburger Toggle Button */
 .navbar-toggler {
     border: none;
     font-size: 1.5rem;
@@ -41,6 +41,7 @@
     padding: 0.25rem 0.75rem;
     border-radius: 0.25rem;
     cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .navbar-toggler:focus {
@@ -49,61 +50,60 @@
 }
 
 .navbar-toggler-placeholder {
-    width: 42px; /* Match width of hamburger button */
+    width: 42px;
 }
 
-/* Always fixed sidebar */
 .sidebar {
-    position: fixed;
-    top: 60px; /* height of header */
+    position: absolute;
+    top: 60px;
     left: 0;
     width: 400px;
     height: calc(100% - 60px);
     background-color: var(--text-colour-light);
     overflow-y: auto;
-    display: none; /* hidden by default */
     border: 1px solid var(--secondary-colour);
+
+    transform: translateX(-100%);
+    transition: transform 0.2s ease;
 }
 
-/* Show when toggled */
 .sidebar.show {
-    display: block;
+    transform: translateX(0);
 }
 
 #sidebar-close-btn {
     color: var(--secondary-colour);
 }
 
-/* Show sidebar on larger screens, hide on smaller screens */
 @media (min-width: 768px) {
     .sidebar.collapse {
         display: block;
+        transform: translateX(0);
+        opacity: 1;
     }
 }
 
-/* Navigation Links */
 .sidebar .nav-link {
     color: var(--secondary-colour);
+    border-color: var(--highlight-colour);
     padding: 0.75rem 1rem;
     font-size: 1.3rem;
     display: flex;
     align-items: center;
+    transition: background-color 0.2s ease;
 }
 
 .sidebar .nav-link:hover {
-    background-color: var(--hover-bg);
-    border-left: 3px solid var(--highlight-colour);
-    color: var(--highlight-colour);
-}
-
-.sidebar .nav-link.active {
-    background-color: var(--text-colour-light);
+    background-color: var(--highlight-colour);
     border-left: 3px solid var(--secondary-colour);
     color: var(--secondary-colour);
-    font-weight: 600;
 }
 
-/* Icons in sidebar */
+.nav-link.active {
+    background-color: var(--highlight-colour);
+    border-left: 3px solid var(--secondary-colour);
+}
+
 .sidebar .nav-link i {
     margin-right: 10px;
     width: 24px;
@@ -111,51 +111,30 @@
     font-size: 1.2rem;
 }
 
-/* Main content area */
 .content-area {
     padding: 1rem;
 }
 
-/* Mobile responsive adjustments */
 @media (max-width: 767.98px) {
     .sidebar {
-        position: fixed;
-        top: 60px; /* Match header height */
-        left: 0;
         width: 80%;
-        height: calc(100% - 60px);
         z-index: 1000;
-        overflow-y: auto;
         box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
     }
 
-    /* Make sure the sidebar is hidden by default on mobile */
     .sidebar.collapse:not(.show) {
         display: none;
     }
 
-    /* Ensure main content takes full width on mobile */
     .col-md-9.ms-sm-auto.col-lg-10 {
         width: 100%;
         margin-left: 0 !important;
     }
 }
-
 /* Footer */
-
-footer {
-    height: 10vh;
-    background: cyan;
-    /*Centralize the content inside this element both vertically and horizontally*/
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-footer p {
-    font-size: 1.3em;
-    font-weight: bold;
-    color: blue;
-    text-align: center;
+#footer {
+    background-color: var(--main-colour);
+    color: var(--secondary-colour);
 }
 
 .alert {
@@ -172,7 +151,63 @@ footer p {
 }
 
 .alert ul {
-    margin-top: 0;
-    margin-bottom: 0;
+    margin: 0;
     padding-left: 20px;
+}
+
+/* Homepage */
+.wellness-section {
+    padding: 4rem 1rem;
+    background-color: var(--background-colour);
+    text-align: center;
+}
+
+.wellness-section h1 {
+    color: var(--secondary-colour);
+    font-weight: 700;
+}
+
+#home-subtite {
+    color: var(--secondary-colour);
+    font-weight: 500;
+    margin-bottom: 2rem;
+}
+
+.wellness-section .feature-box {
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease;
+}
+
+.wellness-section .feature-box:hover {
+    transform: translateY(-5px);
+    cursor: pointer;
+}
+
+.wellness-section .icon-circle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--main-colour);
+    color: var(--secondary-colour);
+    border-radius: 50%;
+    width: 64px;
+    height: 64px;
+    font-size: 28px;
+    margin-bottom: 1rem;
+}
+
+.wellness-section .feature-title {
+    font-weight: bold;
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: var(--secondary-colour);
+    margin-top: 0.5rem;
+}
+
+.wellness-section .feature-desc {
+    color: var(--secondary-colour);
+    font-size: 1rem;
 }
