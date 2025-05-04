@@ -51,6 +51,6 @@ class UserController extends Controller
     public function logout()
     {
         auth()->logout();
-        return redirect('/signup'); //Redirect back to signup page.
+        return redirect('/'); //Redirect back to home page
     }
 }
