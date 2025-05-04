@@ -19,26 +19,28 @@
             </div>
 
             <!-- Right column -->
-            <div class="col-md-4 mb-3">
-                <h6 class="fw-bold">Links:</h6>
-                <ul class="list-unstyled">
-                    <li><a href="/" class="text-decoration-none" style="color: var(--secondary-colour);">Home</a>
-                    </li>
-                    <li><a href="/mood" class="text-decoration-none" style="color: var(--secondary-colour);">Mood
-                            Tracking</a></li>
-                    <li><a href="/exercise" class="text-decoration-none"
-                            style="color: var(--secondary-colour);">Exercise Planning & Logging</a></li>
-                    <li><a href="/sleep" class="text-decoration-none" style="color: var(--secondary-colour);">Sleep
-                            Logging</a></li>
-                    <li><a href="/goals" class="text-decoration-none" style="color: var(--secondary-colour);">Goal
-                            Setting</a></li>
-                    <li><a href="/insights" class="text-decoration-none" style="color: var(--secondary-colour);">Health
-                            Insights</a></li>
-                    <li><a href="/resources" class="text-decoration-none"
-                            style="color: var(--secondary-colour);">Support Resources</a></li>
-                    <li><a href="/forum" class="text-decoration-none" style="color: var(--secondary-colour);">Forum</a>
-                    </li>
-                </ul>
+            <div class="col-md-4 mb-3 d-flex justify-content-md-end justify-content-start">
+                <div class="text-start">
+                    <h6 class="fw-bold">Links:</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="/" class="text-decoration-none"
+                                style="color: var(--secondary-colour);">Home</a></li>
+                        <li><a href="/mood" class="text-decoration-none" style="color: var(--secondary-colour);">Mood
+                                Tracking</a></li>
+                        <li><a href="/exercise" class="text-decoration-none"
+                                style="color: var(--secondary-colour);">Exercise Planning & Logging</a></li>
+                        <li><a href="/sleep" class="text-decoration-none" style="color: var(--secondary-colour);">Sleep
+                                Logging</a></li>
+                        <li><a href="/goals" class="text-decoration-none" style="color: var(--secondary-colour);">Goal
+                                Setting</a></li>
+                        <li><a href="/insights" class="text-decoration-none"
+                                style="color: var(--secondary-colour);">Health Insights</a></li>
+                        <li><a href="/resources" class="text-decoration-none"
+                                style="color: var(--secondary-colour);">Support Resources</a></li>
+                        <li><a href="/forum" class="text-decoration-none"
+                                style="color: var(--secondary-colour);">Forum</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
 
