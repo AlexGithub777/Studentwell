@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ForumController;
 
 // Home Routes
 
@@ -123,17 +124,12 @@ Route::get('/support-resources', function () {
 });
 
 // Forum Routes
-Route::get('/forum', function (Request $request) {
-    //$posts = Post::all();//Query all posts from "posts" table and assign to $posts variable
-    //pass the data $posts & $keywords to VIEW
-    //return view('forum.forum', ['posts' => $posts]);
-    return view('forum.forum');
-});
-
-Route::get('/forum/{id}', function ($id) {
-    return view('forum.post-details', ['id' => $id]);
-});
-
-Route::get('/forum/create', function () {
-    return view('forum.create-post');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/forum', [ForumController::class, 'index'])->name('forum.index');
+    Route::get('/forum/create', [ForumController::class, 'create'])->name('forum.create');
+    Route::post('/forum', [ForumController::class, 'store'])->name('forum.store');
+    Route::get('/forum/{id}', [ForumController::class, 'show'])->name('forum.show');
+    Route::post('/forum/{id}/reply', [ForumController::class, 'reply'])->name('forum.reply');
+    Route::post('/forum/{id}/like', [ForumController::class, 'likePost'])->name('forum.like.post');
+    Route::post('/reply/{id}/like', [ForumController::class, 'likeReply'])->name('forum.like.reply');
 });

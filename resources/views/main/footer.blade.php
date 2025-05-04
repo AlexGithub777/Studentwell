@@ -33,9 +33,9 @@
                                 Logging</a></li>
                         <li><a href="/goals" class="text-decoration-none" style="color: var(--secondary-colour);">Goal
                                 Setting</a></li>
-                        <li><a href="/insights" class="text-decoration-none"
+                        <li><a href="/health-insights" class="text-decoration-none"
                                 style="color: var(--secondary-colour);">Health Insights</a></li>
-                        <li><a href="/resources" class="text-decoration-none"
+                        <li><a href="/support-resources" class="text-decoration-none"
                                 style="color: var(--secondary-colour);">Support Resources</a></li>
                         <li><a href="/forum" class="text-decoration-none"
                                 style="color: var(--secondary-colour);">Forum</a></li>
