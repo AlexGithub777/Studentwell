@@ -73,7 +73,7 @@ class UserController extends Controller
             // Check user role safely
             $user = auth()->user();
             if ($user && $user->role == 'Admin') {
-                return redirect('/dashboard');
+                return redirect('/admin');
             } else {
                 // Redirect to /home with success message
                 return redirect('/home')->with('success', 'Logged in successfully!');

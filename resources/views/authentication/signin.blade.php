@@ -10,16 +10,13 @@
     <div class="signin-page-bg">
         {{-- Check if user is already authenticated --}}
         @auth
-            {{-- If logged in, maybe show a message and redirect or offer logout --}}
-            {{-- This part might be better handled by middleware redirecting away from login page --}}
+            {{-- If logged in, show a message and a logout button --}}
             <div class="text-center" style="color: var(--secondary-colour);">
                 <p>You are already logged in.</p>
                 <form action="/logout" method="POST" class="d-inline">
                     @csrf
                     <button type="submit" class="btn btn-logout">Log out</button>
                 </form>
-                {{-- Optional: Add a link to the dashboard --}}
-                {{-- <a href="/dashboard" class="btn btn-link" style="color: var(--secondary-colour);">Go to Dashboard</a> --}}
             </div>
         @else
             {{-- If not logged in, show the Sign In form --}}

@@ -5,6 +5,10 @@
     --text-colour-light: #ffffff;
     --background-colour: #f8f9fa;
 }
+html {
+    scroll-behavior: smooth;
+    background-color: var(--main-colour);
+}
 
 body {
     font-family: "Inter", sans-serif;

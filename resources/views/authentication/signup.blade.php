@@ -19,7 +19,6 @@
                     @csrf
                     <button type="submit" class="btn btn-logout">Log out</button>
                 </form>
-                {{-- <a href="/dashboard" class="btn btn-link" style="color: var(--secondary-colour);">Go to Dashboard</a> --}}
             </div>
         @else
             <div class="signup-card-wrapper">

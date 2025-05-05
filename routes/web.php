@@ -41,7 +41,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/account/delete', [UserController::class, 'deleteAccount'])->name('account.delete');
 
     // Admin Routes
-    Route::get('/dashboard', function () {
+    Route::get('/admin', function () {
         return view('admin-dashboard.dashboard');
     });
 
