@@ -67,7 +67,7 @@
                     </div>
 
                     <div class="col-12 text-end mt-4">
-                        <button type="submit" class="btn publish-btn px-4 py-2">
+                        <button type="submit" class="btn publish-btn">
                             Publish Post
                         </button>
                     </div>

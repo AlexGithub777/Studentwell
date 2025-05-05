@@ -31,7 +31,6 @@
                 <button>Sign Up</button>
             </form>
         </div>
-
     @endauth
 </div>
 @include('main.footer')

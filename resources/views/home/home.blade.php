@@ -4,6 +4,11 @@
     document.title = "StudentWell | Home";
 </script>
 <div class="content-area m-0 p-0">
+    @if (session('success'))
+        <div class="alert alert-success" id="alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
     <!-- BODY SECTION -->
     <section class="wellness-section">
         <div class="container">
@@ -78,4 +83,15 @@
         </div>
     </section>
 </div>
+<script>
+    setTimeout(() => {
+        const alert = document.getElementById('alert-success');
+        if (alert) {
+            alert.style.transition = 'opacity 0.5s ease-out';
+            alert.style.opacity = '0';
+            setTimeout(() => alert.remove(), 500); // fully remove after fade out
+        }
+    }, 10000); // 10000 ms = 10 seconds
+</script>
+
 @include('main.footer')

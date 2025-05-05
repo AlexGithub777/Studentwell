@@ -93,7 +93,7 @@
     <h4 class="mb-3 h5 fw-bold" style="color: var(--secondary-colour);">
         Add Your Reply
     </h4>
-    <form method="POST" class="forum-post-card forum-reply-form pb-4"
+    <form method="POST" class="forum-post-card forum-reply-form pb-3"
         action="{{ route('forum.reply', $post->ForumPostID) }}">
         @csrf
         <div class="mb-3">
@@ -104,7 +104,7 @@
             @enderror
         </div>
 
-        <div class="text-end"> <button type="submit" class="btn btn-submit-reply me-4">
+        <div class="text-end"> <button type="submit" class="btn btn-submit-reply me-3">
                 Post Reply
             </button>
         </div>

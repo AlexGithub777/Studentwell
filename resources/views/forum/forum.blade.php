@@ -13,7 +13,7 @@
                 </div>
                 <a href="{{ route('forum.create') }}" class="btn text-white"
                     style="background-color: var(--secondary-colour);">
-                    <i class="fas fa-plus me-1"></i> New Post
+                    <i class="fas fa-plus me-1 fw-bold"></i> New Post
                 </a>
             </div>
         </div>
@@ -62,7 +62,7 @@
                                 {{ $post->PostCategory }}
                             </span>
                             <a href="{{ route('forum.show', $post->ForumPostID) }}" class="btn btn-sm"
-                                style="background-color: var(--secondary-colour); color: white;">
+                                style="background-color: var(--secondary-colour); color: white; font-weight: bold;">
                                 View Post
                             </a>
                         </div>
