@@ -22,7 +22,7 @@
         <div class="row row-cols-1 row-cols-md-2 g-4">
             @foreach ($posts as $post)
                 <div class="col">
-                    <div class="forum-card border-0 shadow-sm h-100"
+                    <div class="forum-card h-100"
                         style="background-color: var(--main-colour); color: var(--secondary-colour); padding: 1.5rem; border-radius: 1rem;">
 
                         <div class="d-flex align-items-center mb-2">
