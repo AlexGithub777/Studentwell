@@ -316,6 +316,17 @@ body {
     color: var(--secondary-colour);
 }
 
+/* Account sttyles */
+#accountfirst_name,
+#accountlast_name,
+#accountemail,
+#newpassword,
+#newpassword_confirmation {
+    background-color: var(--main-colour);
+    border: 1px solid var(--secondary-colour);
+    color: var(--secondary-colour);
+}
+
 /* Homepage */
 .wellness-section {
     padding: 4rem 1rem;

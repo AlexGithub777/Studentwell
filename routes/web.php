@@ -34,9 +34,11 @@ Route::post('/signin', [UserController::class, 'signin'])-> name('login');
 Route::middleware(['auth'])->group(function () {
 
     // Account Routes
-    Route::get('/account', function () {
-        return view('authentication.account');
-    });
+    Route::get('/account', [UserController::class, 'showAccount'])->name('account.show');
+
+    Route::post('/account/edit', [UserController::class, 'editAccount'])->name('account.edit');
+
+    Route::post('/account/delete', [UserController::class, 'deleteAccount'])->name('account.delete');
 
     // Admin Routes
     Route::get('/dashboard', function () {
