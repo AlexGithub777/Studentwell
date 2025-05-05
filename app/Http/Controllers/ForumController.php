@@ -102,8 +102,27 @@ public function likePost($id)
     public function likeReply($id)
     {
         $reply = ForumReply::findOrFail($id);
-        $reply->ReplyLikes += 1;
-        $reply->save();
+
+        // Track liked replies in session
+        $likedReplies = session()->get('liked_replies', []);
+
+
+        // Check if the reply is already liked
+        if (in_array($id, $likedReplies)) {
+            // If already liked, unlike (decrement ReplyLikes and remove from session)
+            $reply->ReplyLikes -= 1;  // Decrement the ReplyLikes field
+            $likedReplies = array_diff($likedReplies, [$id]); // Remove the reply from the liked array
+        } else {
+            // If not liked, like the reply (increment ReplyLikes and add to session)
+            $reply->ReplyLikes += 1;  // Increment the ReplyLikes field
+            $likedReplies[] = $id;  // Add the reply to the liked array
+        }
+
+        // Manually save the ReplyLikes and explicitly prevent timestamp update
+        $reply->save(['timestamps' => false]);
+
+        // Update the session
+        session(['liked_replies' => $likedReplies]);
 
         return redirect()->back();
     }
