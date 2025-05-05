@@ -418,7 +418,7 @@ body {
 
 .unliked {
     color: var(--secondary-colour);
-    font-size: 16px;
+    border: none;
 }
 
 /* Essential custom styling */

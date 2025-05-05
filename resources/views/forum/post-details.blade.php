@@ -33,14 +33,14 @@
                 <div class="d-flex justify-content-start gap-3 mt-2 mb-2 align-items-center"
                     style="color: var(--secondary-colour);">
                     @php
-                        $liked = session('liked_posts', []);
-                        $isLiked = in_array($post->ForumPostID, $liked);
+                        $isLiked = auth()->check() ? $post->isLikedByUser(auth()->user()) : false;
                     @endphp
 
-                    <form method="POST" action="{{ route('forum.like.post', $post->ForumPostID) }}" class="d-inline">
+                    <form method="POST" class="m-0 p-0" action="{{ route('forum.like.post', $post->ForumPostID) }}"
+                        class="d-inline">
                         @csrf
-                        <button type="submit" class="btn btn-sm {{ $isLiked ? 'liked' : 'unliked' }}">
-                            <i class="like-icon fa fa-thumbs-up"></i> {{ $post->PostLikes }}
+                        <button type="submit" class="btn {{ $isLiked ? 'liked btn-sm' : 'unliked ps-2 pe-2 py-1' }}">
+                            <i class="fa fa-thumbs-up"></i> {{ $post->likes()->count() }}
                         </button>
                     </form>
                     <div><i class="fa fa-comment"></i> {{ $post->replies->count() }}</div>
@@ -70,16 +70,17 @@
                         <p class="forum-content">{{ $reply->Content }}</p>
 
                         @php
-                            $likedReplies = session('liked_replies', []);
-                            $replyLiked = in_array($reply->ReplyID, $likedReplies);
+                            $replyLiked = auth()->check() ? $reply->isLikedByUser(auth()->user()) : false;
+
                         @endphp
 
                         <div class="reply-actions">
                             <form method="POST" action="{{ route('forum.like.reply', $reply->ReplyID) }}"
                                 class="d-inline">
                                 @csrf
-                                <button type="submit" class="btn btn-sm {{ $replyLiked ? 'liked' : 'unliked' }}">
-                                    <i class="fa fa-thumbs-up"></i> {{ $reply->ReplyLikes }}
+                                <button type="submit"
+                                    class="btn {{ $replyLiked ? 'liked btn-sm' : 'unliked ps-2 pe-2 py-1' }}">
+                                    <i class="fa fa-thumbs-up"></i> {{ $reply->likes()->count() }}
                                 </button>
                             </form>
                         </div>

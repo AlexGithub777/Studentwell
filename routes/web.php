@@ -127,9 +127,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/forum', [ForumController::class, 'index'])->name('forum.index');
     Route::get('/forum/create', [ForumController::class, 'create'])->name('forum.create');
     Route::post('/forum', [ForumController::class, 'store'])->name('forum.store');
-    Route::get('/forum/{id}', [ForumController::class, 'show'])->name('forum.show');
-    Route::post('/forum/{id}/reply', [ForumController::class, 'reply'])->name('forum.reply');
-    Route::post('/forum/{id}/like', [ForumController::class, 'likePost'])->name('forum.like.post');
-    Route::post('/reply/{id}/like', [ForumController::class, 'likeReply'])->name('forum.like.reply');
-
+    Route::get('/forum/post/{id}', [ForumController::class, 'show'])->name('forum.show');
+    Route::post('/forum/post/{id}/reply', [ForumController::class, 'reply'])->name('forum.reply');
+    Route::post('/forum/post/{forum_post}/like', [ForumController::class, 'likePost'])->name('forum.like.post');
+    Route::post('/forum/reply/{forum_reply}/like', [ForumController::class, 'likeReply'])->name('forum.like.reply');
 });

@@ -21,11 +21,12 @@ class ForumPost extends Model
     ];
     
 
-    protected $table = 'Forum_Posts';
+    protected $table = 'forum_posts';
     protected $primaryKey = 'ForumPostID';
 
     protected $fillable = [
         'UserID', // This still uses UserID in the Forum_Posts table
+        'ForumPostID', // This is the primary key
         'PostTitle',
         'PostCategory',
         'Content',
@@ -36,10 +37,26 @@ class ForumPost extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'UserID', 'id');
+        //                               ^ foreign key in forum_posts table
+        //                                         ^ local key in users table (likely 'id')
     }
 
     public function replies()
     {
         return $this->hasMany(ForumReply::class, 'PostID', 'ForumPostID');
+        //                                     ^ foreign key in 'forum_replies'
+        //                                                      ^ local key in 'forum_posts'
+    }
+
+    public function likes()
+    {
+        return $this->hasMany(Like::class, 'forum_post_id', 'ForumPostID');
+        //                                 ^ foreign key in 'likes'
+        //                                              ^ local key in 'forum_posts'
+    }
+
+    public function isLikedByUser(User $user)
+    {
+        return $this->likes()->where('user_id', $user->id)->exists();
     }
 }

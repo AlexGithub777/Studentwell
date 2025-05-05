@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\ForumPost;
 use App\Models\ForumReply;
+use App\Models\Like;
+use App\Models\ReplyLike;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -66,64 +68,57 @@ class ForumController extends Controller
         return redirect()->back()->with('success', 'Reply added successfully!');
     }
 
-    // Like or unlike a post
-// Like or unlike a post
-public function likePost($id)
-{
-    $post = ForumPost::findOrFail($id);
-
-    // Track liked posts in session
-    $liked = session()->get('liked_posts', []);
-
-    // Check if the post is already liked
-    if (in_array($id, $liked)) {
-        // If already liked, unlike (decrement PostLikes and remove from session)
-        $post->PostLikes -= 1;  // Decrement the PostLikes field
-        $liked = array_diff($liked, [$id]); // Remove the post from the liked array
-    } else {
-        // If not liked, like the post (increment PostLikes and add to session)
-        $post->PostLikes += 1;  // Increment the PostLikes field
-        $liked[] = $id;  // Add the post to the liked array
-    }
-
-    // Manually save the PostLikes and explicitly prevent timestamp update
-    $post->save(['timestamps' => false]);
-
-    // Update the session
-    session(['liked_posts' => $liked]);
-
-    return redirect()->back();
-}
-
-
-
-
-    // Like a reply
-    public function likeReply($id)
+    public function likePost(ForumPost $forum_post) // Change the parameter name to match the route
     {
-        $reply = ForumReply::findOrFail($id);
+        $user = Auth::user();
 
-        // Track liked replies in session
-        $likedReplies = session()->get('liked_replies', []);
+        \Log::info('Attempting to like post with ID (from route model binding): ' . $forum_post->ForumPostID . ' by user ID: ' . $user->id);
 
-
-        // Check if the reply is already liked
-        if (in_array($id, $likedReplies)) {
-            // If already liked, unlike (decrement ReplyLikes and remove from session)
-            $reply->ReplyLikes -= 1;  // Decrement the ReplyLikes field
-            $likedReplies = array_diff($likedReplies, [$id]); // Remove the reply from the liked array
+        if ($forum_post->isLikedByUser($user)) {
+            \Log::info('User already liked this post. Attempting to unlike.');
+            $deleted = $forum_post->likes()->where('user_id', $user->id)->delete();
+            \Log::info('Unliked status: ' . ($deleted ? 'Success' : 'Failed'));
         } else {
-            // If not liked, like the reply (increment ReplyLikes and add to session)
-            $reply->ReplyLikes += 1;  // Increment the ReplyLikes field
-            $likedReplies[] = $id;  // Add the reply to the liked array
+            \Log::info('User has not liked this post. Attempting to like.');
+            $like = new Like();
+            $like->user_id = $user->id;
+            $like->forum_post_id = $forum_post->ForumPostID;
+            try {
+                $saved = $like->save();
+                \Log::info('Like saved successfully: ' . ($saved ? 'Yes' : 'No'));
+                if (!$saved) {
+                    \Log::error('Error saving like');
+                }
+            } catch (\Exception $e) {
+                \Log::error('Exception during like save: ' . $e->getMessage());
+            }
         }
 
-        // Manually save the ReplyLikes and explicitly prevent timestamp update
-        $reply->save(['timestamps' => false]);
+        return back();
+    }
 
-        // Update the session
-        session(['liked_replies' => $likedReplies]);
+    public function likeReply(ForumReply $forum_reply)
+    {
+        $user = Auth::user();
 
-        return redirect()->back();
+        \Log::info('Attempting to like reply with ID: ' . $forum_reply->ReplyID . ' by user ID: ' . $user->id);
+
+        if ($forum_reply->isLikedByUser($user)) {
+            \Log::info('User already liked this reply. Attempting to unlike.');
+            $deleted = $forum_reply->likes()->where('user_id', $user->id)->delete();
+            \Log::info('Unliked status: ' . ($deleted ? 'Success' : 'Failed'));
+        } else {
+            \Log::info('User has not liked this reply. Attempting to like.');
+            $like = new ReplyLike();
+            $like->user_id = $user->id;
+            $like->forum_reply_id = $forum_reply->ReplyID;
+            $saved = $like->save();
+            \Log::info('Like saved successfully: ' . ($saved ? 'Yes' : 'No'));
+            if (!$saved) {
+                \Log::error('Error saving reply like');
+            }
+        }
+
+        return back();
     }
 }
