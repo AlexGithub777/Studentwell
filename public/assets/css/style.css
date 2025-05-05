@@ -599,6 +599,13 @@ body {
     margin-bottom: 0.75rem;
 }
 
+.reply-timestamp {
+    display: block; /* Make it a block-level element */
+    color: var(--secondary-colour); /* Or your desired color */
+    font-size: 0.9rem; /* Adjust the font size as needed */
+    margin-bottom: 0.5rem; /* Space below timestamp */
+}
+
 .forum-content {
     margin-bottom: 1rem; /* Space between content and actions */
     line-height: 1.6;

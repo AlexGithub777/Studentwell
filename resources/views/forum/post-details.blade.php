@@ -63,17 +63,15 @@
                     </div>
 
                     <div class="flex-grow-1">
-                        <div class="reply-meta mb-1"> <span class="reply-author">{{ $reply->user->first_name }}
+                        <div class="reply-meta mb-0">
+                            <span class="fs-5 fw-bold">{{ $reply->user->first_name }}
                                 {{ $reply->user->last_name }}</span>
-                            <small>{{ $reply->created_at->diffForHumans() }}</small>
+                            <small class="reply-timestamp">{{ $reply->created_at->diffForHumans() }}</small>
                         </div>
                         <p class="forum-content">{{ $reply->Content }}</p>
-
                         @php
                             $replyLiked = auth()->check() ? $reply->isLikedByUser(auth()->user()) : false;
-
                         @endphp
-
                         <div class="reply-actions">
                             <form method="POST" action="{{ route('forum.like.reply', $reply->ReplyID) }}"
                                 class="d-inline">
