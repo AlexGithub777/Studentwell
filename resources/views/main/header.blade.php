@@ -30,9 +30,11 @@
 
             <!-- Centered logo -->
             <div class="navbar-brand-container">
-                <img src="{{ asset('assets/images/studentwell-logo.png') }}" alt="StudentWell Logo"
-                    style="height: 30px;" class="navbar-brand img-fluid">
-
+                <!-- Link to home ("/") -->
+                <a href="/">
+                    <img src="{{ asset('assets/images/studentwell-logo.png') }}" alt="StudentWell Logo"
+                        style="height: 30px;" class="navbar-brand img-fluid">
+                </a>
             </div>
 
             <div class="navbar-toggler-placeholder"></div>
