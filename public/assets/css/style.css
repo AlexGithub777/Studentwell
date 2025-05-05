@@ -183,16 +183,25 @@ body {
     padding: 1rem; /* Add some padding */
 }
 
+.signup-page-bg {
+    padding: 1rem; /* Add some padding */
+}
+
 /* The main login card */
 .login-card {
     background-color: var(--main-colour);
     border: 1px solid var(--secondary-colour);
     border-radius: 0.75rem;
-    padding: 2rem 2.5rem; /* More padding */
+    padding: 2rem 2.5rem;
     color: var(--secondary-colour);
     width: 100%; /* Take full width of its column */
     max-width: 450px; /* Max width for the card */
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Optional subtle shadow */
+}
+
+.signup-card-wrapper {
+    display: flex;
+    justify-content: center;
 }
 
 /* Logo/Brand styling */
@@ -294,6 +303,17 @@ body {
 .btn-logout:hover {
     background-color: #15396d;
     color: white;
+}
+
+/* Sign Up styles */
+#first_name,
+#last_name,
+#signupemail,
+#signuppassword,
+#signuppassword_confirmation {
+    background-color: var(--main-colour);
+    border: 1px solid var(--secondary-colour);
+    color: var(--secondary-colour);
 }
 
 /* Homepage */

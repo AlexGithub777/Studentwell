@@ -23,7 +23,7 @@ Route::get('/signin', function () {
     return view('authentication.signin');
 });
 
-Route::post('/signup', [UserController::class, 'signup']);
+Route::post('/signup', [UserController::class, 'signup'])->name('register');
 
 Route::post('/logout', [UserController::class, 'logout'])->name('logout');
 

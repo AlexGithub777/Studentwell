@@ -67,7 +67,7 @@
                     </div>
 
                     <div class="signup-prompt">
-                        Don't have an account? <a href="/signup">Sign Up</a>
+                        Don't have an account? <a href="{{ route('register') }}">Sign Up</a>
                         {{-- Use named route 'register' if defined --}}
                     </div>
                 </form>
