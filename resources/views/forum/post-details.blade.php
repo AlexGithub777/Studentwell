@@ -21,7 +21,7 @@
             <div class="flex-grow-1">
                 <span style="display: flex; align-items: center; gap: 0.5rem;">
                     <h3 class="forum-post-title" style="margin: 0;">{{ $post->PostTitle }}</h3>
-                    <span style="background-color: var(--secondary-colour);" class="badge text-white">
+                    <span style="background-color: var(--secondary-colour);" class="badge rounded-pill text-white">
                         {{ $post->PostCategory }}
                     </span>
                 </span>
