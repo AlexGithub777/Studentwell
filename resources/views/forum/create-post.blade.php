@@ -5,12 +5,14 @@
 </script>
 <div class="content-area py-4">
     <div class="container">
+        <!-- Page Title and back link -->
         <div class="mb-3">
-            <a href="{{ route('forum.index') }}" class="back-link fs-4 fw-semibold">
-                <i class="fa fa-chevron-left me-2"></i> Create New Post
+            <a href="{{ route('forum.index') }}" class="back-link h2 fw-bold">
+                <i class="fa fa-chevron-left me-2 h4 fw-bold"></i> Create New Post
             </a>
         </div>
 
+        <!-- Post Form -->
         <div class="post-form-container p-4">
             <form method="POST" action="{{ route('forum.store') }}">
                 @csrf

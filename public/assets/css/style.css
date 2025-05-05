@@ -224,7 +224,8 @@ body {
     color: var(--secondary-colour);
     padding: 1.5rem;
     border-radius: 1rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border-color: var(--secondary-colour);
+    border: 1px solid;
     transition: transform 0.2s ease;
 }
 
@@ -242,11 +243,6 @@ body {
 .unliked {
     color: var(--secondary-colour);
     font-size: 16px;
-}
-
-.back-link {
-    color: var(--secondary-colour);
-    text-decoration: none;
 }
 
 /* Essential custom styling */
@@ -332,6 +328,9 @@ body {
 
 .form-label {
     color: var(--secondary-colour);
+    /* Make h4 headings */
+    font-size: 1.3rem;
+    font-weight: bold;
 }
 
 /* Button styling */
@@ -343,6 +342,162 @@ body {
 }
 
 .publish-btn:hover {
+    background-color: #15396d;
+    color: white;
+}
+/* Define your color variables (adjust hex codes as needed) */
+:root {
+    --avatar-size: 45px; /* Control avatar size easily */
+}
+
+/* --- Back Link --- */
+.forum-back-link {
+    display: inline-block; /* Needed for margin */
+    margin-bottom: 1.5rem; /* Space below link */
+    color: var(--secondary-colour);
+    text-decoration: none;
+    font-weight: 500; /* Medium weight */
+    font-size: 1.1rem;
+}
+
+.forum-back-link:hover {
+    color: var(--secondary-colour);
+    text-decoration: underline;
+}
+
+.forum-back-link i {
+    margin-right: 0.4em;
+}
+
+/* --- Shared Card Styles --- */
+.forum-post-card {
+    background-color: var(--main-colour) !important; /* Override bootstrap */
+    border: 1px solid var(--secondary-colour) !important; /* Override bootstrap */
+    border-radius: 0.75rem !important; /* More rounded corners */
+    color: var(--secondary-colour); /* Default text color inside card */
+    margin-bottom: 1.5rem; /* Space between cards */
+    overflow: hidden; /* Ensure content respects border-radius */
+}
+
+.forum-post-card .card-body {
+    padding: 1.25rem; /* Adjust padding as needed */
+    color: var(--secondary-colour);
+}
+
+.forum-post-card .card-header {
+    /* Style for the reply form header */
+    background-color: transparent; /* Make header blend */
+    border-bottom: 1px solid var(--secondary-colour);
+    color: var(--secondary-colour);
+    font-weight: bold;
+    padding: 0.75rem 1.25rem;
+}
+
+/* --- User Avatar --- */
+.user-avatar {
+    flex-shrink: 0; /* Prevent avatar from shrinking */
+    width: var(--avatar-size);
+    height: var(--avatar-size);
+    background-color: var(--secondary-colour); /* Placeholder background */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    color: var(--main-colour); /* Icon color inside avatar */
+    font-size: 1.2rem; /* Icon size inside avatar */
+    /* If using actual images:
+       background-size: cover;
+       background-position: center;
+       background-image: url('path/to/avatar.jpg');
+    */
+}
+
+/* --- Post/Reply Specific Styles --- */
+.forum-post-title {
+    font-size: 1.5rem; /* Larger title */
+    font-weight: bold;
+    margin-bottom: 0.25rem;
+    color: var(--secondary-colour);
+}
+
+.post-meta,
+.reply-meta {
+    font-size: 1rem;
+    color: var(--secondary-colour); /* Ensure meta text uses secondary color */
+    margin-bottom: 0.75rem;
+}
+
+.reply-author {
+    font-weight: bold;
+    margin-right: 0.5rem; /* Space between author and time */
+}
+
+.forum-content {
+    margin-bottom: 1rem; /* Space between content and actions */
+    line-height: 1.6;
+    color: var(--secondary-colour);
+}
+
+/* --- Action Buttons (Likes) --- */
+.action-button {
+    background-color: transparent;
+    border: none;
+    color: var(--secondary-colour);
+    padding: 0.25rem 0.5rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: inline-flex; /* Align icon and text */
+    align-items: center;
+}
+
+.action-button i {
+    margin-right: 0.3em;
+    font-size: 1rem; /* Adjust icon size if needed */
+}
+
+.action-button:hover {
+    /* Add a subtle hover effect if desired */
+    opacity: 0.8;
+}
+
+/* --- Reply Form --- */
+.forum-reply-form .form-label {
+    color: var(--secondary-colour);
+    font-weight: 500;
+}
+
+.forum-reply-form .form-control {
+    background-color: #ffffff; /* White background for textarea */
+    border: 1px solid var(--secondary-colour);
+    color: var(--secondary-colour); /* Typing color */
+}
+.forum-reply-form .form-control::placeholder {
+    /* Target placeholder text */
+    color: var(--secondary-colour);
+    opacity: 0.7;
+}
+.forum-reply-form .form-control:focus {
+    background-color: var(--main-colour);
+    border-color: var(--secondary-colour);
+    box-shadow: 0 0 0 0.25rem rgba(var(--secondary-rgb), 0.25); /* Use RGB version if possible */
+    color: var(--secondary-colour);
+}
+
+#forum-reply-textarea {
+    background: transparent;
+    border: none;
+    outline: none;
+}
+
+.btn-submit-reply {
+    background-color: var(--secondary-colour);
+    color: white;
+    font-weight: 600;
+    border: none;
+}
+
+.btn-submit-reply:hover {
     background-color: #15396d;
     color: white;
 }
