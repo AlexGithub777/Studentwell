@@ -38,7 +38,6 @@ class ForumController extends Controller
         $post->PostTitle = $validated['PostTitle'];
         $post->PostCategory = $validated['PostCategory'];
         $post->Content = $validated['Content'];
-        $post->PostLikes = 0;
         $post->save();
 
         return redirect()->route('forum.show', $post->ForumPostID)->with('success', 'Post created successfully!');
@@ -62,7 +61,6 @@ class ForumController extends Controller
         $reply->UserID = auth()->user()->id; // Use id from users table
         $reply->PostID = $postId;
         $reply->Content = $validated['Content'];
-        $reply->ReplyLikes = 0;
         $reply->save();
 
         return redirect()->back()->with('success', 'Reply added successfully!');

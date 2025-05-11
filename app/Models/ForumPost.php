@@ -30,7 +30,6 @@ class ForumPost extends Model
         'PostTitle',
         'PostCategory',
         'Content',
-        'PostLikes',
     ];
 
     // Relationships
