@@ -106,6 +106,27 @@ CREATE TABLE Forum_Replies (
     FOREIGN KEY (PostID) REFERENCES Forum_Posts(ForumPostID)
 );
 
+-- Create Likes table
+CREATE TABLE likes (
+    LikeID INT NOT NULL AUTO_INCREMENT,
+    UserID BIGINT UNSIGNED NOT NULL,
+    ForumPostID INT NOT NULL,
+    created_at TIMESTAMP NOT NULL,
+    PRIMARY KEY (LikeID),
+    FOREIGN KEY (UserID) REFERENCES users(id),
+    FOREIGN KEY (ForumPostID) REFERENCES Forum_Posts(ForumPostID)
+)
+
+-- Create reply likes table
+CREATE TABLE reply_likes (
+    ReplyLikeID INT NOT NULL AUTO_INCREMENT,
+    UserID BIGINT UNSIGNED NOT NULL,
+    ReplyID INT NOT NULL,
+    created_at TIMESTAMP NOT NULL,
+    PRIMARY KEY (ReplyLikeID),
+    FOREIGN KEY (UserID) REFERENCES users(id),
+    FOREIGN KEY (ReplyID) REFERENCES
+
 -- Create Support_Resources table
 CREATE TABLE Support_Resources (
     SupportResourceID INT NOT NULL AUTO_INCREMENT,
