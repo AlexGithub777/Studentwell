@@ -1,7 +1,7 @@
 @include('main.header')
 @include('main.sidebar')
 <script>
-    document.title = "StudentWell | [Post Title] ";
+    document.title = "StudentWell | {{ $post->PostTitle }}";
 </script>
 <div class="container mt-4">
     <!-- Page Title and back link -->
