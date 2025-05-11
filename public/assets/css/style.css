@@ -395,6 +395,26 @@ body {
 }
 
 /* Forum */
+#forum-search-box {
+    background-color: var(--main-colour);
+    border: 1px solid var(--secondary-colour);
+    color: var(--secondary-colour);
+}
+
+#forum-search-box:focus {
+    background-color: var(--main-colour);
+    border-color: var(--secondary-colour);
+    box-shadow: 0 0 0 0.25rem rgba(26, 75, 140, 0.25);
+    color: var(--secondary-colour);
+}
+
+#forum-search-btn {
+    background-color: var(--secondary-colour);
+    color: white;
+    font-weight: 600;
+    border: none;
+}
+
 .forum-card {
     background-color: var(--main-colour);
     color: var(--secondary-colour);

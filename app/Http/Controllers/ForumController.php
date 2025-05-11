@@ -12,11 +12,21 @@ use Illuminate\Support\Facades\Auth;
 class ForumController extends Controller
 {
     // Display all forum posts
-    public function index()
+    public function index(Request $request)
     {
-        $posts = ForumPost::with('user')->orderBy('created_at', 'desc')->paginate(10);
+        $query = ForumPost::with('user');
+
+        if ($request->has('search')) {
+            $search = $request->search;
+            $query->where('PostTitle', 'like', "%{$search}%")
+                ->orWhere('Content', 'like', "%{$search}%");
+        }
+
+        $posts = $query->orderBy('created_at', 'desc')->paginate(10);
+
         return view('forum.forum', compact('posts'));
     }
+
 
     // Show form to create a new post
     public function create()
