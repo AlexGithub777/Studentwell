@@ -35,20 +35,36 @@
                 </div>
                 <p class="forum-content">{{ $post->Content }}</p>
 
-                <div class="d-flex justify-content-start gap-3 mt-2 mb-2 align-items-center"
-                    style="color: var(--secondary-colour);">
+                <div class="d-flex justify-content-between align-items-center" style="color: var(--secondary-colour);">
                     @php
                         $isLiked = auth()->check() ? $post->isLikedByUser(auth()->user()) : false;
                     @endphp
-
-                    <form method="POST" class="m-0 p-0" action="{{ route('forum.like.post', $post->ForumPostID) }}"
-                        class="d-inline">
-                        @csrf
-                        <button type="submit" class="btn {{ $isLiked ? 'liked btn-sm' : 'unliked ps-2 pe-2 py-1' }}">
-                            <i class="fa fa-thumbs-up"></i> {{ $post->likes()->count() }}
-                        </button>
-                    </form>
-                    <div><i class="fa fa-comment"></i> {{ $post->replies->count() }}</div>
+                    <div class="d-flex justify-content-start gap-3 align-items-center">
+                        <form method="POST" class="m-0 p-0" action="{{ route('forum.like.post', $post->ForumPostID) }}"
+                            class="d-inline">
+                            @csrf
+                            <button type="submit"
+                                class="btn {{ $isLiked ? 'liked btn-sm' : 'unliked ps-2 pe-2 py-1' }}">
+                                <i class="fa fa-thumbs-up"></i> {{ $post->likes()->count() }}
+                            </button>
+                        </form>
+                        <div><i class="fa fa-comment"></i> {{ $post->replies->count() }}</div>
+                    </div>
+                    <div>
+                        @auth
+                            @if (auth()->id() === $post->UserID)
+                                <form action="{{ route('forum.delete', $post->ForumPostID) }}" method="POST"
+                                    onsubmit="return confirm('Are you sure you want to delete this post?');"
+                                    style="display: inline-block;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-danger">
+                                        <i class="fas fa-trash-alt"></i> Delete
+                                    </button>
+                                </form>
+                            @endif
+                        @endauth
+                    </div>
                 </div>
             </div>
         </div>
@@ -86,7 +102,7 @@
                                     <i class="fa fa-thumbs-up"></i> {{ $reply->likes()->count() }}
                                 </button>
                             </form>
-
+                            <!-- Delete Reply Button -->
                             @auth
                                 @if (auth()->id() === $reply->UserID)
                                     <form action="{{ route('forum.delete.reply', $reply->ReplyID) }}" method="POST"

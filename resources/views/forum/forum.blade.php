@@ -72,6 +72,7 @@
                                         style="background-color: var(--secondary-colour); color: white; font-weight: bold;">
                                         View Post
                                     </a>
+                                    <!-- Delete Button -->
                                     @auth
                                         @if (auth()->id() === $post->UserID)
                                             <form action="{{ route('forum.delete', $post->ForumPostID) }}" method="POST"
