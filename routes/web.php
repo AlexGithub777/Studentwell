@@ -113,7 +113,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/health-insights/sleep', function () {
         return view('health-insights.sleep-insights');
     });
-
+    
     Route::get('/health-insights/goals', function () {
         return view('health-insights.goals-insights');
     });
@@ -131,4 +131,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/forum/post/{id}/reply', [ForumController::class, 'reply'])->name('forum.reply');
     Route::post('/forum/post/{forum_post}/like', [ForumController::class, 'likePost'])->name('forum.like.post');
     Route::post('/forum/reply/{forum_reply}/like', [ForumController::class, 'likeReply'])->name('forum.like.reply');
+    Route::delete('/forum/post/{id}', [ForumController::class, 'delete'])->name('forum.delete');
+    Route::delete('/forum/reply/{id}', [ForumController::class, 'deleteReply'])->name('forum.delete.reply');
+
 });

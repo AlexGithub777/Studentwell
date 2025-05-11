@@ -4,6 +4,11 @@
     document.title = "StudentWell | {{ $post->PostTitle }}";
 </script>
 <div class="container mt-4">
+    @if (session('success'))
+        <div class="alert alert-success" id="alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
     <!-- Page Title and back link -->
     <div class="mb-3">
         <a href="{{ route('forum.index') }}" class="back-link h2 fw-bold">
@@ -72,7 +77,7 @@
                         @php
                             $replyLiked = auth()->check() ? $reply->isLikedByUser(auth()->user()) : false;
                         @endphp
-                        <div class="reply-actions">
+                        <div class="d-flex justify-content-between align-items-center">
                             <form method="POST" action="{{ route('forum.like.reply', $reply->ReplyID) }}"
                                 class="d-inline">
                                 @csrf
@@ -81,6 +86,21 @@
                                     <i class="fa fa-thumbs-up"></i> {{ $reply->likes()->count() }}
                                 </button>
                             </form>
+
+                            @auth
+                                @if (auth()->id() === $reply->UserID)
+                                    <form action="{{ route('forum.delete.reply', $reply->ReplyID) }}" method="POST"
+                                        onsubmit="return confirm('Are you sure you want to delete this reply?');"
+                                        style="display: inline-block;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-danger">
+                                            <i class="fas fa-trash-alt"></i> Delete
+                                        </button>
+                                    </form>
+                                @endif
+                            @endauth
+
                         </div>
                     </div>
                 </div>
@@ -110,4 +130,14 @@
     </form>
 
 </div>
+<script>
+    setTimeout(() => {
+        const alert = document.getElementById('alert-success');
+        if (alert) {
+            alert.style.transition = 'opacity 0.5s ease-out';
+            alert.style.opacity = '0';
+            setTimeout(() => alert.remove(), 500); // fully remove after fade out
+        }
+    }, 10000); // 10000 ms = 10 seconds
+</script>
 @include('main.footer')

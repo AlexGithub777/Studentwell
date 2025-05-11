@@ -50,6 +50,21 @@ class ForumController extends Controller
         return view('forum.post-details', compact('post'));
     }
 
+    public function delete($id)
+    {
+        $post = ForumPost::findOrFail($id);
+
+        // Only allow the author to delete the post
+        if (auth()->id() !== $post->UserID) {
+            abort(403, 'Unauthorized');
+        }
+
+        $post->delete();
+
+        return redirect()->route('forum.index')->with('success', 'Post deleted successfully.');
+    }
+
+
     // Add a reply to a post
     public function reply(Request $request, $postId)
     {
@@ -64,6 +79,21 @@ class ForumController extends Controller
         $reply->save();
 
         return redirect()->back()->with('success', 'Reply added successfully!');
+    }
+
+    // Delete a reply
+    public function deleteReply($replyId)
+    {
+        $reply = ForumReply::findOrFail($replyId);
+
+        // Only allow the author to delete the reply
+        if (auth()->id() !== $reply->UserID) {
+            abort(403, 'Unauthorized');
+        }
+
+        $reply->delete();
+
+        return redirect()->back()->with('success', 'Reply deleted successfully.');
     }
 
     public function likePost(ForumPost $forum_post) // Change the parameter name to match the route
