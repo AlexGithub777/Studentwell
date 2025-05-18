@@ -808,7 +808,7 @@ body {
 .resource-subtitle {
     color: var(--secondary-colour);
     font-weight: bold;
-    font-size: large;
+    font-size: larger;
 }
 
 .resource-card {
@@ -822,6 +822,7 @@ body {
 .resource-card .card-title {
     font-weight: bold;
     color: var(--secondary-colour);
+    font-size: large;
 }
 
 .resource-card .card-text i {
