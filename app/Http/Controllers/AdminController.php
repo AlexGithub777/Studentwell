@@ -54,20 +54,40 @@ class AdminController extends Controller
         return view('admin.add-resource', compact('resource_categories'));
     }
 
+
     public function addResource(Request $request)
     {
-        $request->validate([
-            'ResourceTitle' => 'required|string|min:5|max:100',
-            'ResourceCategory' => 'required|integer|exists:resource_categories,ResourceCategoryID',
-            'Phone' => 'required|string|min:7|max:15',
-            'Location' => 'required|string|min:5|max:255',
-            'Description' => 'required|string|min:10|max:200',
+        $validatedData = $request->validate([
+            'ResourceTitle' => ['required', 'string', 'min:5', 'max:100'],
+            'ResourceCategory' => ['required', 'integer', 'exists:resource_categories,ResourceCategoryID'],
+            'Phone' => ['required', 'regex:/^\+?[0-9]{7,15}$/'],
+            'Location' => ['required', 'string', 'min:5', 'max:255'],
+            'Description' => ['required', 'string', 'min:10', 'max:200'],
+        ], [
+            'ResourceTitle.required' => 'Title is required.',
+            'ResourceTitle.min' => 'Title must be at least 5 characters.',
+            'ResourceTitle.max' => 'Title cannot exceed 100 characters.',
+
+            'ResourceCategory.required' => 'Category is required.',
+            'ResourceCategory.exists' => 'Selected category does not exist.',
+
+            'Phone.required' => 'Phone number is required.',
+            'Phone.regex' => 'Phone number must contain only numbers and may start with +. Must be 7–15 digits.',
+
+            'Location.required' => 'Location is required.',
+            'Location.min' => 'Location must be at least 5 characters.',
+            'Location.max' => 'Location cannot exceed 255 characters.',
+
+            'Description.required' => 'Description is required.',
+            'Description.min' => 'Description must be at least 10 characters.',
+            'Description.max' => 'Description cannot exceed 200 characters.',
         ]);
 
-        SupportResource::create($request->all());
+        SupportResource::create($validatedData);
 
         return redirect()->route('admin.dashboard')->with('success', 'Resource added successfully.');
     }
+
 
     public function editResourcePage($id)
     {
@@ -80,32 +100,37 @@ class AdminController extends Controller
 
     public function updateResource(Request $request, $SupportResourceID)
     {
-        // Validation (same as addResource)
-        $request->validate([
-            'ResourceTitle' => 'required|string|min:5|max:100',
-            'ResourceCategory' => 'required|integer|exists:resource_categories,ResourceCategoryID',
-            'Phone' => 'required|string|min:7|max:15',
-            'Location' => 'required|string|min:5|max:255',
-            'Description' => 'required|string|min:10|max:200',
+        $validatedData = $request->validate([
+            'ResourceTitle' => ['required', 'string', 'min:5', 'max:100'],
+            'ResourceCategory' => ['required', 'integer', 'exists:resource_categories,ResourceCategoryID'],
+            'Phone' => ['required', 'regex:/^\+?[0-9]{7,15}$/'],
+            'Location' => ['required', 'string', 'min:5', 'max:255'],
+            'Description' => ['required', 'string', 'min:10', 'max:200'],
+        ], [
+            'ResourceTitle.required' => 'Title is required.',
+            'ResourceTitle.min' => 'Title must be at least 5 characters.',
+            'ResourceTitle.max' => 'Title cannot exceed 100 characters.',
+
+            'ResourceCategory.required' => 'Category is required.',
+            'ResourceCategory.exists' => 'Selected category does not exist.',
+
+            'Phone.required' => 'Phone number is required.',
+            'Phone.regex' => 'Phone number must contain only numbers and may start with +. Must be 7–15 digits.',
+
+            'Location.required' => 'Location is required.',
+            'Location.min' => 'Location must be at least 5 characters.',
+            'Location.max' => 'Location cannot exceed 255 characters.',
+
+            'Description.required' => 'Description is required.',
+            'Description.min' => 'Description must be at least 10 characters.',
+            'Description.max' => 'Description cannot exceed 200 characters.',
         ]);
 
-        // Find the resource
         $resource = SupportResource::findOrFail($SupportResourceID);
+        $resource->update($validatedData);
 
-        // Update the resource with validated data
-        $resource->update([
-            'ResourceTitle' => $request->input('ResourceTitle'),
-            'ResourceCategory' => $request->input('ResourceCategory'),
-            'Phone' => $request->input('Phone'),
-            'Location' => $request->input('Location'),
-            'Description' => $request->input('Description'),
-        ]);
-
-        // Redirect with success message
         return redirect()->route('admin.dashboard')->with('success', 'Resource updated successfully.');
     }
-
-
 
     public function deleteResource($id)
     {

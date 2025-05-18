@@ -38,14 +38,28 @@ class ForumController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'PostTitle' => 'required|string|min:5|max:50',
-            'PostCategory' => 'required|string|min:3|max:20',
-            'Content' => 'required|string|min:10|max:500',
+            'PostTitle' => ['required', 'string', 'min:5', 'max:50'],
+            'PostCategory' => ['required', 'string', 'min:3', 'max:20'],
+            'Content' => ['required', 'string', 'min:10', 'max:500'],
+        ], [
+            'PostTitle.required' => 'Post title is required.',
+            'PostTitle.string' => 'Post title must be a string.',
+            'PostTitle.min' => 'Post title must be at least 5 characters.',
+            'PostTitle.max' => 'Post title cannot exceed 50 characters.',
+
+            'PostCategory.required' => 'Post category is required.',
+            'PostCategory.string' => 'Post category must be a string.',
+            'PostCategory.min' => 'Post category must be at least 3 characters.',
+            'PostCategory.max' => 'Post category cannot exceed 20 characters.',
+
+            'Content.required' => 'Content is required.',
+            'Content.string' => 'Content must be text.',
+            'Content.min' => 'Content must be at least 10 characters.',
+            'Content.max' => 'Content cannot exceed 500 characters.',
         ]);
 
-
         $post = new ForumPost();
-        $post->UserID = auth()->user()->id; // Use id from users table
+        $post->UserID = auth()->user()->id;
         $post->PostTitle = $validated['PostTitle'];
         $post->PostCategory = $validated['PostCategory'];
         $post->Content = $validated['Content'];
@@ -80,11 +94,15 @@ class ForumController extends Controller
     public function reply(Request $request, $postId)
     {
         $validated = $request->validate([
-            'Content' => 'required|max:500',
+            'Content' => ['required', 'string', 'max:500'],
+        ], [
+            'Content.required' => 'Reply content is required.',
+            'Content.string' => 'Reply content must be text.',
+            'Content.max' => 'Reply content cannot exceed 500 characters.',
         ]);
 
         $reply = new ForumReply();
-        $reply->UserID = auth()->user()->id; // Use id from users table
+        $reply->UserID = auth()->user()->id;
         $reply->PostID = $postId;
         $reply->Content = $validated['Content'];
         $reply->save();
@@ -99,7 +117,7 @@ class ForumController extends Controller
 
         // Only allow the author to delete the reply
         if (auth()->id() !== $reply->UserID) {
-            abort(403, 'Unauthorized');
+            abort(403, 'Unauthorised');
         }
 
         $reply->delete();
