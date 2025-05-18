@@ -121,7 +121,7 @@ class AdminController extends Controller
             'last_name' => ['required', 'min:2', 'max:30'],
             'email' => ['required', 'email', 'min:5', 'max:255'],
             'role' => ['required', Rule::in(['Admin', 'Student'])],
-            'password' => ['nullable', 'string', 'min:6', 'max:255', 'confirmed']
+            'password' => ['nullable', 'string', 'min:8', 'max:255', 'regex:/^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/', 'confirmed']
         ], [
             'first_name.required' => 'First name is required.',
             'first_name.min' => 'First name must be at least 2 characters.',
@@ -135,9 +135,10 @@ class AdminController extends Controller
             'email.max' => 'Email cannot exceed 255 characters.',
             'role.required' => 'User role is required.',
             'role.in' => 'Selected role is invalid.',
-            'password.min' => 'Password must be at least 6 characters.',
+            'password.min' => 'Password must be at least 8 characters.',
             'password.max' => 'Password cannot exceed 255 characters.',
-            'password.confirmed' => 'Passwords do not match.'
+            'password.confirmed' => 'Passwords do not match.',
+            'password.regex' => 'Password must be at least 8 characters and include an uppercase letter, a number, and a special character.'
         ]);
 
         $user = User::findOrFail($id);

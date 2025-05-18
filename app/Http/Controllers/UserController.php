@@ -17,7 +17,7 @@ class UserController extends Controller
             'first_name' => ['required', 'min:2', 'max:30'],
             'last_name' => ['required', 'min:2', 'max:30'],
             'signupemail' => ['required', 'email', Rule::unique('users', 'email'), 'min:5', 'max:255'],
-            'signuppassword' => ['required', 'min:6', 'max:255'],
+            'signuppassword' => ['required', 'string', 'min:8', 'max:255', 'regex:/^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/'],
             'signuppassword_confirmation' => ['required', 'same:signuppassword']
         ], [
             'first_name.required' => 'First name is required.',
@@ -32,10 +32,11 @@ class UserController extends Controller
             'signupemail.min' => 'Email must be at least 5 characters.',
             'signupemail.max' => 'Email cannot exceed 255 characters.',
             'signuppassword.required' => 'Password is required.',
-            'signuppassword.min' => 'Password must be at least 3 characters.',
+            'signuppassword.min' => 'Password must be at least 8 characters.',
             'signuppassword.max' => 'Password cannot exceed 255 characters.',
             'signuppassword_confirmation.required' => 'Password confirmation is required.',
-            'signuppassword_confirmation.same' => 'Passwords do not match.'
+            'signuppassword_confirmation.same' => 'Passwords do not match.',
+            'signuppassword.regex' => 'Password must be at least 8 characters and include an uppercase letter, a number, and a special character.'
         ]);
 
         // Hash password
@@ -114,7 +115,7 @@ class UserController extends Controller
                 'email',
                 Rule::unique('users', 'email')->ignore(Auth::id())
             ],
-            'newpassword' => ['nullable', 'min:3', 'max:200'],
+            'newpassword' => ['nullable', 'string', 'min:8', 'max:255', 'regex:/^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/'],
             'newpassword_confirmation' => ['nullable', 'same:newpassword']
         ], [
             'accountfirst_name.required' => 'First name is required.',
@@ -130,7 +131,8 @@ class UserController extends Controller
             'newpassword.min' => 'Password must be at least 3 characters.',
             'newpassword.max' => 'Password cannot exceed 200 characters.',
             'newpassword_confirmation.required' => 'Password confirmation is required.',
-            'newpassword_confirmation.same' => 'Passwords do not match.'
+            'newpassword_confirmation.same' => 'Passwords do not match.',
+            'newpassword.regex' => 'Password must be at least 8 characters and include an uppercase letter, a number, and a special character.'
         ]);
 
         // Update user info
