@@ -8,6 +8,10 @@
         <div class="alert alert-success" id="alert-success">
             {{ session('success') }}
         </div>
+    @elseif (session('error'))
+        <div class="alert alert-danger" id="alert-success">
+            {{ session('error') }}
+        </div>
     @endif
     <!-- BODY SECTION -->
     <section class="wellness-section">

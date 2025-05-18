@@ -25,68 +25,71 @@
                 {{-- If not logged in, show the Sign Up form --}}
                 <div class="login-card"> {{-- Reuse the login card style --}}
                     <h2 class="page-title mb-3">Your Details</h2>
-                    {{-- Display Validation Errors --}}
-                    @if ($errors->any())
-                        <div class="alert alert-danger mb-3"
-                            style="background-color: #f8d7da; border-color: #f5c6cb; color: #721c24;">
-                            <ul class="mb-0 ps-3">
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li> {{-- List all errors for registration --}}
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
                     {{-- Registration Form --}}
-                    {{-- Make sure action points to your registration route --}}
-                    <form action="{{ route('register') }}" method="POST"> {{-- Use named route 'register' if defined --}}
+                    <form action="{{ route('register') }}" method="POST">
                         @csrf
 
-                        {{-- First Name Input --}}
+                        {{-- First Name --}}
                         <div class="mb-3">
                             <label for="first_name" class="form-label">First Name</label>
-                            <input type="text" class="form-control" id="first_name" name="first_name"
-                                placeholder="Enter your first name" value="{{ old('first_name') }}" required autofocus>
+                            <input type="text" class="form-control @error('first_name') is-invalid @enderror"
+                                id="first_name" name="first_name" value="{{ old('first_name') }}"
+                                placeholder="Enter your first name" required autofocus>
+                            @error('first_name')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
 
-                        {{-- Last Name Input --}}
+                        {{-- Last Name --}}
                         <div class="mb-3">
                             <label for="last_name" class="form-label">Last Name</label>
-                            <input type="text" class="form-control" id="last_name" name="last_name"
-                                placeholder="Enter your last name" value="{{ old('last_name') }}" required>
+                            <input type="text" class="form-control @error('last_name') is-invalid @enderror"
+                                id="last_name" name="last_name" value="{{ old('last_name') }}"
+                                placeholder="Enter your last name" required>
+                            @error('last_name')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
 
-                        {{-- Email Input --}}
+                        {{-- Email --}}
                         <div class="mb-3">
                             <label for="signupemail" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="signupemail" name="signupemail"
-                                placeholder="Enter your email" value="{{ old('signupemail') }}" required>
+                            <input type="email" class="form-control @error('signupemail') is-invalid @enderror"
+                                id="signupemail" name="signupemail" value="{{ old('signupemail') }}"
+                                placeholder="Enter your email" required>
+                            @error('signupemail')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
 
-                        {{-- Password Input --}}
+                        {{-- Password --}}
                         <div class="mb-3">
                             <label for="signuppassword" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="signuppassword" name="signuppassword"
-                                placeholder="Create a password" required>
-                            {{-- Optional: Add password requirements hint --}}
-                            {{-- <small class="form-text" style="color: var(--secondary-colour); opacity: 0.8;">Minimum 8 characters</small> --}}
+                            <input type="password" class="form-control @error('signuppassword') is-invalid @enderror"
+                                id="signuppassword" name="signuppassword" placeholder="Create a password" required>
+                            @error('signuppassword')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
 
-                        {{-- Confirm Password Input --}}
+                        {{-- Confirm Password --}}
                         <div class="mb-3">
                             <label for="signuppassword_confirmation" class="form-label">Confirm Password</label>
-                            <input type="password" class="form-control" id="signuppassword_confirmation"
-                                name="signuppassword_confirmation" placeholder="Confirm your password" required>
+                            <input type="password"
+                                class="form-control @error('signuppassword_confirmation') is-invalid @enderror"
+                                id="signuppassword_confirmation" name="signuppassword_confirmation"
+                                placeholder="Confirm your password" required>
+                            @error('signuppassword_confirmation')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
 
-
-                        {{-- Sign Up Button --}}
+                        {{-- Submit Button --}}
                         <div class="d-grid mt-4">
-                            {{-- Reuse btn-signin style but change text --}}
                             <button type="submit" class="btn btn-signin">Sign Up</button>
                         </div>
 
-
-                        <div class="signup-prompt"> {{-- Reuse class, content changes --}}
+                        <div class="signup-prompt">
                             Already have an account? <a href="{{ route('login') }}">Sign In</a>
                         </div>
                     </form>

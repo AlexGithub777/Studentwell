@@ -8,19 +8,19 @@
         <!-- Page Title and back link -->
         <div class="mb-3">
             <a href="{{ route('forum.index') }}" class="back-link h2 fw-bold">
-                <i class="fa fa-chevron-left me-2 h4 fw-bold"></i> Create New Post
+                <i class="fa fa-chevron-left me-2 h4 fw-bold"></i>Create New Post
             </a>
         </div>
 
         <!-- Post Form -->
-        <div class="post-form-container p-4">
+        <div class="custom-form-container p-4">
             <form method="POST" action="{{ route('forum.store') }}">
                 @csrf
                 <div class="row">
                     <div class="col-lg-6 mb-3 mb-lg-0">
                         <div class="left-column-wrapper d-flex flex-column h-100">
-                            <h1 class="post-header-title fw-bold mb-1">Post Content</h1>
-                            <p class="post-header-desc mb-1">Share your thoughts, questions, or experiences with the
+                            <h1 class="custom-header-title fw-bold mb-1">Post Content</h1>
+                            <p class="custom-header-desc mb-1">Share your thoughts, questions, or experiences with the
                                 community</p>
 
                             <div class="mb-2">

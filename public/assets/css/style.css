@@ -60,7 +60,7 @@ body {
 
 .sidebar {
     position: absolute;
-    top: 60px;
+    top: 0px;
     left: 0;
     width: 400px;
     height: 100%;
@@ -70,6 +70,22 @@ body {
     transform: translateX(-100%);
     transition: transform 0.2s ease;
     z-index: 1000;
+}
+
+.sidebar-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent */
+    z-index: 950; /* Just under sidebar if it's 1050+ */
+    display: none;
+    transition: opacity 0.3s ease;
+}
+
+.sidebar-backdrop.show {
+    display: block;
 }
 
 .sidebar.show {
@@ -104,7 +120,7 @@ body {
     color: var(--secondary-colour);
 }
 
-.nav-link.active {
+.sidebar .nav-link.active {
     background-color: var(--highlight-colour);
     border-left: 3px solid var(--secondary-colour);
 }
@@ -176,6 +192,104 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
     background: #555;
+}
+
+/* Admin Styling */
+
+.add-btn {
+    border-radius: 0px;
+}
+
+/* Base styling for both tabs */
+.nav-pills .nav-link {
+    border: 3px solid #eaeaea;
+    background-color: #eaeaea;
+    color: black;
+    border-radius: 0; /* rectangle */
+    margin-right: -1px; /* avoid double border between tabs */
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Active tab */
+.nav-pills .nav-link.active {
+    background-color: var(--secondary-colour);
+    color: white;
+    border-color: #eaeaea; /* keep the same border color */
+}
+
+/* Force header background override */
+.table > thead > tr > th {
+    background-color: #eaeaea;
+}
+
+/* Pill-style badge for category */
+.category-badge {
+    background-color: var(--secondary-colour);
+    color: white;
+    font-weight: bold;
+    padding: 0.4em 0.75em;
+    font-size: 0.85rem;
+    max-width: fit-content;
+}
+
+@media (max-width: 768px) {
+    table thead {
+        display: none;
+    }
+
+    table,
+    tbody,
+    tr {
+        display: block;
+        width: 100%;
+    }
+
+    tr {
+        margin-bottom: 1rem;
+        border: 1px solid black; /* outer border around each record */
+        border-radius: 6px;
+        background-color: #fff;
+        overflow: hidden;
+    }
+
+    td {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        padding: 0.75rem 0;
+        text-align: right;
+        border-bottom: 1px solid #dee2e6; /* i want light grey horizontal dividers inside each record */
+    }
+
+    tr td:last-child {
+        border-bottom: none; /* don’t want a border at the bottom of the last row per record */
+    }
+
+    td::before {
+        content: attr(data-label);
+        text-align: left;
+        font-weight: bold;
+        padding-right: 1rem;
+    }
+
+    td[data-label="Category"] > span {
+        justify-self: end; /* align the badge to the right */
+    }
+
+    td[data-label="Role"] > span {
+        justify-self: end; /* align the badge to the right */
+    }
+
+    td[data-label="Actions"] {
+        align-items: center; /* center everything vertically */
+    }
+
+    td[data-label="Actions"]::before {
+        justify-self: start; /* keep label on the left */
+    }
+
+    td[data-label="Actions"] > div {
+        justify-self: end; /* buttons go on the right */
+    }
 }
 
 /* Signup/Login */
@@ -331,6 +445,11 @@ body {
     color: var(--secondary-colour);
 }
 
+.form-control.is-invalid {
+    border-color: #dc3545 !important;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
 /* Homepage */
 .wellness-section {
     padding: 4rem 1rem;
@@ -395,20 +514,20 @@ body {
 }
 
 /* Forum */
-#forum-search-box {
+#search-box {
     background-color: var(--main-colour);
     border: 1px solid var(--secondary-colour);
     color: var(--secondary-colour);
 }
 
-#forum-search-box:focus {
+#search-box:focus {
     background-color: var(--main-colour);
     border-color: var(--secondary-colour);
     box-shadow: 0 0 0 0.25rem rgba(26, 75, 140, 0.25);
     color: var(--secondary-colour);
 }
 
-#forum-search-btn {
+#search-btn {
     background-color: var(--secondary-colour);
     color: white;
     font-weight: 600;
@@ -452,18 +571,18 @@ body {
     text-decoration: underline;
 }
 
-.post-form-container {
+.custom-form-container {
     background-color: var(--main-colour);
     border-radius: 10px;
     border: 1px solid var(--secondary-colour);
 }
 
-.post-header-title {
+.custom-header-title {
     color: var(--secondary-colour);
     font-size: 1.75rem;
 }
 
-.post-header-desc {
+.custom-header-desc {
     color: var(--secondary-colour);
 }
 
@@ -506,7 +625,6 @@ body {
     min-height: 200px;
 }
 
-/* Make sure Category is at bottom */
 .category-container {
     margin-bottom: 0;
 }

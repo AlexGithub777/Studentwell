@@ -16,8 +16,8 @@ class UserController extends Controller
         $incomingFields = $request->validate([
             'first_name' => ['required', 'min:2', 'max:30'],
             'last_name' => ['required', 'min:2', 'max:30'],
-            'signupemail' => ['required', 'email', Rule::unique('users', 'email')],
-            'signuppassword' => ['required', 'min:3', 'max:200'],
+            'signupemail' => ['required', 'email', Rule::unique('users', 'email'), 'min:5', 'max:255'],
+            'signuppassword' => ['required', 'min:6', 'max:255'],
             'signuppassword_confirmation' => ['required', 'same:signuppassword']
         ], [
             'first_name.required' => 'First name is required.',
@@ -29,9 +29,11 @@ class UserController extends Controller
             'signupemail.required' => 'Email is required.',
             'signupemail.email' => 'Please enter a valid email address.',
             'signupemail.unique' => 'Email already exists. Please use a different email.',
+            'signupemail.min' => 'Email must be at least 5 characters.',
+            'signupemail.max' => 'Email cannot exceed 255 characters.',
             'signuppassword.required' => 'Password is required.',
             'signuppassword.min' => 'Password must be at least 3 characters.',
-            'signuppassword.max' => 'Password cannot exceed 200 characters.',
+            'signuppassword.max' => 'Password cannot exceed 255 characters.',
             'signuppassword_confirmation.required' => 'Password confirmation is required.',
             'signuppassword_confirmation.same' => 'Passwords do not match.'
         ]);
@@ -62,7 +64,7 @@ class UserController extends Controller
             'signinemail.required' => 'Email is required.',
             'signinemail.email' => 'Please enter a valid email address.',
             'signinpassword.required' => 'Password is required.'
-        ]);        
+        ]);
 
         if (auth()->attempt([
             'email' => $incomingFields['signinemail'],
@@ -140,7 +142,7 @@ class UserController extends Controller
         if (!empty($validated['newpassword'])) {
             $user->password = Hash::make($validated['newpassword']);
         }
-        
+
         $user->save();
 
         return redirect()->route('account.show')->with('success', 'Account updated successfully.');

@@ -3,20 +3,24 @@
 <script>
     document.title = "StudentWell | Forum";
 </script>
+@if (session('success'))
+    <div class="alert alert-success" id="alert-success">
+        {{ session('success') }}
+    </div>
+@elseif (session('error'))
+    <div class="alert alert-danger" id="alert-success">
+        {{ session('error') }}
+    </div>
+@endif
 <div class="content-area">
     <div class="container">
-        @if (session('success'))
-            <div class="alert alert-success" id="alert-success">
-                {{ session('success') }}
-            </div>
-        @endif
         <!-- Page Title, Subtitle, and New Post Button -->
         <div class="row mb-4">
             <div class="col d-flex justify-content-between align-items-center mt-4">
                 <div>
                     <h1 class="page-title mb-1">Forum</h1>
                 </div>
-                <a href="{{ route('forum.create') }}" class="btn text-white"
+                <a href="{{ route('forum.create') }}" class="btn add-btn text-white"
                     style="background-color: var(--secondary-colour);">
                     <i class="fas fa-plus me-1 fw-bold"></i> New Post
                 </a>
@@ -24,9 +28,9 @@
         </div>
         <form method="GET" action="{{ route('forum.index') }}" class="mb-4">
             <div class="input-group">
-                <input type="text" id="forum-search-box" name="search" class="form-control"
+                <input type="text" id="search-box" name="search" class="form-control"
                     placeholder="Search forum posts..." value="{{ request('search') }}">
-                <button id="forum-search-btn" class="btn btn-secondary" type="submit">
+                <button id="search-btn" class="btn btn-secondary" type="submit">
                     <i class="fas fa-search"></i>
                 </button>
             </div>

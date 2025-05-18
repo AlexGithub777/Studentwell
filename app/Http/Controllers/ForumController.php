@@ -38,10 +38,11 @@ class ForumController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'PostTitle' => 'required|max:50',
-            'PostCategory' => 'required|max:20',
-            'Content' => 'required|max:500',
+            'PostTitle' => 'required|string|min:5|max:50',
+            'PostCategory' => 'required|string|min:3|max:20',
+            'Content' => 'required|string|min:10|max:500',
         ]);
+
 
         $post = new ForumPost();
         $post->UserID = auth()->user()->id; // Use id from users table

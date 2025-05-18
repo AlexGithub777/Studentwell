@@ -12,7 +12,7 @@
     <!-- Page Title and back link -->
     <div class="mb-3">
         <a href="{{ route('forum.index') }}" class="back-link h2 fw-bold">
-            <i class="fa fa-chevron-left me-2 h4 fw-bold"></i> Back to Forum
+            <i class="fa fa-chevron-left me-2 h4 fw-bold"></i>Back to Forum
         </a>
     </div>
 

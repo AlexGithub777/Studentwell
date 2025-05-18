@@ -1,3 +1,6 @@
+<!-- Backdrop -->
+<div id="sidebar-backdrop" class="sidebar-backdrop"></div>
+
 <!-- Sidebar -->
 <nav id="sidebarMenu" class="sidebar">
     <!-- Sidebar header with logo and close button -->
@@ -24,6 +27,12 @@
             <li class="nav-item">
                 <a class="nav-link {{ request()->is('/') ? 'active' : '' }}" href="{{ url('/') }}">
                     <i class="fas fa-house me-2"></i> Home
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ request()->is('support-resources') ? 'active' : '' }}"
+                    href="{{ url('/support-resources') }}">
+                    <i class="fas fa-address-card me-2"></i> Support Resources
                 </a>
             </li>
         @endguest

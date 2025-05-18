@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ForumController;
+use App\Http\Controllers\AdminController;
 
 // Home Routes
 Route::get('/', function () {
@@ -11,6 +12,11 @@ Route::get('/', function () {
 
 Route::get('/home', function () {
     return view('home.home');
+});
+
+// Support Resources Routes
+Route::get('/support-resources', function () {
+    return view('support-resources.support-resources');
 });
 
 // Authentication Routes
@@ -27,7 +33,7 @@ Route::post('/signup', [UserController::class, 'signup'])->name('register');
 
 Route::post('/logout', [UserController::class, 'logout'])->name('logout');
 
-Route::post('/signin', [UserController::class, 'signin'])-> name('login');
+Route::post('/signin', [UserController::class, 'signin'])->name('login');
 
 
 // Protected Routes
@@ -40,9 +46,21 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('/account/delete', [UserController::class, 'deleteAccount'])->name('account.delete');
 
-    // Admin Routes
-    Route::get('/admin', function () {
-        return view('admin-dashboard.dashboard');
+    // Admin-only routes
+    Route::middleware('IsAdmin')->prefix('admin')->as('admin.')->group(function () {
+        Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');
+
+        // Support Resources Routes
+        Route::get('/add-resource', [AdminController::class, 'addResourcePage'])->name('add.resource');
+        Route::post('/add-resource', [AdminController::class, 'addResource'])->name('store.resource');
+        Route::get('/edit-resource/{id}', [AdminController::class, 'editResourcePage'])->name('edit.resource');
+        Route::put('/edit-resource/{id}', [AdminController::class, 'updateResource'])->name('update.resource');
+        Route::delete('/delete-resource/{id}', [AdminController::class, 'deleteResource'])->name('delete.resource');
+
+        // User Management Routes
+        Route::get('/edit-user/{id}', [AdminController::class, 'editUserPage'])->name('edit.user');
+        Route::put('/edit-user/{id}', [AdminController::class, 'updateUser'])->name('update.user');
+        Route::delete('/delete-user/{id}', [AdminController::class, 'deleteUser'])->name('delete.user');
     });
 
     // Mood Routes
@@ -113,14 +131,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/health-insights/sleep', function () {
         return view('health-insights.sleep-insights');
     });
-    
+
     Route::get('/health-insights/goals', function () {
         return view('health-insights.goals-insights');
-    });
-
-    // Support Resources Routes
-    Route::get('/support-resources', function () {
-        return view('support-resources.support-resources');
     });
 
     // Forum Routes
@@ -133,5 +146,4 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/forum/reply/{forum_reply}/like', [ForumController::class, 'likeReply'])->name('forum.like.reply');
     Route::delete('/forum/post/{id}', [ForumController::class, 'delete'])->name('forum.delete');
     Route::delete('/forum/reply/{id}', [ForumController::class, 'deleteReply'])->name('forum.delete.reply');
-
 });
