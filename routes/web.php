@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ForumController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\SupportResourceController;
 
 // Home Routes
 Route::get('/', function () {
@@ -15,9 +16,7 @@ Route::get('/home', function () {
 });
 
 // Support Resources Routes
-Route::get('/support-resources', function () {
-    return view('support-resources.support-resources');
-});
+Route::get('/support-resources', [SupportResourceController::class, 'index'])->name('support-resources.index');
 
 // Authentication Routes
 

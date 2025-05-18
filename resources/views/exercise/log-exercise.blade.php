@@ -3,7 +3,7 @@
 <script>
     document.title = "StudentWell | Log Exercise";
 </script>
-<div class="content-area">
+<div class="content-area py-4">
     <h1>Log Exercise</h1>
 </div>
 @include('main.footer')

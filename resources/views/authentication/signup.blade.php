@@ -3,7 +3,7 @@
 <script>
     document.title = "StudentWell | Sign Up";
 </script>
-<div class="content-area">
+<div class="content-area py-4">
     <div class="container mb-3">
         <h1 class="page-title mt-4">Sign Up</h1>
     </div>

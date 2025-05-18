@@ -12,7 +12,7 @@
         {{ session('error') }}
     </div>
 @endif
-<div class="content-area">
+<div class="content-area py-4">
     <div class="container">
         <!-- Page Title, Subtitle, and Add Resource Button -->
         <div class="row mb-4">
