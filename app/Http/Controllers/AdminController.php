@@ -26,7 +26,11 @@ class AdminController extends Controller
                     ->orWhere('Phone', 'like', "%{$searchResources}%")
                     ->orWhere('Description', 'like', "%{$searchResources}%");
             })
-            ->paginate(10);
+            ->paginate(10, ['*'], 'resources_page')
+            ->appends([
+                'tab' => 'resources',
+                'search_resources' => $searchResources
+            ]);
 
         $users = User::when($searchUsers, function ($query, $searchUsers) {
             $query->where('first_name', 'like', "%{$searchUsers}%")
@@ -34,7 +38,11 @@ class AdminController extends Controller
                 ->orWhere('role', 'like', "%{$searchUsers}%")
                 ->orWhere('email', 'like', "%{$searchUsers}%");
         })
-            ->get();
+            ->paginate(10, ['*'], 'users_page') // custom page name
+            ->appends([
+                'tab' => 'users', // stay in users tab
+                'search_users' => $searchUsers // keep search term
+            ]);
 
         return view('admin.dashboard', compact('resources', 'users', 'searchResources', 'searchUsers'));
     }
