@@ -63,118 +63,58 @@
                                 @enderror
                             </div>
 
-                            <!-- Mood Emotions -->
+                            @php
+                                $emotions = [
+                                    'Adventurous',
+                                    'Anxious',
+                                    'Bored',
+                                    'Calm',
+                                    'Content',
+                                    'Creative',
+                                    'Excited',
+                                    'Focused',
+                                    'Frustrated',
+                                    'Grateful',
+                                    'Hopeful',
+                                    'Irritable',
+                                    'Lonely',
+                                    'Motivated',
+                                    'Overwhelmed',
+                                    'Productive',
+                                    'Relaxed',
+                                    'Social',
+                                    'Stressed',
+                                    'Tense',
+                                    'Tired',
+                                ];
+                            @endphp
                             <div class="mb-2">
-                                <label class="form-label fw-semibold mb-1">Select your current emotions</label>
+                                <label for="Emotions" class="form-label fw-semibold mb-1">Select your current
+                                    emotions</label>
                                 <div class="d-flex flex-wrap gap-2 mb-3">
-                                    <div class="emotion-option">
-                                        <input type="checkbox" id="emotion_irritable" name="Emotions[]"
-                                            value="Irritable">
-                                        <label for="emotion_irritable" class="badge">Irritable</label>
-                                    </div>
-                                    <div class="emotion-option">
-                                        <input type="checkbox" id="emotion_content" name="Emotions[]" value="Content">
-                                        <label for="emotion_content" class="badge">Content</label>
-                                    </div>
-                                    <div class="emotion-option">
-                                        <input type="checkbox" id="emotion_adventurous" name="Emotions[]"
-                                            value="Adventurous">
-                                        <label for="emotion_adventurous" class="badge">Adventurous</label>
-                                    </div>
-                                    <div class="emotion-option">
-                                        <input type="checkbox" id="emotion_tense" name="Emotions[]" value="Tense">
-                                        <label for="emotion_tense" class="badge">Tense</label>
-                                    </div>
-                                    <div class="emotion-option">
-                                        <input type="checkbox" id="emotion_hopeful" name="Emotions[]" value="Hopeful">
-                                        <label for="emotion_hopeful" class="badge">Hopeful</label>
-                                    </div>
-                                    <div class="emotion-option">
-                                        <input type="checkbox" id="emotion_overwhelmed" name="Emotions[]"
-                                            value="Overwhelmed">
-                                        <label for="emotion_overwhelmed" class="badge">Overwhelmed</label>
-                                    </div>
-                                    <div class="emotion-option">
-                                        <input type="checkbox" id="emotion_grateful" name="Emotions[]" value="Grateful">
-                                        <label for="emotion_grateful" class="badge">Grateful</label>
-                                    </div>
-                                    <div class="emotion-option">
-                                        <input type="checkbox" id="emotion_excited" name="Emotions[]" value="Excited">
-                                        <label for="emotion_excited" class="badge">Excited</label>
-                                    </div>
-                                    <div class="emotion-option">
-                                        <input type="checkbox" id="emotion_bored" name="Emotions[]" value="Bored">
-                                        <label for="emotion_bored" class="badge">Bored</label>
-                                    </div>
-                                    <div class="emotion-option">
-                                        <input type="checkbox" id="emotion_focused" name="Emotions[]"
-                                            value="Focused">
-                                        <label for="emotion_focused" class="badge">Focused</label>
-                                    </div>
-                                    <div class="emotion-option">
-                                        <input type="checkbox" id="emotion_productive" name="Emotions[]"
-                                            value="Productive">
-                                        <label for="emotion_productive" class="badge">Productive</label>
-                                    </div>
-                                    <div class="emotion-option">
-                                        <input type="checkbox" id="emotion_tired" name="Emotions[]" value="Tired">
-                                        <label for="emotion_tired" class="badge">Tired</label>
-                                    </div>
-                                    <div class="emotion-option">
-                                        <input type="checkbox" id="emotion_stressed" name="Emotions[]"
-                                            value="Stressed">
-                                        <label for="emotion_stressed" class="badge">Stressed</label>
-                                    </div>
-                                    <div class="emotion-option">
-                                        <input type="checkbox" id="emotion_relaxed" name="Emotions[]"
-                                            value="Relaxed">
-                                        <label for="emotion_relaxed" class="badge">Relaxed</label>
-                                    </div>
-                                    <div class="emotion-option">
-                                        <input type="checkbox" id="emotion_anxious" name="Emotions[]"
-                                            value="Anxious">
-                                        <label for="emotion_anxious" class="badge">Anxious</label>
-                                    </div>
-                                    <div class="emotion-option">
-                                        <input type="checkbox" id="emotion_creative" name="Emotions[]"
-                                            value="Creative">
-                                        <label for="emotion_creative" class="badge">Creative</label>
-                                    </div>
-                                    <div class="emotion-option">
-                                        <input type="checkbox" id="emotion_calm" name="Emotions[]" value="Calm">
-                                        <label for="emotion_calm" class="badge">Calm</label>
-                                    </div>
-                                    <div class="emotion-option">
-                                        <input type="checkbox" id="emotion_frustrated" name="Emotions[]"
-                                            value="Frustrated">
-                                        <label for="emotion_frustrated" class="badge">Frustrated</label>
-                                    </div>
-                                    <div class="emotion-option">
-                                        <input type="checkbox" id="emotion_motivated" name="Emotions[]"
-                                            value="Motivated">
-                                        <label for="emotion_motivated" class="badge">Motivated</label>
-                                    </div>
-                                    <div class="emotion-option">
-                                        <input type="checkbox" id="emotion_lonely" name="Emotions[]" value="Lonely">
-                                        <label for="emotion_lonely" class="badge">Lonely</label>
-                                    </div>
-                                    <div class="emotion-option" style="">
-                                        <input type="checkbox" id="emotion_social" name="Emotions[]" value="Social">
-                                        <label for="emotion_social" class="badge">Social</label>
-                                    </div>
+                                    @foreach ($emotions as $emotion)
+                                        <div class="emotion-option">
+                                            <input type="checkbox" id="emotion_{{ strtolower($emotion) }}"
+                                                name="Emotions[]" value="{{ $emotion }}"
+                                                {{ is_array(old('Emotions')) && in_array($emotion, old('Emotions')) ? 'checked' : '' }}>
+                                            <label for="emotion_{{ strtolower($emotion) }}" class="badge">
+                                                {{ $emotion }}
+                                            </label>
+                                        </div>
+                                    @endforeach
                                 </div>
-
-                                @error('Emotions')
-                                    <div class="text-danger small">{{ $message }}</div>
-                                @enderror
                             </div>
+
+                            @error('Emotions')
+                                <div class="text-danger small">{{ $message }}</div>
+                            @enderror
                         </div>
                     </div>
 
+
                     <div class="col-lg-6">
                         <div style="color: var(--secondary-colour)" class="content-wrapper">
-                            <label for="Reflection"
-                                class="form-label fw-semibold mb-2 content-label">Reflection</label>
+                            <label for="Reflection" class="form-label fw-semibold mb-2 content-label">Reflection</label>
                             <p class="content-header-desc mb-1">Consider these prompts:</p>
                             <ul>
                                 <li style="color: var(secondary-colour)">What made you feel this way?</li>
@@ -198,8 +138,9 @@
                         </button>
                     </div>
                 </div>
-            </form>
         </div>
+        </form>
     </div>
+</div>
 </div>
 @include('main.footer')
