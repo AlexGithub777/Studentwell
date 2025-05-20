@@ -62,4 +62,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(ForumReply::class, 'UserID', 'id');
     }
+
+    public function moodLogs()
+    {
+        // Order by created_at in descending order
+        return $this->hasMany(MoodLog::class, 'UserID', 'id')->orderBy('created_at', 'desc');
+    }
 }

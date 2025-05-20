@@ -14,7 +14,6 @@
             </div>
         </div>
 
-        <!-- may add a search bar here in the future -->
         @php
             $mentalHealth = $resources->filter(fn($r) => $r->category && $r->category->Name === 'Mental Health');
             $physicalHealth = $resources->filter(fn($r) => $r->category && $r->category->Name === 'Physical Health');

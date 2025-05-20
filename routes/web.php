@@ -5,6 +5,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ForumController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\SupportResourceController;
+use App\Http\Controllers\MoodTrackingController;
 
 // Home Routes
 Route::get('/', function () {
@@ -62,14 +63,12 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/delete-user/{id}', [AdminController::class, 'deleteUser'])->name('delete.user');
     });
 
-    // Mood Routes
-    Route::get('/mood', function () {
-        return view('mood.mood');
-    });
-
-    Route::get('/mood/track-mood', function () {
-        return view('mood.track-mood');
-    });
+    //  Mood Routes
+    Route::get('/mood', [MoodTrackingController::class, 'index'])->name('mood.index');
+    Route::get('/mood/track-mood', [MoodTrackingController::class, 'track'])->name('mood.track');
+    Route::post('/mood/track-mood', [MoodTrackingController::class, 'store'])->name('mood.store');
+    Route::get('/mood/edit-mood/{id}', [MoodTrackingController::class, 'edit'])->name('mood.edit');
+    Route::put('/mood/edit-mood/{id}', [MoodTrackingController::class, 'update'])->name('mood.update');
 
     // Exercise Routes
     Route::get('/exercise', function () {

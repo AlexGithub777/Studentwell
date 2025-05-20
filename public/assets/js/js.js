@@ -66,8 +66,3 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
-
-// Admin - Add Resource js
-if (window.location.pathname === "/admin/add-resource") {
-    //
-}

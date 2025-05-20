@@ -832,3 +832,17 @@ body {
 .resource-card:hover {
     transform: translateY(-5px);
 }
+
+/* Mood Tracking styles */
+.metric-emoji {
+    font-size: 3.5rem;
+    color: var(--secondary-colour);
+}
+
+/* Mood Tracking styles */
+.metric-icon {
+    font-size: 3.5rem;
+    color: var(--secondary-colour);
+    padding-top: 1rem;
+    padding-left: 0.5rem;
+}
