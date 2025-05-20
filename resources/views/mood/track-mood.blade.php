@@ -89,7 +89,7 @@
                                 ];
                             @endphp
                             <div class="mb-2">
-                                <label for="Emotions" class="form-label fw-semibold mb-1">Select your current
+                                <label for="Emotions" class="form-label fw-semibold mb-2">Select your current
                                     emotions</label>
                                 <div class="d-flex flex-wrap gap-2 mb-3">
                                     @foreach ($emotions as $emotion)
