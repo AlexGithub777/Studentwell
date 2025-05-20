@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\MoodLog;
 
 class MoodTrackingController extends Controller
 {
+    // Show the mood tracking dashboard
     public function index(Request $request)
     {
         // Load all mood logs for the authenticated user
@@ -80,26 +82,57 @@ class MoodTrackingController extends Controller
         ));   
     }
 
-    public function track(Request $request)
+    // Show the mood tracking form
+    public function track()
     {
-        // Validate the request
-        $request->validate([
-            'mood_rating' => 'required|integer|min:1|max:5',
-            'emotions' => 'required|string|max:255',
-            'reflection' => 'nullable|string|max:1000',
+        // Return the view and pass the mood log
+        return view('mood.track-mood');
+    }
+
+
+    // Store mood log
+    public function store(Request $request)
+    {
+        $validatedData = $request->validate([
+            'MoodId' => ['required', 'integer', 'min:1', 'max:5'],
+            'Emotions' => ['nullable', 'array', 'max:5'],  // max 5 emotions selected
+            'Reflection' => ['nullable', 'string', 'max:255'],
+        ], [
+            'MoodId.required' => 'Mood rating is required.',
+            'MoodId.integer' => 'Mood rating must be an integer.',
+            'MoodId.min' => 'Mood rating must be at least 1.',
+            'MoodId.max' => 'Mood rating cannot be greater than 5.',
+    
+            'Emotions.array' => 'Emotions must be sent as an array.',
+            'Emotions.max' => 'You can select up to 5 emotions only.', // <-- add this message
+    
+            'Reflection.string' => 'Reflection must be a valid string.',
+            'Reflection.max' => 'Reflection cannot exceed 255 characters.',
         ]);
 
-        // Create a new mood log
-        auth()->user()->moodLogs()->create([
-            'MoodRating' => $request->input('mood_rating'),
-            'Emotions' => $request->input('emotions'),
-            'Reflection' => $request->input('reflection'),
+        $userId = auth()->user()->id;
+
+        // Check if a mood log already exists for today
+        $existingLog = MoodLog::where('UserID', $userId)
+            ->whereDate('created_at', now())
+            ->first();
+
+        if ($existingLog) {
+            return redirect()->back()
+                ->with('error', 'You have already logged your mood for today.');
+        }
+
+        MoodLog::create([
+            'MoodRating' => $validatedData['MoodId'],
+            'Emotions' => json_encode($validatedData['Emotions'] ?? []),
+            'Reflection' => $validatedData['Reflection'],
+            'UserID' => $userId,
         ]);
 
-        // Redirect back with success message
         return redirect()->route('mood.index')->with('success', 'Mood logged successfully!');
     }
 
+    // Show the mood log edit form
     public function edit($id)
     {
         // Find the mood log by ID
@@ -109,13 +142,14 @@ class MoodTrackingController extends Controller
         return view('mood.edit-mood', compact('moodLog'));
     }
 
+    // Update mood log
     public function update(Request $request, $id)
     {
         // Validate the request
         $request->validate([
             'mood_rating' => 'required|integer|min:1|max:5',
             'emotions' => 'required|string|max:255',
-            'reflection' => 'nullable|string|max:1000',
+            'reflection' => 'nullable|string|max:255',
         ]);
 
         // Find the mood log by ID

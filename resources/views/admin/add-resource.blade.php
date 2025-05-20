@@ -89,7 +89,7 @@
                     </div>
 
                     <div class="col-12 text-end mt-4">
-                        <button type="submit" class="btn publish-btn">
+                        <button type="submit" class="btn custom-form-btn">
                             Create Resource
                         </button>
                     </div>

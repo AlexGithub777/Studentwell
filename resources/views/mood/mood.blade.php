@@ -42,7 +42,7 @@
                                 {{ $todayMood?->MoodLabel ?? 'No entry today' }}
                             </h5>
                             <p class="tracked-time mb-0">
-                                {{ $todayMood ? 'Tracked ' . \Carbon\Carbon::parse($todayMood->created_at)->diffForHumans() : 'No entry today' }}
+                                {{ $todayMood ? 'Tracked ' . \Carbon\Carbon::parse($todayMood->created_at)->diffForHumans() : '' }}
                             </p>
                         </div>
                     </div>
@@ -140,7 +140,7 @@
                                     <div>
                                         <!-- Display emtotions in seperate badege pills -->
                                         @foreach (json_decode($moodLog->Emotions, true) as $emotion)
-                                            <span class="badge rounded-pill px-3 py-2"
+                                            <span class="badge rounded-pill mb-md-2 px-3 py-2"
                                                 style="background-color: var(--secondary-colour); color: white; width: fit-content;">
                                                 {{ $emotion }}
                                             </span>
@@ -181,23 +181,5 @@
             setTimeout(() => alert.remove(), 500); // fully remove after fade out
         }
     }, 10000); // 10000 ms = 10 seconds
-
-    // funciton to convert emoji to string
-    function emojiToString(emoji) {
-        switch (emoji) {
-            case "😄":
-                return "Great";
-            case "😊":
-                return "Good";
-            case "😐":
-                return "Okay";
-            case "😔":
-                return "Down";
-            case "😢":
-                return "Sad";
-            default:
-                return "?";
-        }
-    }
 </script>
 @include('main.footer')

@@ -66,3 +66,21 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
+
+// nvert emoji to string
+function emojiToString(emoji) {
+    switch (emoji) {
+        case "😄":
+            return "Great";
+        case "😊":
+            return "Good";
+        case "😐":
+            return "Okay";
+        case "😔":
+            return "Down";
+        case "😢":
+            return "Sad";
+        default:
+            return "?";
+    }
+}

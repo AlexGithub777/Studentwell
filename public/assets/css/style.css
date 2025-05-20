@@ -648,14 +648,14 @@ body {
 }
 
 /* Button styling */
-.publish-btn {
+.custom-form-btn {
     background-color: var(--secondary-colour);
     color: white;
     font-weight: 600;
     border: none;
 }
 
-.publish-btn:hover {
+.custom-form-btn:hover {
     background-color: #15396d;
     color: white;
 }
@@ -795,11 +795,11 @@ body {
     color: white;
 }
 
-.publish-btn:focus,
-.publish-btn:active,
-.publish-btn:hover,
-.publish-btn:focus-visible,
-.publish-btn:active:focus {
+.custom-form-btn:focus,
+.custom-form-btn:active,
+.custom-form-btn:hover,
+.custom-form-btn:focus-visible,
+.custom-form-btn:active:focus {
     background-color: #15396d;
     color: white;
 }
@@ -845,4 +845,57 @@ body {
     color: var(--secondary-colour);
     padding-top: 1rem;
     padding-left: 0.5rem;
+}
+
+.mood-option {
+    border: 2px solid var(--secondary-colour);
+    border-radius: 0.5rem;
+    cursor: pointer;
+    height: 80px;
+    width: 80px;
+    color: var(--secondary-colour);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Mood option active state */
+.mood-option:has(input[type="radio"]:checked) {
+    background-color: var(--secondary-colour);
+    color: white;
+    border-color: var(--secondary-colour);
+}
+
+.mood-option:hover {
+    transform: scale(1.05);
+}
+.mood-option:has(input[type="radio"]:checked) .mood-text {
+    color: white;
+}
+
+.emotion-option input[type="checkbox"] {
+    display: none;
+}
+
+/* Default badge style using Bootstrap + custom border */
+.emotion-option label {
+    cursor: pointer;
+    border: 1px solid var(--secondary-colour);
+    border-radius: 50rem;
+    background-color: var(--main-colour);
+    color: var(--secondary-colour);
+    padding: 0.4rem 0.9rem;
+    font-weight: 600;
+    transition: background-color 0.3s, color 0.3s;
+    user-select: none;
+}
+
+/* Checked state */
+.emotion-option input[type="checkbox"]:checked + label {
+    background-color: var(--secondary-colour);
+    color: white;
+    border-color: var(--secondary-colour);
+}
+
+/* Hover effect */
+.emotion-option label:hover {
+    transform: scale(1.05);
 }
