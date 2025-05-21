@@ -6,6 +6,7 @@ use App\Http\Controllers\ForumController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\SupportResourceController;
 use App\Http\Controllers\MoodTrackingController;
+use App\Http\Controllers\SleepLogController;
 
 // Home Routes
 Route::get('/', function () {
@@ -105,13 +106,11 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // Sleep Routes
-    Route::get('/sleep', function () {
-        return view('sleep.sleep');
-    });
-
-    Route::get('/sleep/log-sleep', function () {
-        return view('sleep.log-sleep');
-    });
+    Route::get('/sleep', [SleepLogController::class, 'index'])->name('sleep.index');
+    Route::get('/sleep/log-sleep', [SleepLogController::class, 'log'])->name('sleep.log'); 
+    Route::post('/sleep/log-sleep', [SleepLogController::class, 'store'])->name('sleep.store');
+    Route::get('/sleep/edit-sleep/{id}', [SleepLogController::class, 'edit'])->name('sleep.edit');
+    Route::put('/sleep/edit-sleep/{id}', [SleepLogController::class, 'update'])->name('sleep.update');
 
     // Health Insights Routes
     Route::get('/health-insights', function () {

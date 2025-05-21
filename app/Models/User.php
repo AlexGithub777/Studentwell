@@ -68,4 +68,10 @@ class User extends Authenticatable
         // Order by created_at in descending order
         return $this->hasMany(MoodLog::class, 'UserID', 'id')->orderBy('created_at', 'desc');
     }
+
+    public function sleepLogs()
+    {
+        // Order by created_at in descending order
+        return $this->hasMany(SleepLog::class, 'UserID', 'id')->orderBy('created_at', 'desc');
+    }
 }
