@@ -84,3 +84,48 @@ function emojiToString(emoji) {
             return "?";
     }
 }
+
+if (
+    window.location.pathname === "/sleep/log-sleep" ||
+    window.location.pathname === "/sleep/log-sleep/" ||
+    window.location.pathname === "/sleep/edit-sleep" ||
+    window.location.pathname === "/sleep/edit-sleep/"
+) {
+    const bedTimeInput = document.getElementById("BedTime");
+    const wakeTimeInput = document.getElementById("WakeTime");
+    const durationDisplayDiv = document.getElementById(
+        "SleepDurationDisplayDiv"
+    );
+    const durationDisplay = document.getElementById("SleepDurationDisplay");
+
+    function updateSleepDuration() {
+        const bedTime = bedTimeInput.value;
+        const wakeTime = wakeTimeInput.value;
+
+        if (!bedTime || !wakeTime) {
+            durationDisplayDiv.classList.add("d-none");
+            return;
+        }
+
+        const now = new Date();
+        const bed = new Date(now.toDateString() + " " + bedTime);
+        let wake = new Date(now.toDateString() + " " + wakeTime);
+
+        if (wake <= bed) {
+            wake.setDate(wake.getDate() + 1);
+        }
+
+        const durationMs = wake - bed;
+        const durationMin = Math.floor(durationMs / (1000 * 60));
+        const hours = Math.floor(durationMin / 60);
+        const minutes = durationMin % 60;
+
+        durationDisplay.textContent = `${hours}h ${minutes
+            .toString()
+            .padStart(2, "0")}m`;
+        durationDisplayDiv.classList.remove("d-none");
+    }
+
+    bedTimeInput.addEventListener("change", updateSleepDuration);
+    wakeTimeInput.addEventListener("change", updateSleepDuration);
+}

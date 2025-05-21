@@ -95,30 +95,73 @@ class SleepLogController extends Controller
         return view('sleep.log-sleep');
     }
 
-    // Store a new sleep log
-    public function store(Request $request) 
+    public function store(Request $request)
     {
-        // Validate the request
-        $request->validate([
-            'SleepDate' => 'required|date',
-            'SleepDurationMinutes' => 'required|integer|min:0',
-            'SleepQuality' => 'required|integer|between:1,5',
-            'Notes' => 'nullable|string|max:255',
+        $validatedData = $request->validate([
+            'SleepDate' => ['required', 'date', 'before_or_equal:today'],
+            'BedTime' => ['required', 'date_format:H:i'],
+            'WakeTime' => ['required', 'date_format:H:i'],
+            'QualityId' => ['required', 'integer', 'between:1,5'],
+            'Notes' => ['nullable', 'string', 'max:255'],
+        ], [
+            'SleepDate.required' => 'The sleep date is required.',
+            'SleepDate.date' => 'The sleep date must be a valid date.',
+            'SleepDate.before_or_equal' => 'You cannot select a future date.',
+
+            'BedTime.required' => 'Bedtime is required.',
+            'BedTime.date_format' => 'Bedtime must be in the format HH:MM.',
+
+            'WakeTime.required' => 'Wake time is required.',
+            'WakeTime.date_format' => 'Wake time must be in the format HH:MM.',
+
+            'QualityId.required' => 'Sleep quality is required.',
+            'QualityId.integer' => 'Sleep quality must be a number.',
+            'QualityId.between' => 'Sleep quality must be between 1 and 5.',
+
+            'Notes.string' => 'Notes must be a valid string.',
+            'Notes.max' => 'Notes cannot exceed 255 characters.',
         ]);
 
-        // Create a new sleep log
-        $sleepLog = new SleepLog();
-        $sleepLog->UserID = auth()->user()->id;
-        $sleepLog->SleepDate = $request->input('SleepDate');
-        $sleepLog->SleepDurationMinutes = $request->input('SleepDurationMinutes');
-        $sleepLog->SleepQuality = $request->input('SleepQuality');
-        $sleepLog->Notes = $request->input('Notes');
-        $sleepLog->created_at = now();
-        $sleepLog->save();
+        $sleepDate = \Carbon\Carbon::createFromFormat('Y-m-d', $validatedData['SleepDate']);
+        $bedTime = $sleepDate->copy()->setTimeFromTimeString($validatedData['BedTime']);
+        $wakeTime = $sleepDate->copy()->setTimeFromTimeString($validatedData['WakeTime']);
 
-        // Redirect to the sleep log index with a success message
+        // If wake time is before or equal to bed time, assume it crosses midnight
+        if ($wakeTime->lessThanOrEqualTo($bedTime)) {
+            $wakeTime->addDay();
+        }
+
+        // Disallow BedTime in the future
+        if ($bedTime->greaterThan(now())) {
+            return back()
+                ->withErrors(['BedTime' => 'You cannot log a sleep session that starts in the future.'])
+                ->withInput();
+        }
+
+        // Disallow WakeTime in the future
+        if ($wakeTime->greaterThan(now())) {
+            return back()
+                ->withErrors(['WakeTime' => 'You cannot log a sleep session that hasn’t finished yet.'])
+                ->withInput();
+        }
+
+        $sleepDuration = $bedTime->diffInMinutes($wakeTime, false);
+
+        SleepLog::create([
+            'UserID' => auth()->user()->id,
+            'SleepDate' => $validatedData['SleepDate'],
+            'BedTime' => $validatedData['BedTime'],
+            'WakeTime' => $validatedData['WakeTime'],
+            'SleepDurationMinutes' => $sleepDuration,
+            'SleepQuality' => $validatedData['QualityId'],
+            'Notes' => $validatedData['Notes'] ?? null,
+        ]);
+
         return redirect()->route('sleep.index')->with('success', 'Sleep log created successfully.');
     }
+
+
+
 
     // Show the sleep log edit form
     public function edit($id) 
