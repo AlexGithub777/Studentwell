@@ -15,11 +15,16 @@ class MoodLog extends Model
 
     protected $dates = ['created_at'];
 
+    // Casts
+    protected $casts = [
+        'MoodDate' => 'date',
+    ];
 
     // fillable fields
     protected $fillable = [
         'MoodLogID',
         'UserID',
+        'MoodDate',
         'MoodRating',
         'Emotions',
         'Reflection',

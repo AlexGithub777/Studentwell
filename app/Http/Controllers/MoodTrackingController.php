@@ -15,42 +15,44 @@ class MoodTrackingController extends Controller
 
         // Load mood metrics (todays mood, avergae mood this week, Days tracked this week and mood log streak)
         $todayMood = auth()->user()->moodLogs()
-            ->whereDate('created_at', now())
+            ->whereDate('MoodDate', now())
             ->first();
 
         $averageMood = auth()->user()->moodLogs()
-            ->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])
+            ->whereBetween('MoodDate', [now()->startOfWeek(), now()->endOfWeek()])
             ->avg('MoodRating');
 
         $daysTrackedThisWeek = auth()->user()->moodLogs()
-            ->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])
-            ->distinct('created_at')
-            ->count('created_at');
+            ->whereBetween('MoodDate', [now()->startOfWeek(), now()->endOfWeek()])
+            ->distinct('MoodDate')
+            ->count('MoodDate');
 
         // Calculate mood streak (consecutive days with logs starting today or yesterday)
         $moodLogsByDate = auth()->user()->moodLogs()
-            ->orderBy('created_at', 'desc')
-            ->get()
-            ->groupBy(function ($log) {
-                return \Carbon\Carbon::parse($log->created_at)->format('Y-m-d');
-            })
-            ->keys()
-            ->sortDesc()
+            ->orderBy('MoodDate', 'desc')
+            ->pluck('MoodDate')
+            ->map(fn ($d) => \Carbon\Carbon::parse($d)->format('Y-m-d'))
+            ->unique()
             ->values();
 
         $streak = 0;
         $today = \Carbon\Carbon::today();
 
+        // Check if today or yesterday's mood log exists
         foreach ($moodLogsByDate as $date) {
             $logDate = \Carbon\Carbon::parse($date);
 
+            
             if ($streak === 0) {
+                // Check if today or yesterday's mood log exists
                 if ($logDate->equalTo($today) || $logDate->equalTo($today->copy()->subDay())) {
+                    // Start the streak
                     $streak++;
                 } else {
                     break;
                 }
             } else {
+                // Check if the previous date is consecutive
                 $previousDate = \Carbon\Carbon::parse($moodLogsByDate[$streak - 1]);
                 if ($logDate->equalTo($previousDate->copy()->subDay())) {
                     $streak++;
@@ -114,47 +116,55 @@ class MoodTrackingController extends Controller
     }
 
 
-    // Store mood log
     public function store(Request $request)
     {
         $validatedData = $request->validate([
             'MoodId' => ['required', 'integer', 'min:1', 'max:5'],
-            'Emotions' => ['nullable', 'array', 'max:5'],  // max 5 emotions selected
+            'MoodDate' => ['required', 'date', 'before_or_equal:today'],
+            'Emotions' => ['nullable', 'array', 'max:5'],
             'Reflection' => ['nullable', 'string', 'max:255'],
         ], [
             'MoodId.required' => 'Mood rating is required.',
             'MoodId.integer' => 'Mood rating must be an integer.',
             'MoodId.min' => 'Mood rating must be at least 1.',
             'MoodId.max' => 'Mood rating cannot be greater than 5.',
-    
+
+            'MoodDate.required' => 'The mood date is required.',
+            'MoodDate.date' => 'The mood date must be a valid date.',
+            'MoodDate.before_or_equal' => 'You cannot select a future date.',
+
             'Emotions.array' => 'Emotions must be sent as an array.',
-            'Emotions.max' => 'You can select up to 5 emotions only.', // <-- add this message
-    
+            'Emotions.max' => 'You can select up to 5 emotions only.',
+
             'Reflection.string' => 'Reflection must be a valid string.',
             'Reflection.max' => 'Reflection cannot exceed 255 characters.',
         ]);
 
-        $userId = auth()->user()->id;
+        $userId = auth()->id();
+        $moodDate = $validatedData['MoodDate'];
 
-        // Check if a mood log already exists for today
+        // Check if a log already exists for this user on that date
         $existingLog = MoodLog::where('UserID', $userId)
-            ->whereDate('created_at', now())
+            ->whereDate('MoodDate', $moodDate)
             ->first();
 
         if ($existingLog) {
             return redirect()->back()
-                ->with('error', 'You have already logged your mood for today.');
+                ->withInput()
+                ->with('error', 'You have already logged a mood for this date.');
         }
 
         MoodLog::create([
+            'UserID' => $userId,
             'MoodRating' => $validatedData['MoodId'],
+            'MoodDate' => $moodDate,
             'Emotions' => json_encode($validatedData['Emotions'] ?? []),
             'Reflection' => $validatedData['Reflection'],
-            'UserID' => $userId,
         ]);
 
         return redirect()->route('mood.index')->with('success', 'Mood logged successfully!');
     }
+
 
     // Show the mood log edit form
     public function edit($id)
@@ -169,48 +179,53 @@ class MoodTrackingController extends Controller
     // Update mood log
     public function update(Request $request, $id)
     {
-        // Validate the request
         $validatedData = $request->validate([
             'MoodId' => ['required', 'integer', 'min:1', 'max:5'],
-            'Emotions' => ['nullable', 'array', 'max:5'],  // max 5 emotions selected
+            'MoodDate' => ['required', 'date', 'before_or_equal:today'],
+            'Emotions' => ['nullable', 'array', 'max:5'],
             'Reflection' => ['nullable', 'string', 'max:255'],
         ], [
             'MoodId.required' => 'Mood rating is required.',
             'MoodId.integer' => 'Mood rating must be an integer.',
             'MoodId.min' => 'Mood rating must be at least 1.',
             'MoodId.max' => 'Mood rating cannot be greater than 5.',
-    
+
+            'MoodDate.required' => 'The mood date is required.',
+            'MoodDate.date' => 'The mood date must be a valid date.',
+            'MoodDate.before_or_equal' => 'You cannot select a future date.',
+
             'Emotions.array' => 'Emotions must be sent as an array.',
-            'Emotions.max' => 'You can select up to 5 emotions only.', // <-- add this message
-    
+            'Emotions.max' => 'You can select up to 5 emotions only.',
+
             'Reflection.string' => 'Reflection must be a valid string.',
             'Reflection.max' => 'Reflection cannot exceed 255 characters.',
         ]);
 
-        // Find the mood log by ID
-        $moodLog = auth()->user()->moodLogs()->findOrFail($id);
+        $user = auth()->user();
+        $moodLog = $user->moodLogs()->findOrFail($id);
+        $moodDate = $validatedData['MoodDate'];
 
-        // Update the mood log
+        // Check for existing mood log for this user and date, excluding the current one
+        $existingLog = $user->moodLogs()
+            ->whereDate('MoodDate', $moodDate)
+            ->where('id', '!=', $id)
+            ->first();
+
+        if ($existingLog) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'You already have a mood logged for that date.');
+        }
+
+        // Update fields
         $moodLog->MoodRating = $validatedData['MoodId'];
+        $moodLog->MoodDate = $moodDate;
+        $moodLog->Emotions = isset($validatedData['Emotions']) ? json_encode($validatedData['Emotions']) : null;
+        $moodLog->Reflection = $validatedData['Reflection'] ?? null;
 
-        // Check if emotions are provided
-        if (isset($validatedData['Emotions'])) {
-            $moodLog->Emotions = json_encode($validatedData['Emotions']);
-        } else {
-            $moodLog->Emotions = null;
-        }
-
-        // Check if reflection is provided
-        if (isset($validatedData['Reflection'])) {
-            $moodLog->Reflection = $validatedData['Reflection'];
-        } else {
-            $moodLog->Reflection = null;
-        }
-
-        // Save the mood log
         $moodLog->save();
 
-        // Redirect back with success message
         return redirect()->route('mood.index')->with('success', 'Mood updated successfully!');
     }
+
 }

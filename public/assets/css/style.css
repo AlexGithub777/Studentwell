@@ -137,6 +137,20 @@ body {
 }
 
 @media (max-width: 767.98px) {
+    /* Full-width date and time inputs on mobile */
+    .mobile-full-width {
+        width: 100% !important;
+        padding-right: 0 !important;
+        margin-right: 0 !important;
+    }
+
+    /* Stack bedtime and waketime vertically */
+    .bed-wake-stack {
+        flex-direction: column !important;
+    }
+}
+
+@media (max-width: 767.98px) {
     .sidebar {
         width: 80%;
         z-index: 1000;
@@ -871,7 +885,32 @@ body {
     color: white;
 }
 
-.emotion-option input[type="checkbox"] {
+/* Sleep quality stlyes */
+.quality-option {
+    border: 1px solid var(--secondary-colour);
+    border-radius: 0.5rem;
+    cursor: pointer;
+    height: 100px;
+    width: 100px;
+    color: var(--secondary-colour);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* quality-option active state */
+.quality-option:has(input[type="radio"]:checked) {
+    background-color: var(--secondary-colour);
+    color: white;
+    border-color: var(--secondary-colour);
+}
+
+.quality-option:hover {
+    transform: scale(1.05);
+}
+.quality-option:has(input[type="radio"]:checked) .quality-text {
+    color: white;
+}
+
+.quality-option input[type="checkbox"] {
     display: none;
 }
 

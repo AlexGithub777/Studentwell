@@ -124,7 +124,10 @@
                                                 {{ $moodLog->MoodLabel }}
                                             </h5>
                                             <p style="margin:0; font-size:0.9rem; color: var(--secondary-colour);">
-                                                {{ \Carbon\Carbon::parse($moodLog->created_at)->diffForHumans() }}
+                                                {{ \Carbon\Carbon::parse($moodLog->MoodDate)->format('F jS, Y') }}
+                                                @if (\Carbon\Carbon::parse($moodLog->MoodDate)->isToday())
+                                                    (Today)
+                                                @endif
                                             </p>
                                         </div>
                                         <div class="mt-1">

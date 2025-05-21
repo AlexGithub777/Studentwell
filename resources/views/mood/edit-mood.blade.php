@@ -30,10 +30,22 @@
                         <div class="left-column-wrapper d-flex flex-column h-100">
                             <h1 class="custom-header-title fw-bold mb-1">How are you feeling right now?</h1>
                             <p class="custom-header-desc mb-1">Update your emotional state details to monitor your
-                                mental
-                                wellbeing </p>
+                                mental wellbeing</p>
 
-                            <div class="mb-2">
+                            <!--- Mood Date (disallowed future dates in frontend and backend) -->
+                            <div class="mb-3 mt-1 w-50 pe-4 mobile-full-width">
+                                <label for="MoodDate" class="form-label fw-semibold mb-1">Date</label>
+                                <input type="date"
+                                    class="me-4 form-control custom-input @error('MoodDate') is-invalid @enderror"
+                                    id="MoodDate" name="MoodDate"
+                                    value="{{ old('MoodDate', isset($moodLog) ? $moodLog->MoodDate->format('Y-m-d') : '') }}"
+                                    max="{{ now()->format('Y-m-d') }}" required>
+                                @error('MoodDate')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="mb-1">
                                 <label for="Mood Rating" class="form-label fw-semibold mb-1">Select your current
                                     mood</label>
                             </div>
@@ -104,8 +116,9 @@
 
                                     @foreach ($emotions as $emotion)
                                         <div class="emotion-option">
-                                            <input type="checkbox" name="Emotions[]" value="{{ $emotion }}"
-                                                id="emotion_{{ $emotion }}" class="form-check-input"
+                                            <input class="d-none" type="checkbox" name="Emotions[]"
+                                                value="{{ $emotion }}" id="emotion_{{ $emotion }}"
+                                                class="form-check-input"
                                                 {{ in_array($emotion, $selectedEmotions) ? 'checked' : '' }}>
                                             <label class="badge" for="emotion_{{ $emotion }}">
                                                 {{ ucfirst($emotion) }}
@@ -135,7 +148,7 @@
                                 <li>What could you do differently tomorrow?</li>
                             </ul>
 
-                            <textarea style="min-height: 200px;" class="form-control custom-input @error('Reflection') is-invalid @enderror"
+                            <textarea class="content-area-height form-control custom-input @error('Reflection') is-invalid @enderror"
                                 id="Reflection" name="Reflection" placeholder="Write your thoughts here...">{{ old('Reflection', $moodLog->Reflection) }}</textarea>
                             @error('Reflection')
                                 <div class="invalid-feedback">{{ $message }}</div>
