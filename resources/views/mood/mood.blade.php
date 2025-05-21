@@ -139,12 +139,18 @@
                                 <div class="d-flex justify-content-between align-items-center mt-3">
                                     <div>
                                         <!-- Display emtotions in seperate badege pills -->
-                                        @foreach (json_decode($moodLog->Emotions, true) as $emotion)
-                                            <span class="badge rounded-pill mb-md-2 px-3 py-2"
-                                                style="background-color: var(--secondary-colour); color: white; width: fit-content;">
-                                                {{ $emotion }}
-                                            </span>
-                                        @endforeach
+                                        @php
+                                            $emotions = json_decode($moodLog->Emotions ?? '[]', true);
+                                        @endphp
+
+                                        @if (is_array($emotions) && count($emotions) > 0)
+                                            @foreach ($emotions as $emotion)
+                                                <span class="badge rounded-pill mb-md-2 px-3 py-2"
+                                                    style="background-color: var(--secondary-colour); color: white; width: fit-content;">
+                                                    {{ $emotion }}
+                                                </span>
+                                            @endforeach
+                                        @endif
                                     </div>
                                     <div>
                                         <!-- Edit Button -->

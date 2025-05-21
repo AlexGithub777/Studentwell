@@ -27,20 +27,40 @@ class MoodTrackingController extends Controller
             ->distinct('created_at')
             ->count('created_at');
 
-        // get the number of days tracked in a row all time
-        $moodLogStreak = auth()->user()->moodLogs()
+        // Calculate mood streak (consecutive days with logs starting today or yesterday)
+        $moodLogsByDate = auth()->user()->moodLogs()
             ->orderBy('created_at', 'desc')
             ->get()
-            ->groupBy(function ($date) {
-                return \Carbon\Carbon::parse($date->created_at)->format('Y-m-d');
+            ->groupBy(function ($log) {
+                return \Carbon\Carbon::parse($log->created_at)->format('Y-m-d');
             })
-            ->map(function ($group) {
-                return $group->count();
-            })
-            ->filter(function ($count) {
-                return $count > 0;
-            })
-            ->count();
+            ->keys()
+            ->sortDesc()
+            ->values();
+
+        $streak = 0;
+        $today = \Carbon\Carbon::today();
+
+        foreach ($moodLogsByDate as $date) {
+            $logDate = \Carbon\Carbon::parse($date);
+
+            if ($streak === 0) {
+                if ($logDate->equalTo($today) || $logDate->equalTo($today->copy()->subDay())) {
+                    $streak++;
+                } else {
+                    break;
+                }
+            } else {
+                $previousDate = \Carbon\Carbon::parse($moodLogsByDate[$streak - 1]);
+                if ($logDate->equalTo($previousDate->copy()->subDay())) {
+                    $streak++;
+                } else {
+                    break;
+                }
+            }
+        }
+
+        $moodLogStreak = $streak;
         
         $moodMap = [
             1 => ['emoji' => '😢', 'label' => 'Sad'],
@@ -64,11 +84,15 @@ class MoodTrackingController extends Controller
             $todayMood->MoodLabel = $moodMap[$rating]['label'] ?? 'Unknown';
         }
 
-        if ($averageMood) {
-            $rounded = round($averageMood); // because it's a float
+        if (is_numeric($averageMood)) {
+            $rounded = round($averageMood);
             $averageMoodEmoji = $moodMap[$rounded]['emoji'] ?? '❓';
             $averageMoodLabel = $moodMap[$rounded]['label'] ?? 'Unknown';
+        } else {
+            $averageMoodEmoji = null;
+            $averageMoodLabel = null;
         }
+        
 
 
         // Return the view and pass the mood logs
@@ -146,21 +170,45 @@ class MoodTrackingController extends Controller
     public function update(Request $request, $id)
     {
         // Validate the request
-        $request->validate([
-            'mood_rating' => 'required|integer|min:1|max:5',
-            'emotions' => 'required|string|max:255',
-            'reflection' => 'nullable|string|max:255',
+        $validatedData = $request->validate([
+            'MoodId' => ['required', 'integer', 'min:1', 'max:5'],
+            'Emotions' => ['nullable', 'array', 'max:5'],  // max 5 emotions selected
+            'Reflection' => ['nullable', 'string', 'max:255'],
+        ], [
+            'MoodId.required' => 'Mood rating is required.',
+            'MoodId.integer' => 'Mood rating must be an integer.',
+            'MoodId.min' => 'Mood rating must be at least 1.',
+            'MoodId.max' => 'Mood rating cannot be greater than 5.',
+    
+            'Emotions.array' => 'Emotions must be sent as an array.',
+            'Emotions.max' => 'You can select up to 5 emotions only.', // <-- add this message
+    
+            'Reflection.string' => 'Reflection must be a valid string.',
+            'Reflection.max' => 'Reflection cannot exceed 255 characters.',
         ]);
 
         // Find the mood log by ID
         $moodLog = auth()->user()->moodLogs()->findOrFail($id);
 
         // Update the mood log
-        $moodLog->update([
-            'MoodRating' => $request->input('mood_rating'),
-            'Emotions' => $request->input('emotions'),
-            'Reflection' => $request->input('reflection'),
-        ]);
+        $moodLog->MoodRating = $validatedData['MoodId'];
+
+        // Check if emotions are provided
+        if (isset($validatedData['Emotions'])) {
+            $moodLog->Emotions = json_encode($validatedData['Emotions']);
+        } else {
+            $moodLog->Emotions = null;
+        }
+
+        // Check if reflection is provided
+        if (isset($validatedData['Reflection'])) {
+            $moodLog->Reflection = $validatedData['Reflection'];
+        } else {
+            $moodLog->Reflection = null;
+        }
+
+        // Save the mood log
+        $moodLog->save();
 
         // Redirect back with success message
         return redirect()->route('mood.index')->with('success', 'Mood updated successfully!');
