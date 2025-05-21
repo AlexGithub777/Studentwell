@@ -88,7 +88,9 @@
                     <div class="d-flex">
                         <i class="fas fa-fire metric-icon"></i>
                         <div class="metric-text ms-4 mt-3">
-                            <h5 class="fw-bold metric-value mb-1">{{ $moodLogStreak }} days</h5>
+                            <h5 class="fw-bold metric-value mb-1">
+                                {{ $moodLogStreak }} {{ $moodLogStreak === 1 ? 'day' : 'days' }}
+                            </h5>
                             <p class="tracked-time mb-0">Consecutive tracking</p>
                         </div>
                     </div>
