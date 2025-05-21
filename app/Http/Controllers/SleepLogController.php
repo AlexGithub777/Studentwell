@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\SleepLog;
+use Carbon\Carbon;
 
 class SleepLogController extends Controller
 {
@@ -126,30 +127,78 @@ class SleepLogController extends Controller
         $bedTime = $sleepDate->copy()->setTimeFromTimeString($validatedData['BedTime']);
         $wakeTime = $sleepDate->copy()->setTimeFromTimeString($validatedData['WakeTime']);
 
-        // If wake time is before or equal to bed time, assume it crosses midnight
+        // Cross-midnight adjustment
         if ($wakeTime->lessThanOrEqualTo($bedTime)) {
             $wakeTime->addDay();
         }
 
-        // Disallow BedTime in the future
+        // Disallow future bed time
         if ($bedTime->greaterThan(now())) {
             return back()
                 ->withErrors(['BedTime' => 'You cannot log a sleep session that starts in the future.'])
                 ->withInput();
         }
 
-        // Disallow WakeTime in the future
+        // Disallow future wake time
         if ($wakeTime->greaterThan(now())) {
             return back()
                 ->withErrors(['WakeTime' => 'You cannot log a sleep session that hasn’t finished yet.'])
                 ->withInput();
         }
 
+        // Adjust for early-morning sessions (shift to previous day if before 6am)
+        $adjustedSleepDate = $bedTime->copy();
+        if ($bedTime->hour < 6) {
+            $adjustedSleepDate->subDay();
+        }
+        $adjustedDateOnly = $adjustedSleepDate->toDateString();
+
+        // Fetch all existing logs for this user on the adjusted sleep date
+        $existingLogs = \App\Models\SleepLog::where('UserID', auth()->id())
+            ->where('SleepDate', $adjustedDateOnly)
+            ->get();
+
+        // Enforce only 1 sleep log per adjusted sleep date
+        if ($existingLogs->count() >= 1) {
+            return back()
+                ->withErrors(['SleepDate' => 'You can only log one sleep session per day.'])
+                ->withInput();
+        }
+
+        // Check for overlapping sleep times
+        foreach ($existingLogs as $log) {
+            $existingBedTime = Carbon::parse("{$log->SleepDate} {$log->BedTime}");
+            $existingWakeTime = Carbon::parse("{$log->SleepDate} {$log->WakeTime}");
+
+            // Adjust if crosses midnight
+            if ($existingWakeTime->lessThanOrEqualTo($existingBedTime)) {
+                $existingWakeTime->addDay();
+            }
+
+            // Adjust for early AM logs to keep consistency in overlap checks
+            if ($existingBedTime->hour < 6) {
+                $existingBedTime->subDay();
+                $existingWakeTime->subDay();
+            }
+
+            // Overlap check
+            if (
+                $bedTime->between($existingBedTime, $existingWakeTime) ||
+                $wakeTime->between($existingBedTime, $existingWakeTime) ||
+                ($bedTime->lessThan($existingBedTime) && $wakeTime->greaterThan($existingWakeTime))
+            ) {
+                return back()
+                    ->withErrors(['SleepDate' => 'This sleep session overlaps with an existing log.'])
+                    ->withInput();
+            }
+        }
+
+        // Calculate sleep duration in minutes
         $sleepDuration = $bedTime->diffInMinutes($wakeTime, false);
 
         SleepLog::create([
-            'UserID' => auth()->user()->id,
-            'SleepDate' => $validatedData['SleepDate'],
+            'UserID' => auth()->id(),
+            'SleepDate' => $adjustedDateOnly,
             'BedTime' => $validatedData['BedTime'],
             'WakeTime' => $validatedData['WakeTime'],
             'SleepDurationMinutes' => $sleepDuration,
@@ -159,8 +208,6 @@ class SleepLogController extends Controller
 
         return redirect()->route('sleep.index')->with('success', 'Sleep log created successfully.');
     }
-
-
 
 
     // Show the sleep log edit form
