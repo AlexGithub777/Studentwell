@@ -3,6 +3,15 @@
 <script>
     document.title = "StudentWell | Set New Goal";
 </script>
+@if (session('success'))
+    <div class="alert alert-success" id="alert-success">
+        {{ session('success') }}
+    </div>
+@elseif (session('error'))
+    <div class="alert alert-danger" id="alert-success">
+        {{ session('error') }}
+    </div>
+@endif
 <div class="content-area py-4">
     <div class="container">
         <!-- Page Title and back link -->
