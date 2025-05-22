@@ -155,12 +155,14 @@
                                     </div>
                                     <div>
                                         <!-- goal log notes -->
-                                        <span>
-                                            <p class="ms-2"
-                                                style="margin:0; font-size:0.9rem; color: var(--secondary-colour);">
-                                                <b>Note:</b> {{ $goalLog->Notes ?? '' }}
-                                            </p>
-                                        </span>
+                                        @if (!empty($goalLog->Notes))
+                                            <span>
+                                                <p class="ms-2"
+                                                    style="margin:0; font-size:0.9rem; color: var(--secondary-colour);">
+                                                    <b>Note:</b> {{ $goalLog->Notes }}
+                                                </p>
+                                            </span>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
