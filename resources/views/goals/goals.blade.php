@@ -115,7 +115,7 @@
                                             class="fas 
                                         @if ($goalLog->GoalStatus === 'completed') fa-trophy 
                                         @elseif ($goalLog->GoalStatus === 'incomplete') fa-circle-xmark 
-                                        @elseif ($goalLog->GoalStatus === 'partially') fa-bars-progress @endif me-2 metric-icon">
+                                        @elseif ($goalLog->GoalStatus === 'partially') fa-adjust @endif me-2 metric-icon">
                                         </i>
                                     </div>
                                     <div>
