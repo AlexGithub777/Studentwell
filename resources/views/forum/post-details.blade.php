@@ -137,7 +137,7 @@
             @csrf
             <div class="mb-3">
                 <textarea id="forum-reply-textarea" class="form-control @error('Content') is-invalid @enderror" id="Content"
-                    name="Content" rows="4" placeholder="Write your reply here..." required>{{ old('Content') }}</textarea>
+                    name="Content" rows="4" placeholder="Write your reply here...">{{ old('Content') }}</textarea>
                 @error('Content')
                     <div class="invalid-feedback" style="color: #dc3545;">{{ $message }}</div>
                 @enderror

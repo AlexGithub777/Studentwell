@@ -26,7 +26,7 @@
                         <label for="accountfirst_name" class="form-label">First Name</label>
                         <input type="text" class="form-control @error('accountfirst_name') is-invalid @enderror"
                             id="accountfirst_name" name="accountfirst_name"
-                            value="{{ old('accountfirst_name', $user->first_name ?? '') }}" required autofocus>
+                            value="{{ old('accountfirst_name', $user->first_name ?? '') }}" autofocus>
                         @error('accountfirst_name')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -37,7 +37,7 @@
                         <label for="accountlast_name" class="form-label">Last Name</label>
                         <input type="text" class="form-control @error('accountlast_name') is-invalid @enderror"
                             id="accountlast_name" name="accountlast_name"
-                            value="{{ old('accountlast_name', $user->last_name ?? '') }}" required>
+                            value="{{ old('accountlast_name', $user->last_name ?? '') }}">
                         @error('accountlast_name')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -47,8 +47,7 @@
                     <div class="mb-3">
                         <label for="accountemail" class="form-label">Email</label>
                         <input type="email" class="form-control @error('accountemail') is-invalid @enderror"
-                            id="accountemail" name="accountemail" value="{{ old('accountemail', $user->email ?? '') }}"
-                            required>
+                            id="accountemail" name="accountemail" value="{{ old('accountemail', $user->email ?? '') }}">
                         @error('accountemail')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror

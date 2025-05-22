@@ -34,7 +34,7 @@
                             <label for="first_name" class="form-label">First Name</label>
                             <input type="text" class="form-control @error('first_name') is-invalid @enderror"
                                 id="first_name" name="first_name" value="{{ old('first_name') }}"
-                                placeholder="Enter your first name" required autofocus>
+                                placeholder="Enter your first name" autofocus>
                             @error('first_name')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -45,7 +45,7 @@
                             <label for="last_name" class="form-label">Last Name</label>
                             <input type="text" class="form-control @error('last_name') is-invalid @enderror"
                                 id="last_name" name="last_name" value="{{ old('last_name') }}"
-                                placeholder="Enter your last name" required>
+                                placeholder="Enter your last name">
                             @error('last_name')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -56,7 +56,7 @@
                             <label for="signupemail" class="form-label">Email</label>
                             <input type="email" class="form-control @error('signupemail') is-invalid @enderror"
                                 id="signupemail" name="signupemail" value="{{ old('signupemail') }}"
-                                placeholder="Enter your email" required>
+                                placeholder="Enter your email">
                             @error('signupemail')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -66,7 +66,7 @@
                         <div class="mb-3">
                             <label for="signuppassword" class="form-label">Password</label>
                             <input type="password" class="form-control @error('signuppassword') is-invalid @enderror"
-                                id="signuppassword" name="signuppassword" placeholder="Create a password" required>
+                                id="signuppassword" name="signuppassword" placeholder="Create a password">
                             @error('signuppassword')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -78,7 +78,7 @@
                             <input type="password"
                                 class="form-control @error('signuppassword_confirmation') is-invalid @enderror"
                                 id="signuppassword_confirmation" name="signuppassword_confirmation"
-                                placeholder="Confirm your password" required>
+                                placeholder="Confirm your password">
                             @error('signuppassword_confirmation')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror

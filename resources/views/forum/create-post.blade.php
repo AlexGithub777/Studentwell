@@ -28,7 +28,7 @@
                                 <input type="text"
                                     class="form-control custom-input @error('PostTitle') is-invalid @enderror"
                                     id="PostTitle" name="PostTitle" value="{{ old('PostTitle') }}"
-                                    placeholder="Enter a descriptive title" required>
+                                    placeholder="Enter a descriptive title">
                                 @error('PostTitle')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -37,7 +37,7 @@
                             <div class="category-container">
                                 <label for="PostCategory" class="form-label fw-semibold mb-1">Category</label>
                                 <select class="form-select custom-input @error('PostCategory') is-invalid @enderror"
-                                    id="PostCategory" name="PostCategory" required>
+                                    id="PostCategory" name="PostCategory">
                                     <option value="" selected disabled>Select a category</option>
                                     <option value="General">General</option>
                                     <option value="Mental Health">Mental Health</option>
@@ -59,7 +59,7 @@
                         <div class="content-wrapper">
                             <label for="Content" class="form-label fw-semibold mb-2 content-label">Content</label>
                             <textarea class="form-control custom-input content-area-height @error('Content') is-invalid @enderror" id="Content"
-                                name="Content" placeholder="Share your thoughts, questions, or experiences..." required>{{ old('Content') }}</textarea>
+                                name="Content" placeholder="Share your thoughts, questions, or experiences...">{{ old('Content') }}</textarea>
                             @error('Content')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror

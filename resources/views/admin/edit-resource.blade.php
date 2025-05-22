@@ -29,7 +29,7 @@
                                     class="form-control custom-input @error('ResourceTitle') is-invalid @enderror"
                                     id="ResourceTitle" name="ResourceTitle"
                                     value="{{ old('ResourceTitle', $resource->ResourceTitle) }}"
-                                    placeholder="Enter a resource title" required>
+                                    placeholder="Enter a resource title">
                                 @error('ResourceTitle')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -38,7 +38,7 @@
                             <div class="category-container mb-3">
                                 <label for="ResourceCategory" class="form-label fw-semibold mb-1">Category</label>
                                 <select class="form-select custom-input @error('ResourceCategory') is-invalid @enderror"
-                                    id="ResourceCategory" name="ResourceCategory" required>
+                                    id="ResourceCategory" name="ResourceCategory">
                                     <option value="">Select a category</option>
                                     @foreach ($resource_categories as $category)
                                         <option value="{{ $category->ResourceCategoryID }}"
@@ -57,7 +57,7 @@
                                 <input type="text"
                                     class="form-control custom-input @error('Phone') is-invalid @enderror"
                                     id="Phone" name="Phone" value="{{ old('Phone', $resource->Phone) }}"
-                                    placeholder="Enter a phone number" required>
+                                    placeholder="Enter a phone number">
                                 @error('Phone')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -68,7 +68,7 @@
                                 <input type="text"
                                     class="form-control custom-input @error('Location') is-invalid @enderror"
                                     id="Location" name="Location" value="{{ old('Location', $resource->Location) }}"
-                                    placeholder="Enter a location" required>
+                                    placeholder="Enter a location">
                                 @error('Location')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -82,7 +82,7 @@
                             <label for="Description"
                                 class="form-label fw-semibold mb-2 content-label">Description</label>
                             <textarea class="form-control custom-input content-area-height @error('Description') is-invalid @enderror"
-                                id="Description" name="Description" placeholder="Enter resource details..." required>{{ old('Description', $resource->Description) }}</textarea>
+                                id="Description" name="Description" placeholder="Enter resource details...">{{ old('Description', $resource->Description) }}</textarea>
                             @error('Description')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror

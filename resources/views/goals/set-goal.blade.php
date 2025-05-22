@@ -27,7 +27,7 @@
                                 <input type="text"
                                     class="form-control custom-input @error('GoalTitle') is-invalid @enderror"
                                     id="GoalTitle" name="GoalTitle" value="{{ old('GoalTitle') }}"
-                                    placeholder="Enter a clear, specific goal" required>
+                                    placeholder="Enter a clear, specific goal">
                                 @error('GoalTitle')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -55,7 +55,7 @@
                                 @endphp
 
                                 <select class="form-select custom-input @error('GoalCategory') is-invalid @enderror"
-                                    id="GoalCategory" name="GoalCategory" required>
+                                    id="GoalCategory" name="GoalCategory">
                                     <option value="">Select a category</option>
                                     @foreach ($goalCategories as $category => $emoji)
                                         <option value="{{ $category }}"

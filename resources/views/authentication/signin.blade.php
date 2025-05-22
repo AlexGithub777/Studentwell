@@ -28,21 +28,6 @@
                         height="35px">
                 </div>
 
-                {{-- Display Login Errors --}}
-                @if ($errors->any())
-                    <div class="alert alert-danger mb-3"
-                        style="background-color: #f8d7da; border-color: #f5c6cb; color: #721c24;">
-                        <ul class="mb-0 ps-3"> {{-- Use padding start instead of default list style --}}
-                            {{-- Typically for login, you might show a single generic error --}}
-                            <li>{{ $errors->first() }}</li>
-                            {{-- Or loop through all if needed --}}
-                            {{-- @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach --}}
-                        </ul>
-                    </div>
-                @endif
-
                 {{-- Login Form --}}
                 <form action="{{ route('login') }}" method="POST"> {{-- Use named route 'login' if defined --}}
                     @csrf
@@ -50,15 +35,22 @@
                     {{-- Email Input --}}
                     <div class="mb-3">
                         <label for="signinemail" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="signinemail" name="signinemail"
-                            placeholder="Enter your email" value="{{ old('email') }}" required autofocus>
+                        <input type="email" class="form-control @error('signinemail') is-invalid @enderror"
+                            id="signinemail" name="signinemail" placeholder="Enter your email"
+                            value="{{ old('signinemail') }}" autofocus>
+                        @error('signinemail')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
 
                     {{-- Password Input --}}
                     <div class="mb-2"> {{-- Reduced margin bottom before forgot password link --}}
-                        <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="signinpassword" name="signinpassword"
-                            placeholder="Enter your password" required>
+                        <label for="signinpassword" class="form-label">Password</label>
+                        <input type="password" class="form-control @error('signinpassword') is-invalid @enderror"
+                            id="signinpassword" name="signinpassword" placeholder="Enter your password">
+                        @error('signinpassword')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
 
                     {{-- Sign In Button --}}

@@ -39,7 +39,7 @@
                                     class="me-4 form-control custom-input @error('MoodDate') is-invalid @enderror"
                                     id="MoodDate" name="MoodDate"
                                     value="{{ old('MoodDate') ?? now()->format('Y-m-d') }}"
-                                    max="{{ now()->format('Y-m-d') }}" required>
+                                    max="{{ now()->format('Y-m-d') }}">
                                 @error('MoodDate')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
