@@ -42,7 +42,7 @@
                             </div>
 
                             <!-- Goal completion status radio buttons -->
-                            <div class="mb-3">
+                            <div>
                                 <label class="form-label fw-semibold mb-1">Did you complete this goal?</label>
                                 <div>
                                     <div class="form-check form-check-inline">
@@ -50,7 +50,7 @@
                                             class="form-check-input log-goal-radio @error('GoalStatus') is-invalid @enderror"
                                             type="radio" name="GoalStatus" id="GoalStatusYes" value="completed"
                                             {{ old('GoalStatus') == 'completed' ? 'checked' : '' }}>
-                                        <label class="form-check-label" for="GoalStatusYes">Yes</label>
+                                        <label class="form-check-label log-goal-label" for="GoalStatusYes">Yes</label>
                                     </div>
 
                                     <div class="form-check form-check-inline">
@@ -58,7 +58,7 @@
                                             class="form-check-input log-goal-radio @error('GoalStatus') is-invalid @enderror"
                                             type="radio" name="GoalStatus" id="GoalStatusNo" value="incomplete"
                                             {{ old('GoalStatus') == 'incomplete' ? 'checked' : '' }}>
-                                        <label class="form-check-label" for="GoalStatusNo">No</label>
+                                        <label class="form-check-label log-goal-label" for="GoalStatusNo">No</label>
                                     </div>
 
                                     <div class="form-check form-check-inline">
@@ -66,7 +66,8 @@
                                             class="form-check-input log-goal-radio @error('GoalStatus') is-invalid @enderror"
                                             type="radio" name="GoalStatus" id="GoalStatusPartial" value="partially"
                                             {{ old('GoalStatus') == 'partially' ? 'checked' : '' }}>
-                                        <label class="form-check-label" for="GoalStatusPartial">Partially</label>
+                                        <label class="form-check-label log-goal-label"
+                                            for="GoalStatusPartial">Partially</label>
                                     </div>
                                 </div>
 
