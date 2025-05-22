@@ -170,12 +170,20 @@ class GoalSettingController extends Controller
     public function update(Request $request, $id)
     {
         // Validate the request data
-        $request->validate([
-            'GoalTitle' => 'required|string|max:30',
-            'GoalCategory' => 'required|string|max:20',
-            'GoalStartDate' => 'required|date',
-            'GoalTargetDate' => 'required|date|after_or_equal:GoalStartDate',
-            'Notes' => 'nullable|string|max:255',
+        $validatedData = $request->validate([
+            'GoalTitle' => ['required', 'string', 'max:30'],
+            'GoalCategory' => ['required', 'string', 'max:20'],
+            'GoalStartDate' => ['required', 'date'],
+            'GoalTargetDate' => ['required', 'date', 'after_or_equal:GoalStartDate'],
+            'Notes' => ['nullable', 'string', 'max:255'],
+        ], [
+            'GoalTitle.required' => 'The goal title is required.',
+            'GoalTitle.max' => 'The goal title may not be greater than 30 characters.',
+            'GoalCategory.required' => 'The goal category is required.',
+            'GoalStartDate.required' => 'The goal start date is required.',
+            'GoalTargetDate.required' => 'The goal target date is required.',
+            'Notes.max' => 'The notes may not be greater than 255 characters.',
+            'GoalTargetDate.after_or_equal' => 'The target date must be a date after or equal to the start date.',
         ]);
 
         // Fetch the goal entry from the database
@@ -187,11 +195,11 @@ class GoalSettingController extends Controller
         }
 
         // Update the goal entry
-        $goal->GoalTitle = $request->input('GoalTitle');
-        $goal->GoalCategory = $request->input('GoalCategory');
-        $goal->GoalStartDate = $request->input('GoalStartDate');
-        $goal->GoalTargetDate = $request->input('GoalTargetDate');
-        $goal->Notes = $request->input('Notes');
+        $goal->GoalTitle = $validatedData['GoalTitle'];
+        $goal->GoalCategory = $validatedData['GoalCategory'];
+        $goal->GoalStartDate = $validatedData['GoalStartDate'];
+        $goal->GoalTargetDate = $validatedData['GoalTargetDate'];
+        $goal->Notes = $validatedData['Notes'] ?? null;
 
         // Save the updated goal entry to the database
         $goal->save();
@@ -199,6 +207,7 @@ class GoalSettingController extends Controller
         // Redirect back to the goal setting page with a success message
         return redirect()->route('goals.index')->with('success', 'Goal updated successfully.');
     }
+
 
     // show the goal logging form
     public function log($id)
