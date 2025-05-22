@@ -14,13 +14,13 @@
 @endif
 <div class="content-area py-4">
     <div class="container">
-        <!-- Page Title, Subtitle, and New Post Button -->
+        <!-- Page Title, Subtitle, and Set Goal Button -->
         <div class="row mb-4">
             <div class="col d-flex justify-content-between align-items-center mt-4">
                 <div>
                     <h1 class="page-title mb-1">Goal Setting</h1>
                 </div>
-                <a href="{{ route('sleep.log') }}" class="btn add-btn text-white"
+                <a href="{{ route('goals.set') }}" class="btn add-btn text-white"
                     style="background-color: var(--secondary-colour);">
                     <i class="fas fa-plus me-1 fw-bold"></i> Set Goal
                 </a>
@@ -198,8 +198,8 @@
                                             </h5>
                                             <!-- Add goal start and target date -->
                                             <p style="margin:0; font-size:0.9rem; color: var(--secondary-colour);">
-                                                {{ \Carbon\Carbon::parse($goal->StartDate)->format('F jS, Y') }} to
-                                                {{ \Carbon\Carbon::parse($goal->TargetDate)->format('F jS, Y') }}
+                                                {{ \Carbon\Carbon::parse($goal->GoalStartDate)->format('F jS, Y') }} to
+                                                {{ \Carbon\Carbon::parse($goal->GoalTargetDate)->format('F jS, Y') }}
                                             </p>
                                         </div>
                                         <!-- Display active goal notes -->

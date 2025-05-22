@@ -31,6 +31,7 @@
                             <h1 class="custom-header-title fw-bold mb-1">Sleep Details</h1>
                             <p class="custom-header-desc mb-1">Log your sleep duration and quality</p>
 
+                            <!-- Sleep Date Selection -->
                             <div class="mb-3 mt-1 w-50 pe-4 mobile-full-width">
                                 <label for="SleepDate" class="form-label fw-semibold mb-1">Bedtime Date</label>
                                 <input type="date" max="{{ now()->format('Y-m-d') }}"
@@ -41,6 +42,7 @@
                                 @enderror
                             </div>
 
+                            <!-- Sleep Time Selection -->
                             <div class="d-flex bed-wake-stack">
                                 <div class="mb-3 w-50 me-4 mobile-full-width">
                                     <label for="BedTime" class="form-label fw-semibold mb-1">Bedtime</label>
@@ -114,6 +116,7 @@
                         <div style="color: var(--secondary-colour)" class="content-wrapper">
                             <label for="Notes" class="form-label fw-semibold mb-2 content-label">Notes</label>
 
+                            <!-- Sleep Notes Textarea -->
                             <textarea class="content-area-height mb-4 form-control custom-input @error('Notes') is-invalid @enderror" id="Notes"
                                 name="Notes" placeholder="Write your thoughts here...">{{ old('Notes') }}</textarea>
                             @error('Notes')
@@ -122,6 +125,7 @@
                         </div>
                     </div>
 
+                    <!-- Submit Button -->
                     <div class="col-12 text-end">
                         <button type="submit" class="btn custom-form-btn">
                             Log Sleep
