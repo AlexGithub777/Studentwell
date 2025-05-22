@@ -22,6 +22,7 @@ class GoalLog extends Model
         'GoalLogDate',
         'GoalStatus',
         'Notes',
+        'UserID',
         'created_at',
     ];
 
@@ -42,5 +43,4 @@ class GoalLog extends Model
     {
         return $this->belongsTo(User::class, 'UserID', 'id');
     }
-
 }

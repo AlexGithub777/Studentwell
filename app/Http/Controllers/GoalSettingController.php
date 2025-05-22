@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Goal;
+use App\Models\GoalLog;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class GoalSettingController extends Controller
 {
@@ -143,7 +146,7 @@ class GoalSettingController extends Controller
         $goal->GoalCategory = $validatedData['GoalCategory'];
         $goal->GoalStartDate = $validatedData['GoalStartDate'];
         $goal->GoalTargetDate = $validatedData['GoalTargetDate'];
-        $goal->Notes = $validatedData['Notes'] ?? null;        
+        $goal->Notes = $validatedData['Notes'] ?? null;
 
         // Save the goal entry to the database
         $goal->save();
@@ -224,22 +227,60 @@ class GoalSettingController extends Controller
     }
 
     // store the goal logging form
-    public function storeLog(Request $request)
+    public function storeLog(Request $request, $goalId)
     {
-        // Validate the request data
-        $request->validate([
-            'GoalID' => 'required|exists:goals,GoalID',
-            'GoalLogDate' => 'required|date',
-            'GoalStatus' => 'required|string|max:15',
-            'Notes' => 'required|string|max:255',
-        ]);
+        // Fetch the goal entry once
+        $goal = Goal::findOrFail($goalId);
 
-        // Create a new goal log entry
-        $goalLog = new GoalLog();
-        $goalLog->GoalID = $request->input('GoalID');
-        $goalLog->GoalLogDate = $request->input('GoalLogDate');                                                         
-        $goalLog->GoalStatus = $request->input('GoalStatus');
-        $goalLog->Notes = $request->input('Notes');
+        // Check ownership early
+        if ($goal->UserID !== auth()->id()) {
+            return redirect()->route('goals.index')->with('error', 'Unauthorized access.');
+        }
+
+        // Prepare today's date for validation
+        $today = now()->toDateString();
+
+        // Validate inputs (including the goalId passed in URL)
+        $validator = Validator::make(
+            array_merge($request->all(), ['GoalID' => $goalId]),
+            [
+                'GoalID' => ['required', 'exists:goals,GoalID'],
+                'GoalLogDate' => ['required', 'date', Rule::in([$today])],
+                'GoalStatus' => ['required', 'string', 'max:15'],
+                'Notes' => ['nullable', 'string', 'max:255'],
+            ],
+            [
+                'GoalID.required' => 'The goal ID is required.',
+                'GoalID.exists' => 'The selected goal does not exist.',
+                'GoalLogDate.required' => 'The goal log date is required.',
+                'GoalLogDate.date' => 'The goal log date must be a valid date.',
+                'GoalLogDate.in' => 'You can only log a goal for today’s date.',
+                'GoalStatus.required' => 'The goal status is required.',
+                'Notes.max' => 'The notes may not be greater than 255 characters.',
+            ]
+        );
+
+        // Add custom validation after the main check
+        $validator->after(function ($validator) use ($goal, $request) {
+            if ($goal->GoalTargetDate > now() && $request->input('GoalStatus') === 'completed') {
+                $validator->errors()->add('GoalStatus', 'You cannot mark this goal as completed before the target date.');
+            }
+        });
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        $validatedData = $validator->validated();
+
+        // Create and save goal log
+        $goalLog = new GoalLog([
+            'GoalID' => $validatedData['GoalID'],
+            'GoalLogDate' => $validatedData['GoalLogDate'],
+            'GoalStatus' => $validatedData['GoalStatus'],
+            'Notes' => $validatedData['Notes'] ?? null,
+            'UserID' => auth()->id(),
+        ]);
 
         // Save the goal log entry to the database
         $goalLog->save();

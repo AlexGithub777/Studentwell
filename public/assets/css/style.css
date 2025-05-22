@@ -914,3 +914,30 @@ body {
 .emotion-option label:hover {
     transform: scale(1.05);
 }
+
+/* Goal Setting styles */
+/* Style only radio buttons with .log-goal-radio */
+input[type="radio"].log-goal-radio {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 16px;
+    height: 16px;
+    border: 1px solid var(--secondary-colour);
+    border-radius: 50%;
+    background-color: transparent;
+    position: relative;
+    cursor: pointer;
+    margin-top: 3px;
+    transition: background-color 0.2s ease;
+}
+
+input[type="radio"].log-goal-radio:checked {
+    background-color: var(--secondary-colour);
+}
+
+/* Keep error state support */
+input[type="radio"].log-goal-radio.is-invalid {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
