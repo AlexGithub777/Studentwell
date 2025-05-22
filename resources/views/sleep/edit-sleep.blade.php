@@ -32,6 +32,7 @@
                             <h1 class="custom-header-title fw-bold mb-1">Sleep Details</h1>
                             <p class="custom-header-desc mb-1">Update your sleep log details</p>
 
+                            <!-- Sleep Date Selection -->
                             <div class="mb-3 mt-1 w-50 pe-4 mobile-full-width">
                                 <label for="SleepDate" class="form-label fw-semibold mb-1">Bedtime Date</label>
                                 <input type="date" max="{{ now()->format('Y-m-d') }}"
@@ -43,7 +44,9 @@
                                 @enderror
                             </div>
 
+                            <!-- Sleep Time Selection -->
                             <div class="d-flex bed-wake-stack">
+                                <!-- Bedtime Selection -->
                                 <div class="mb-3 w-50 me-4 mobile-full-width">
                                     <label for="BedTime" class="form-label fw-semibold mb-1">Bedtime</label>
                                     <input type="time"
@@ -54,6 +57,7 @@
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
+                                <!-- Wake Time Selection -->
                                 <div class="mb-3 w-50 me-4 mobile-full-width">
                                     <label for="WakeTime" class="form-label fw-semibold mb-1">Wake Time</label>
                                     <input type="time"
