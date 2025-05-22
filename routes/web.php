@@ -87,8 +87,8 @@ Route::middleware(['auth'])->group(function () {
 
     // Goals Routes
     Route::get('/goals', [GoalSettingController::class, 'index'])->name('goals.index');
-    Route::get('/goals/log-goal', [GoalSettingController::class, 'log'])->name('goals.log');
-    Route::post('/goals/log-goal', [GoalSettingController::class, 'storeLog'])->name('goals.store.log');
+    Route::get('/goals/log-goal/{id}', [GoalSettingController::class, 'log'])->name('goals.log');
+    Route::post('/goals/log-goal/{id}', [GoalSettingController::class, 'storeLog'])->name('goals.store.log');
     Route::get('/goals/edit-goal/{id}', [GoalSettingController::class, 'edit'])->name('goals.edit');
     Route::put('/goals/edit-goal/{id}', [GoalSettingController::class, 'update'])->name('goals.update');
     Route::get('/goals/set-goal', [GoalSettingController::class, 'set'])->name('goals.set');
@@ -96,7 +96,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Sleep Routes
     Route::get('/sleep', [SleepLogController::class, 'index'])->name('sleep.index');
-    Route::get('/sleep/log-sleep', [SleepLogController::class, 'log'])->name('sleep.log'); 
+    Route::get('/sleep/log-sleep', [SleepLogController::class, 'log'])->name('sleep.log');
     Route::post('/sleep/log-sleep', [SleepLogController::class, 'store'])->name('sleep.store');
     Route::get('/sleep/edit-sleep/{id}', [SleepLogController::class, 'edit'])->name('sleep.edit');
     Route::put('/sleep/edit-sleep/{id}', [SleepLogController::class, 'update'])->name('sleep.update');
