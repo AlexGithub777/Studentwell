@@ -81,7 +81,7 @@ class ForumController extends Controller
 
         // Only allow the author to delete the post
         if (auth()->id() !== $post->UserID) {
-            abort(403, 'Unauthorized');
+            return redirect()->route('forum.index')->with('error', 'You do not have permission to delete this forum post.');
         }
 
         $post->delete();
@@ -117,7 +117,7 @@ class ForumController extends Controller
 
         // Only allow the author to delete the reply
         if (auth()->id() !== $reply->UserID) {
-            abort(403, 'Unauthorised');
+            return redirect()->back()->with('error', 'You do not have permission to delete this reply.');
         }
 
         $reply->delete();

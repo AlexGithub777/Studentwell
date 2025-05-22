@@ -179,6 +179,14 @@ class MoodTrackingController extends Controller
     // Update mood log
     public function update(Request $request, $id)
     {
+        // Find the mood log by ID first
+        $moodLog = MoodLog::findOrFail($id);
+
+        // Check if the authenticated user is the owner of the mood log
+        if ($moodLog->UserID !== auth()->user()->id) {
+            return redirect()->route('mood.index')->with('error', 'You do not have permission to edit this mood log.');
+        }
+
         $validatedData = $request->validate([
             'MoodId' => ['required', 'integer', 'min:1', 'max:5'],
             'MoodDate' => ['required', 'date', 'before_or_equal:today'],
@@ -189,26 +197,22 @@ class MoodTrackingController extends Controller
             'MoodId.integer' => 'Mood rating must be an integer.',
             'MoodId.min' => 'Mood rating must be at least 1.',
             'MoodId.max' => 'Mood rating cannot be greater than 5.',
-
             'MoodDate.required' => 'The mood date is required.',
             'MoodDate.date' => 'The mood date must be a valid date.',
             'MoodDate.before_or_equal' => 'You cannot select a future date.',
-
             'Emotions.array' => 'Emotions must be sent as an array.',
             'Emotions.max' => 'You can select up to 5 emotions only.',
-
             'Reflection.string' => 'Reflection must be a valid string.',
             'Reflection.max' => 'Reflection cannot exceed 255 characters.',
         ]);
 
         $user = auth()->user();
-        $moodLog = $user->moodLogs()->findOrFail($id);
         $moodDate = $validatedData['MoodDate'];
 
         // Check for existing mood log for this user and date, excluding the current one
         $existingLog = $user->moodLogs()
             ->whereDate('MoodDate', $moodDate)
-            ->where('id', '!=', $id)
+            ->where('MoodLogID', '!=', $id) // exclude the current mood log
             ->first();
 
         if ($existingLog) {
@@ -222,7 +226,6 @@ class MoodTrackingController extends Controller
         $moodLog->MoodDate = $moodDate;
         $moodLog->Emotions = isset($validatedData['Emotions']) ? json_encode($validatedData['Emotions']) : null;
         $moodLog->Reflection = $validatedData['Reflection'] ?? null;
-
         $moodLog->save();
 
         return redirect()->route('mood.index')->with('success', 'Mood updated successfully!');

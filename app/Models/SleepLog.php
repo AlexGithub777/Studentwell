@@ -15,10 +15,12 @@ class SleepLog extends Model
 
     protected $dates = ['created_at'];
 
+    // In your SleepLog model
     protected $casts = [
-        'BedTime' => 'datetime:H:i:s',
-        'WakeTime' => 'datetime:H:i:s',
-    ];    
+        'SleepDate' => 'date',
+        'BedTime' => 'datetime',
+        'WakeTime' => 'datetime',
+    ];
 
     // fillable fields
     protected $fillable = [
