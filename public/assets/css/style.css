@@ -548,7 +548,7 @@ body {
     border: none;
 }
 
-.forum-card {
+.custom-card {
     background-color: var(--main-colour);
     color: var(--secondary-colour);
     padding: 1.5rem;
@@ -558,7 +558,7 @@ body {
     transition: transform 0.2s ease;
 }
 
-.forum-card:hover {
+.custom-card:hover {
     transform: translateY(-5px);
     cursor: pointer;
 }
@@ -695,30 +695,6 @@ body {
 
 .forum-back-link i {
     margin-right: 0.4em;
-}
-
-/* --- Shared Card Styles --- */
-.forum-post-card {
-    background-color: var(--main-colour) !important; /* Override bootstrap */
-    border: 1px solid var(--secondary-colour) !important; /* Override bootstrap */
-    border-radius: 0.75rem !important; /* More rounded corners */
-    color: var(--secondary-colour); /* Default text color inside card */
-    margin-bottom: 1.5rem; /* Space between cards */
-    overflow: hidden; /* Ensure content respects border-radius */
-}
-
-.forum-post-card .card-body {
-    padding: 1.25rem; /* Adjust padding as needed */
-    color: var(--secondary-colour);
-}
-
-.forum-post-card .card-header {
-    /* Style for the reply form header */
-    background-color: transparent; /* Make header blend */
-    border-bottom: 1px solid var(--secondary-colour);
-    color: var(--secondary-colour);
-    font-weight: bold;
-    padding: 0.75rem 1.25rem;
 }
 
 /* --- User Avatar --- */

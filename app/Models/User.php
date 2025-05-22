@@ -74,4 +74,16 @@ class User extends Authenticatable
         // Order by created_at in descending order
         return $this->hasMany(SleepLog::class, 'UserID', 'id')->orderBy('SleepDate', 'desc');
     }
+
+    public function goals() // ACTIVE GOALS
+    {
+        // Order by created_at in descending order
+        return $this->hasMany(Goal::class, 'UserID', 'id')->orderBy('created_at', 'desc');
+    }
+
+    public function goalLogs() // COMPLETED GOALS
+    {
+        // Order by created_at in descending order
+        return $this->hasMany(GoalLog::class, 'UserID', 'id')->orderBy('GoalLogDate', 'desc');
+    }
 }

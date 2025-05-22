@@ -46,11 +46,11 @@
             <div class="row row-cols-1 row-cols-md-2 g-4">
                 @foreach ($posts as $post)
                     <div class="col">
-                        <div class="forum-card d-flex flex-column justify-content-between h-100"
+                        <div class="custom-card d-flex flex-column justify-content-between h-100"
                             style="background-color: var(--main-colour); color: var(--secondary-colour); padding: 1.5rem; border-radius: 1rem;">
 
 
-                            <div class="post-header">
+                            <div class="card-header">
                                 <div class="d-flex align-items-center mb-2">
                                     <div class="me-2">
                                         <i class="fa fa-user-circle fa-2x" style="color: var(--secondary-colour);"></i>
@@ -69,7 +69,7 @@
 
 
                             <!-- wrap the content in a div to allow for overflow -->
-                            <div class="post-content">
+                            <div class="card-content">
                                 <div class="d-flex justify-content-start gap-3 mt-2 mb-2 align-items-center"
                                     style="color: var(--secondary-colour);">
                                     @php

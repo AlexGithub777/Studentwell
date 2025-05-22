@@ -104,9 +104,9 @@
             <div class="row row-cols-1 row-cols-md-2 g-4">
                 @foreach ($sleepLogs as $sleepLog)
                     <div class="col">
-                        <div class="forum-card d-flex flex-column justify-content-between h-100"
+                        <div class="custom-card d-flex flex-column justify-content-between h-100"
                             style="background-color: var(--main-colour); color: var(--secondary-colour); padding: 1.5rem; border-radius: 1rem;">
-                            <div class="post-header">
+                            <div class="card-header">
                                 <div class="d-flex align-items-center">
                                     <div class="me-2">
                                         <!-- Add emoji based on sleep quality -->
@@ -145,7 +145,7 @@
                             </div>
 
                             <!-- wrap the content in a div to allow for overflow -->
-                            <div class="post-content">
+                            <div class="card-content">
                                 <div class="d-flex justify-content-between align-items-center mt-3">
                                     <div>
                                         <span class="badge rounded-pill mb-md-2 px-3 py-2"

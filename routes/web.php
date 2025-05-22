@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\SupportResourceController;
 use App\Http\Controllers\MoodTrackingController;
 use App\Http\Controllers\SleepLogController;
+use App\Http\Controllers\GoalSettingController;
 
 // Home Routes
 Route::get('/', function () {
@@ -89,21 +90,13 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // Goals Routes
-    Route::get('/goals', function () {
-        return view('goals.goals');
-    });
-
-    Route::get('/goals/log-goal', function () {
-        return view('goals.log-goal');
-    });
-
-    Route::get('/goals/set-goal', function () {
-        return view('goals.set-goal');
-    });
-
-    Route::get('/goals/edit-goal/{id}', function ($id) {
-        return view('goals.edit-goal');
-    });
+    Route::get('/goals', [GoalSettingController::class, 'index'])->name('goals.index');
+    Route::get('/goals/log-goal', [GoalSettingController::class, 'log'])->name('goals.log');
+    Route::post('/goals/log-goal', [GoalSettingController::class, 'storeLog'])->name('goals.store.log');
+    Route::get('/goals/edit-goal/{id}', [GoalSettingController::class, 'edit'])->name('goals.edit');
+    Route::put('/goals/edit-goal/{id}', [GoalSettingController::class, 'update'])->name('goals.update');
+    Route::get('/goals/set-goal', [GoalSettingController::class, 'set'])->name('goals.set');
+    Route::post('/goals/set-goal', [GoalSettingController::class, 'store'])->name('goals.store.set');
 
     // Sleep Routes
     Route::get('/sleep', [SleepLogController::class, 'index'])->name('sleep.index');
