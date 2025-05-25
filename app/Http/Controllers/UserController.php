@@ -10,6 +10,11 @@ use App\Models\User;
 
 class UserController extends Controller
 {
+    /**
+     * Show the signup form.
+     *
+     * @return \Illuminate\View\View
+     */
     public function signup(Request $request)
     {
         // Validate input
@@ -56,8 +61,19 @@ class UserController extends Controller
         return redirect('/home')->with('success', 'Account created successfully! Welcome aboard.');
     }
 
+    /**
+     * Show the signin form.
+     *
+     * @return \Illuminate\View\View
+     */
     public function signin(Request $request)
     {
+        // If user is already authenticated, redirect to home
+        if (auth()->check()) {
+            return redirect('/home')->with('info', 'You are already logged in.');
+        }
+
+        // validate input
         $incomingFields = $request->validate([
             'signinemail' => 'required|email',
             'signinpassword' => 'required'
@@ -67,6 +83,7 @@ class UserController extends Controller
             'signinpassword.required' => 'Password is required.'
         ]);
 
+        // Attempt to authenticate user
         if (auth()->attempt([
             'email' => $incomingFields['signinemail'],
             'password' => $incomingFields['signinpassword']
@@ -89,6 +106,12 @@ class UserController extends Controller
         ])->withInput();
     }
 
+    /**
+     * Show the account page.
+     *
+     * @param Request $request
+     * @return \Illuminate\View\View
+     */
     public function showAccount(Request $request)
     {
         // Check if user is authenticated
@@ -102,11 +125,23 @@ class UserController extends Controller
         ]);
     }
 
+    /**
+     * Edit the account information.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function editAccount(Request $request)
     {
+        // Check if user is authenticated
+        if (!auth()->check()) {
+            return redirect('/')->with('error', 'You must be logged in to edit your account.');
+        }
+
         // get the authenticated user
         $user = Auth::user();
 
+        // Validate input
         $validated = $request->validate([
             'accountfirst_name' => ['required', 'min:2', 'max:30'],
             'accountlast_name' => ['required', 'min:2', 'max:30'],
@@ -145,13 +180,27 @@ class UserController extends Controller
             $user->password = Hash::make($validated['newpassword']);
         }
 
+        // Save changes
         $user->save();
 
+        // Redirect to account page with success message
         return redirect()->route('account.show')->with('success', 'Account updated successfully.');
     }
 
+    /**
+     * Delete the user account.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function deleteAccount(Request $request)
     {
+        // Check if user is authenticated
+        if (!auth()->check()) {
+            return redirect('/')->with('error', 'You must be logged in to delete your account.');
+        }
+
+        // get the authenticated user
         $user = Auth::user();
 
         Auth::logout(); // Log out user
@@ -161,9 +210,14 @@ class UserController extends Controller
         return redirect('/')->with('success', 'Your account has been deleted.');
     }
 
-
+    /**
+     * Log out the user.
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function logout()
     {
+        // log out the user
         auth()->logout();
         return redirect('/')->with('success', 'Logged out successfully!');
     }

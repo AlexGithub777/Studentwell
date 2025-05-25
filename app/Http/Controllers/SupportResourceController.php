@@ -7,6 +7,12 @@ use App\Models\SupportResource;
 
 class SupportResourceController extends Controller
 {
+    /**
+     * Display the support resources page with a list of all resources.
+     *
+     * @param Request $request
+     * @return \Illuminate\View\View
+     */
     public function index(Request $request)
     {
         // Load all support resources with their categories

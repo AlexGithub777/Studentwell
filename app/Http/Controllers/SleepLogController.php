@@ -8,65 +8,77 @@ use Carbon\Carbon;
 
 class SleepLogController extends Controller
 {
-    // Show the sleep logging dashboard
-    public function index(Request $request) 
+    /**
+     * Display the sleep log index page with user's sleep logs and statistics.
+     *
+     * @param Request $request
+     * @return \Illuminate\View\View
+     */
+    public function index(Request $request)
     {
+        // Fetch the user's sleep logs with pagination
         $sleepLogs = auth()->user()->sleepLogs()->with('user')->paginate(10);
 
+        // Calculate average sleep duration and quality for the current week
         $weeklyLogsQuery = auth()->user()->sleepLogs()
             ->whereBetween('SleepDate', [now()->startOfWeek(), now()->endOfWeek()]);
 
+        // Calculate average sleep duration and quality
+        $averageSleepDuration = null;
         $averageSleepDurationRaw = $weeklyLogsQuery->avg('SleepDurationMinutes');
         $averageSleepQualityRaw = $weeklyLogsQuery->avg('SleepQuality');
 
+        // calculate nights logged this week
         $nightsLoggedThisWeek = $weeklyLogsQuery
             ->distinct('SleepDate')
             ->count('SleepDate');
 
         // Streak calculation
         $sleepLogsByDate = auth()->user()->sleepLogs()
-        ->orderBy('SleepDate', 'desc')
-        ->pluck('SleepDate')
-        ->map(fn ($d) => \Carbon\Carbon::parse($d)->format('Y-m-d'))
-        ->unique()
-        ->values();
+            ->orderBy('SleepDate', 'desc')
+            ->pluck('SleepDate')
+            ->map(fn($d) => \Carbon\Carbon::parse($d)->format('Y-m-d'))
+            ->unique()
+            ->values();
 
+        // Initialize streak counter
         $streak = 0;
         $currentDate = \Carbon\Carbon::today();
         $sleepLogDatesSet = collect($sleepLogsByDate)->flip();
 
         // Check today first
         if ($sleepLogDatesSet->has($currentDate->format('Y-m-d'))) {
-        // Today has a log, count backwards from today
-        while ($sleepLogDatesSet->has($currentDate->format('Y-m-d'))) {
-            $streak++;
-            $currentDate->subDay();
-        }
-        } else {
-        // Today doesn't have a log, check yesterday
-        $currentDate->subDay(); // Move to yesterday
-
-        if ($sleepLogDatesSet->has($currentDate->format('Y-m-d'))) {
-            // Yesterday has a log, count backwards from yesterday
+            // Today has a log, count backwards from today
             while ($sleepLogDatesSet->has($currentDate->format('Y-m-d'))) {
                 $streak++;
                 $currentDate->subDay();
             }
         } else {
-            // Neither today nor yesterday have logs, check day before yesterday
-            $currentDate->subDay(); // Move to day before yesterday
-            
+            // Today doesn't have a log, check yesterday
+            $currentDate->subDay(); // Move to yesterday
+
             if ($sleepLogDatesSet->has($currentDate->format('Y-m-d'))) {
-                // Day before yesterday has a log, count backwards
+                // Yesterday has a log, count backwards from yesterday
                 while ($sleepLogDatesSet->has($currentDate->format('Y-m-d'))) {
                     $streak++;
                     $currentDate->subDay();
                 }
+            } else {
+                // Neither today nor yesterday have logs, check day before yesterday
+                $currentDate->subDay(); // Move to day before yesterday
+
+                if ($sleepLogDatesSet->has($currentDate->format('Y-m-d'))) {
+                    // Day before yesterday has a log, count backwards
+                    while ($sleepLogDatesSet->has($currentDate->format('Y-m-d'))) {
+                        $streak++;
+                        $currentDate->subDay();
+                    }
+                }
+                // If even day before yesterday is missing, streak = 0 (2+ day gap)
             }
-            // If even day before yesterday is missing, streak = 0 (2+ day gap)
-        }
         }
 
+        // If streak is 0, it means no logs for today, yesterday, or the day before yesterday
         $sleepLogStreak = $streak;
 
         // Emoji map
@@ -104,6 +116,7 @@ class SleepLogController extends Controller
             $averageSleepQualityLabel = 'Unknown';
         }
 
+        // Return the view with all the data
         return view('sleep.sleep', compact(
             'sleepLogs',
             'averageSleepDuration',
@@ -115,14 +128,37 @@ class SleepLogController extends Controller
     }
 
 
-    // Show the sleep log form
-    public function log(Request $request) 
+    /**
+     * Show the form to log a new sleep session.
+     *
+     * @param Request $request
+     * @return \Illuminate\View\View
+     */
+    public function log(Request $request)
     {
+        // Check if the user is authenticated
+        if (!auth()->check()) {
+            return redirect()->route('login')->with('error', 'You must be logged in to log sleep.');
+        }
+
+        // return the view for logging sleep
         return view('sleep.log-sleep');
     }
 
+    /**
+     * Store a new sleep log entry.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function store(Request $request)
     {
+        // Check if the user is authenticated
+        if (!auth()->check()) {
+            return redirect()->route('login')->with('error', 'You must be logged in to log sleep.');
+        }
+
+        // Validate the request data
         $validatedData = $request->validate([
             'SleepDate' => ['required', 'date', 'before_or_equal:today'],
             'BedTime' => ['required', 'date_format:H:i'],
@@ -148,6 +184,7 @@ class SleepLogController extends Controller
             'Notes.max' => 'Notes cannot exceed 255 characters.',
         ]);
 
+        // Parse the sleep date and times
         $sleepDate = \Carbon\Carbon::createFromFormat('Y-m-d', $validatedData['SleepDate']);
         $bedTime = $sleepDate->copy()->setTimeFromTimeString($validatedData['BedTime']);
         $wakeTime = $sleepDate->copy()->setTimeFromTimeString($validatedData['WakeTime']);
@@ -171,6 +208,7 @@ class SleepLogController extends Controller
                 ->withInput();
         }
 
+        // Adjust sleep date for early morning bedtimes
         $adjustedSleepDate = $bedTime->copy();
 
         // Only adjust if bedtime is early morning AND wake time suggests it's not a full night's sleep
@@ -179,13 +217,14 @@ class SleepLogController extends Controller
             // OR if it's a very short sleep (< 4 hours), don't adjust
             $sleepDuration = $wakeTime->diffInHours($bedTime);
             $wakeHour = $wakeTime->hour;
-            
+
             // Only adjust if it looks like a normal night's sleep
             if ($sleepDuration >= 4 && $wakeHour >= 6 && $wakeHour <= 12) {
                 $adjustedSleepDate->subDay();
             }
         }
 
+        // Convert adjusted sleep date to a date string
         $adjustedDateOnly = $adjustedSleepDate->toDateString();
 
         // Fetch all existing logs for this user on the adjusted sleep date
@@ -231,6 +270,7 @@ class SleepLogController extends Controller
         // Calculate sleep duration in minutes
         $sleepDuration = $bedTime->diffInMinutes($wakeTime, false);
 
+        // Create the sleep log entry
         SleepLog::create([
             'UserID' => auth()->id(),
             'SleepDate' => $adjustedDateOnly,
@@ -241,15 +281,28 @@ class SleepLogController extends Controller
             'Notes' => $validatedData['Notes'] ?? null,
         ]);
 
+        // Redirect back to the sleep log index with success message
         return redirect()->route('sleep.index')->with('success', 'Sleep log created successfully.');
     }
 
-
-    // Show the sleep log edit form
-    public function edit($id) 
+    /**
+     * Show the form to edit an existing sleep log.
+     *
+     * @param int $id
+     * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse
+     */
+    public function edit($id)
     {
-        // Find the sleep log by ID
-        $sleepLog = SleepLog::findOrFail($id);
+        // Check if the user is authenticated
+        if (!auth()->check()) {
+            return redirect()->route('login')->with('error', 'You must be logged in to edit sleep logs.');
+        }
+
+        // Find the sleep log by ID qnd redirect if not found
+        $sleepLog = SleepLog::find($id);
+        if (!$sleepLog) {
+            return redirect()->route('sleep.index')->with('error', 'Sleep log not found.');
+        }
 
         // Check if the authenticated user is the owner of the sleep log
         if ($sleepLog->UserID !== auth()->user()->id) {
@@ -260,10 +313,25 @@ class SleepLogController extends Controller
         return view('sleep.edit-sleep', compact('sleepLog'));
     }
 
-    public function update(Request $request, $id) 
+    /**
+     * Update an existing sleep log entry.
+     *
+     * @param Request $request
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function update(Request $request, $id)
     {
-        // Find the sleep log by ID first
-        $sleepLog = SleepLog::findOrFail($id);
+        // Check if the user is authenticated
+        if (!auth()->check()) {
+            return redirect()->route('login')->with('error', 'You must be logged in to edit sleep logs.');
+        }
+
+        // Find the sleep log by ID and redirect if not found
+        $sleepLog = SleepLog::find($id);
+        if (!$sleepLog) {
+            return redirect()->route('sleep.index')->with('error', 'Sleep log not found.');
+        }
 
         // Check if the authenticated user is the owner of the sleep log
         if ($sleepLog->UserID !== auth()->user()->id) {
@@ -296,6 +364,7 @@ class SleepLogController extends Controller
             'Notes.max' => 'Notes cannot exceed 255 characters.',
         ]);
 
+        // Parse the sleep date and times
         $sleepDate = \Carbon\Carbon::createFromFormat('Y-m-d', $validatedData['SleepDate']);
         $bedTime = $sleepDate->copy()->setTimeFromTimeString($validatedData['BedTime']);
         $wakeTime = $sleepDate->copy()->setTimeFromTimeString($validatedData['WakeTime']);
@@ -319,6 +388,7 @@ class SleepLogController extends Controller
                 ->withInput();
         }
 
+        // Adjust sleep date for early morning bedtimes
         $adjustedSleepDate = $bedTime->copy();
 
         // Only adjust if bedtime is early morning AND wake time suggests it's not a full night's sleep
@@ -327,7 +397,7 @@ class SleepLogController extends Controller
             // OR if it's a very short sleep (< 4 hours), don't adjust
             $sleepDuration = $wakeTime->diffInHours($bedTime);
             $wakeHour = $wakeTime->hour;
-            
+
             // Only adjust if it looks like a normal night's sleep
             if ($sleepDuration >= 4 && $wakeHour >= 6 && $wakeHour <= 12) {
                 $adjustedSleepDate->subDay();
@@ -392,5 +462,4 @@ class SleepLogController extends Controller
 
         return redirect()->route('sleep.index')->with('success', 'Sleep log updated successfully.');
     }
-
 }

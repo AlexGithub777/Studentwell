@@ -10,12 +10,22 @@ use Illuminate\Validation\Rule;
 
 class GoalSettingController extends Controller
 {
+    /**
+     * Display the goals index page with key metrics and paginated data.
+     *
+     * @return \Illuminate\View\View
+     */
     public function index()
     {
+        // Ensure the user is authenticated
+        if (!auth()->check()) {
+            return redirect()->route('login')->with('error', 'You must be logged in to view your goals.');
+        }
+
+        // Get the authenticated user
         $user = auth()->user();
 
         // Calculate key metrics for goals
-
         $goals = $user->goals()
             ->doesntHave('goalLogs')
             ->with('user')
@@ -101,6 +111,7 @@ class GoalSettingController extends Controller
             return $log;
         });
 
+        // Return the view with all the necessary data
         return view('goals.goals', compact(
             'activeGoalCount',
             'activeGoalUniqueCategoryCount',
@@ -113,15 +124,29 @@ class GoalSettingController extends Controller
     }
 
 
-    // show the goal setting form
+    /** Show the goal setting form.
+     *
+     * @return \Illuminate\View\View
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function set()
     {
         return view('goals.set-goal');
     }
 
-    // store the goal setting form
+    /**
+     * Store a new goal entry.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function store(Request $request)
     {
+        // Ensure the user is authenticated
+        if (!auth()->check()) {
+            return redirect()->route('login')->with('error', 'You must be logged in to set a goal.');
+        }
+
         // Validate the request data
         $validatedData = $request->validate([
             'GoalTitle' => ['required', 'string', 'max:30'],
@@ -155,7 +180,12 @@ class GoalSettingController extends Controller
         return redirect()->route('goals.index')->with('success', 'Goal added successfully.');
     }
 
-    // show the goal editing form
+    ?/**
+     * Show the form for editing a goal entry.
+     *
+     * @param int $id
+     * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse
+     */
     public function edit($id)
     {
         // Fetch the goal entry from the database
@@ -169,9 +199,20 @@ class GoalSettingController extends Controller
         return view('goals.edit-goal', compact('goal'));
     }
 
-    // update the goal entry
+    /**
+     * Update an existing goal entry.
+     *
+     * @param Request $request
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function update(Request $request, $id)
     {
+        // Ensure the user is authenticated
+        if (!auth()->check()) {
+            return redirect()->route('login')->with('error', 'You must be logged in to update a goal.');
+        }
+
         // Validate the request data
         $validatedData = $request->validate([
             'GoalTitle' => ['required', 'string', 'max:30'],
@@ -212,9 +253,19 @@ class GoalSettingController extends Controller
     }
 
 
-    // show the goal logging form
+    /**
+     * Show the goal logging form for a specific goal.
+     *
+     * @param int $id
+     * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse
+     */
     public function log($id)
     {
+        // Ensure the user is authenticated
+        if (!auth()->check()) {
+            return redirect()->route('login')->with('error', 'You must be logged in to log a goal.');
+        }
+
         // get the goal log from "goals" table
         $goal = Goal::findOrFail($id);
 
@@ -226,7 +277,13 @@ class GoalSettingController extends Controller
         return view('goals.log-goal', compact('goal'));
     }
 
-    // store the goal logging form
+    /**
+     * Store a new goal log entry.
+     *
+     * @param Request $request
+     * @param int $goalId
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function storeLog(Request $request, $goalId)
     {
         // Fetch the goal entry once
@@ -267,10 +324,13 @@ class GoalSettingController extends Controller
             }
         });
 
+        // Check if validation fails
         if ($validator->fails()) {
+            // Redirect back with errors and input
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
+        // If validation passes, get the validated data
         $validatedData = $validator->validated();
 
         // Create and save goal log
