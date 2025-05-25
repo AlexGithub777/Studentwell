@@ -11,6 +11,12 @@ use Illuminate\Validation\Rule;
 
 class AdminController extends Controller
 {
+    /**
+     * Show the admin dashboard with resources and users.
+     *
+     * @param Request $request
+     * @return \Illuminate\View\View
+     */
     public function dashboard(Request $request)
     {
         $searchResources = $request->input('search_resources');
@@ -47,6 +53,11 @@ class AdminController extends Controller
         return view('admin.dashboard', compact('resources', 'users', 'searchResources', 'searchUsers'));
     }
 
+    /**
+     * Show the add resource page.
+     *
+     * @return \Illuminate\View\View
+     */
     public function addResourcePage()
     {
         $resource_categories = ResourceCategory::all(); // Fetch all resource categories
@@ -88,7 +99,12 @@ class AdminController extends Controller
         return redirect()->route('admin.dashboard')->with('success', 'Resource added successfully.');
     }
 
-
+    /**
+     * Show the edit resource page.
+     *
+     * @param int $id
+     * @return \Illuminate\View\View
+     */
     public function editResourcePage($id)
     {
         // Fetch the resource and its categories
@@ -100,6 +116,7 @@ class AdminController extends Controller
 
     public function updateResource(Request $request, $SupportResourceID)
     {
+        // Validate the request data
         $validatedData = $request->validate([
             'ResourceTitle' => ['required', 'string', 'min:5', 'max:100'],
             'ResourceCategory' => ['required', 'integer', 'exists:resource_categories,ResourceCategoryID'],
@@ -126,29 +143,54 @@ class AdminController extends Controller
             'Description.max' => 'Description cannot exceed 200 characters.',
         ]);
 
+        // Find the resource by ID and update it
         $resource = SupportResource::findOrFail($SupportResourceID);
         $resource->update($validatedData);
 
+        // Redirect back to the admin dashboard with a success message
         return redirect()->route('admin.dashboard')->with('success', 'Resource updated successfully.');
     }
 
+    /**
+     * Delete a support resource.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function deleteResource($id)
     {
+        // Validate the ID and find the resource
         $resource = SupportResource::findOrFail($id);
         $resource->delete();
 
+        // Redirect back to the admin dashboard with a success message
         return redirect()->route('admin.dashboard')->with('success', 'Support Resource deleted successfully.');
     }
 
-    /* User Management */
+    /**
+     * Show the edit user page.
+     *
+     * @return \Illuminate\View\View
+     */
     public function editUserPage($id)
     {
+        // Validate the ID and find the user
         $user = User::findOrFail($id);
+
+        // Pass the user data to the view
         return view('admin.edit-user', compact('user'));
     }
 
+    /**
+     * Update user details.
+     *
+     * @param Request $request
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function updateUser(Request $request, $id)
     {
+        // Validate the request data
         $validatedData = $request->validate([
             'first_name' => ['required', 'min:2', 'max:30'],
             'last_name' => ['required', 'min:2', 'max:30'],
@@ -174,6 +216,7 @@ class AdminController extends Controller
             'password.regex' => 'Password must be at least 8 characters and include an uppercase letter, a number, and a special character.'
         ]);
 
+        // Find the user by ID
         $user = User::findOrFail($id);
 
         // Fill only the validated fields (excluding password for now)
@@ -189,18 +232,28 @@ class AdminController extends Controller
             $user->password = Hash::make($validatedData['password']);
         }
 
+        // Save the user
         $user->save();
 
+        // Redirect back to the admin dashboard with a success message
         return redirect()
             ->route('admin.dashboard', ['tab' => 'users'])
             ->with('success', 'User updated successfully.');
     }
 
+    /**
+     * Delete a user.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function deleteUser($id)
     {
+        // Validate the ID and find the user
         $user = User::findOrFail($id);
         $user->delete();
 
+        // Redirect back to the admin dashboard with a success message
         return redirect()
             ->route('admin.dashboard', ['tab' => 'users'])
             ->with('success', 'User deleted successfully.');
