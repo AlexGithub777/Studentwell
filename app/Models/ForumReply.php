@@ -11,12 +11,21 @@ class ForumReply extends Model
 
     protected $table = 'Forum_Replies';
     protected $primaryKey = 'ReplyID';
-    public $timestamps = true; // Assuming you want timestamps for replies
+    public $timestamps = false;
+
+    // Define the date format for the created_at column
+    protected $dates = ['created_at'];
+
+    // Cast the created_at column to a datetime type
+    protected $casts = [
+        'created_at' => 'datetime',
+    ];
 
     protected $fillable = [
         'UserID',
         'PostID',
         'Content',
+        'created_at',
     ];
 
     public function user()

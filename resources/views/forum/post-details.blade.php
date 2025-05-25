@@ -19,7 +19,7 @@
         </div>
 
         <!-- Post Details -->
-        <div class="card forum-post-card">
+        <div class="card custom-form-container mb-3">
             <div class="card-body d-flex align-items-start">
                 <div class="user-avatar">
                     <i class="fa fa-user"></i>
@@ -81,7 +81,7 @@
             </h4>
 
             @foreach ($post->replies as $reply)
-                <div class="card forum-post-card">
+                <div class="card custom-form-container mb-3">
                     <div class="card-body d-flex align-items-start">
                         <div class="user-avatar">
                             <i class="fa fa-user"></i>
@@ -132,7 +132,7 @@
         <h4 class="mb-3 h5 fw-bold" style="color: var(--secondary-colour);">
             Add Your Reply
         </h4>
-        <form method="POST" class="forum-post-card forum-reply-form pb-3"
+        <form method="POST" class="custom-form-container forum-reply-form pb-3"
             action="{{ route('forum.reply', $post->ForumPostID) }}">
             @csrf
             <div class="mb-3">
