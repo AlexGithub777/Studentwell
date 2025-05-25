@@ -180,7 +180,7 @@ class GoalSettingController extends Controller
         return redirect()->route('goals.index')->with('success', 'Goal added successfully.');
     }
 
-    ?/**
+    /**
      * Show the form for editing a goal entry.
      *
      * @param int $id
