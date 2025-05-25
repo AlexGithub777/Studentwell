@@ -12,14 +12,14 @@ class ForumPost extends Model
     // disbale timestamps
     public $timestamps = false;
 
-    // add created_at and updated_at columns
-    protected $dates = ['created_at', 'updated_at'];
-    // add created_at and updated_at columns set type to datetime
+    // add created_at columns as date
+    protected $dates = ['created_at'];
+
+    // add created_at columns set type to datetime
     protected $casts = [
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
+        'created_at' => 'datetime'
     ];
-    
+
 
     protected $table = 'forum_posts';
     protected $primaryKey = 'ForumPostID';
