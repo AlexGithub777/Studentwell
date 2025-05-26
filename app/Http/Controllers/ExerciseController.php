@@ -149,7 +149,7 @@ class ExerciseController extends Controller
         }
 
         // Return the view for adding a planned exercise
-        return view('exercise.add-exercise');
+        return view('exercise.plan-exercise');
     }
 
     /**
