@@ -86,4 +86,16 @@ class User extends Authenticatable
         // Order by created_at in descending order
         return $this->hasMany(GoalLog::class, 'UserID', 'id')->orderBy('GoalLogDate', 'desc');
     }
+
+    public function exerciseLogs()
+    {
+        // Order by created_at in descending order
+        return $this->hasMany(ExerciseLog::class, 'UserID', 'id')->orderBy('ExerciseDateTime', 'desc');
+    }
+
+    public function exercisePlans()
+    {
+        // Order by created_at in descending order
+        return $this->hasMany(ExercisePlan::class, 'UserID', 'id')->orderBy('ExerciseDateTime', 'desc');
+    }
 }

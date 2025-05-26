@@ -115,7 +115,7 @@
                                             class="fas 
                                         @if ($goalLog->GoalStatus === 'completed') fa-trophy 
                                         @elseif ($goalLog->GoalStatus === 'incomplete') fa-circle-xmark 
-                                        @elseif ($goalLog->GoalStatus === 'partially') fa-adjust @endif me-2 metric-icon">
+                                        @elseif ($goalLog->GoalStatus === 'partially') fa-adjust @endif me-2 p-0 metric-icon">
                                         </i>
                                     </div>
                                     <div>
@@ -189,7 +189,7 @@
                                 <div class="d-flex align-items-center">
                                     <div class="me-2">
                                         <!-- Add icon based on Goal Category -->
-                                        <i class="fas {{ $goal->GoalCategoryIcon }} metric-icon me-2">
+                                        <i class="fas {{ $goal->GoalCategoryIcon }} metric-icon p-0 me-2">
                                             <!-- Add GoalCategoryIcon to model in controller -->
                                         </i>
                                     </div>
@@ -229,7 +229,7 @@
                                         @auth
                                             @if (auth()->id() === $goal->UserID)
                                                 <!--edit button -->
-                                                <a href="{{ route('goals.edit', $goal->GoalID) }}" class="btn btn-sm"
+                                                <a href="{{ route('goals.edit', $goal->GoalID) }}" class="btn btn-sm me-1"
                                                     style="background-color: var(--secondary-colour); color: white; font-weight: bold;">
                                                     <i class="fas fa-pencil-alt"></i>
                                                 </a>

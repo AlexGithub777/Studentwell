@@ -37,6 +37,21 @@
                 </a>
             </div>
 
-            <div class="navbar-toggler-placeholder"></div>
+            <!-- Right side -->
+            @guest
+                <div class="d-flex align-items-center">
+                    <!-- Sign In Button -->
+                    <a href="{{ route('login') }}" class="btn add-btn me-4 text-white"
+                        style="background-color: var(--secondary-colour);">
+                        Sign In
+                    </a>
+
+                    <!-- Sign Up Button -->
+                    <a href="{{ route('register') }}" class="btn add-btn me-2 text-white"
+                        style="background-color: var(--secondary-colour);">
+                        Sign Up
+                    </a>
+                </div>
+            @endguest
         </header>
     </div>

@@ -43,7 +43,6 @@ class Goal extends Model
 
     public function goalLogs()
     {
-        return $this->hasMany(GoalLog::class, 'GoalID', 'GoalID');
+        return $this->hasOne(GoalLog::class, 'GoalID', 'GoalID');
     }
-
 }

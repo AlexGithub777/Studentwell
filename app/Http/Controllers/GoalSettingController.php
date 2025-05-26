@@ -30,7 +30,7 @@ class GoalSettingController extends Controller
             ->doesntHave('goalLogs')
             ->with('user')
             ->paginate(5, ['*'], 'goalsPage')
-            ->appends(['goalLogsPage' => request('goalLogsPage')]);
+            ->appends(['goalsPage' => request('goalsPage')]);
 
         // Active goals
         $activeGoals = $user->goals()
@@ -45,7 +45,7 @@ class GoalSettingController extends Controller
         $goalLogs = $user->goalLogs()
             ->with('user')
             ->paginate(5, ['*'], 'goalLogsPage')
-            ->appends(['goalsPage' => request('goalsPage')]);
+            ->appends(['goalLogsPage' => request('goalLogsPage')]);
 
         // fetch all goals logs wihout pagination
         $allGoalLogs = $user->goalLogs()

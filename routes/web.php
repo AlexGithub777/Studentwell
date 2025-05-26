@@ -8,6 +8,7 @@ use App\Http\Controllers\SupportResourceController;
 use App\Http\Controllers\MoodTrackingController;
 use App\Http\Controllers\SleepLogController;
 use App\Http\Controllers\GoalSettingController;
+use App\Http\Controllers\ExerciseController;
 
 // Home Routes
 Route::get('/', function () {
@@ -69,21 +70,13 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/mood/edit-mood/{id}', [MoodTrackingController::class, 'update'])->name('mood.update');
 
     // Exercise Routes
-    Route::get('/exercise', function () {
-        return view('exercise.exercise');
-    });
-
-    Route::get('/exercise/log-exercise', function () {
-        return view('exercise.log-exercise');
-    });
-
-    Route::get('/exercise/plan-exercise', function () {
-        return view('exercise.plan-exercise');
-    });
-
-    Route::get('/exercise/{id}', function ($id) {
-        return view('exercise.edit-exercise', ['id' => $id]);
-    });
+    Route::get('/exercise', [ExerciseController::class, 'index'])->name('exercise.index');
+    Route::get('/exercise/plan-exercise', [ExerciseController::class, 'addPlannedExercisePage'])->name('exercise.plan');
+    Route::post('/exercise/plan-exercise', [ExerciseController::class, 'storePlannedExercise'])->name('exercise.store.plan');
+    Route::get('/exercise/log-exercise/{id?}', [ExerciseController::class, 'logExercisePage'])->name('exercise.log');
+    Route::post('/exercise/log-exercise/{id?}', [ExerciseController::class, 'storeLoggedExercise'])->name('exercise.store.log');
+    Route::get('/exercise/edit-exercise/{id}', [ExerciseController::class, 'editPlannedExercisePage'])->name('exercise.edit');
+    Route::put('/exercise/edit-exercise/{id}', [ExerciseController::class, 'updatePlannedExercise'])->name('exercise.update');
 
     // Goals Routes
     Route::get('/goals', [GoalSettingController::class, 'index'])->name('goals.index');
