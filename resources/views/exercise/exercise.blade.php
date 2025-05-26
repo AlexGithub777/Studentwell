@@ -267,7 +267,7 @@
                         </div>
                     @endforeach
                     <div class="mt-4">
-                        {{ $loggedExercises->links('pagination::bootstrap-5') }}
+                        {{ $plannedExercises->links('pagination::bootstrap-5') }}
                     </div>
                 @endif
             </div>
