@@ -10,15 +10,11 @@ use App\Http\Controllers\SleepLogController;
 use App\Http\Controllers\GoalSettingController;
 use App\Http\Controllers\ExerciseController;
 use App\Http\Controllers\HealthInsightsController;
+use App\Http\Controllers\HomeController;
 
 // Home Routes
-Route::get('/', function () {
-    return view('home.home');
-});
-
-Route::get('/home', function () {
-    return view('home.home');
-});
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('home.index');
 
 // Support Resources Routes
 Route::get('/support-resources', [SupportResourceController::class, 'index'])->name('support-resources.index');
@@ -30,7 +26,6 @@ Route::post('/signup', [UserController::class, 'signup'])->name('register');
 Route::post('/logout', [UserController::class, 'logout'])->name('logout');
 Route::post('/signin', [UserController::class, 'signin'])->name('login');
 
-
 // Protected Routes
 Route::middleware(['auth'])->group(function () {
 
@@ -39,6 +34,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/', [UserController::class, 'showAccount'])->name('show');
         Route::get('/edit', [UserController::class, 'editAccountPage'])->name('edit');
         Route::put('/edit', [UserController::class, 'updateAccount'])->name('update');
+        Route::get('/delete', [UserController::class, 'deleteAccountPage'])->name('delete');
     });
 
     // Admin-only routes
