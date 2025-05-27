@@ -133,7 +133,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row mt-4">
+                <div class="row mt-0 mt-md-4">
                     <div class="col-md-6">
                         <div class="custom-card">
                             Card 3
@@ -165,7 +165,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row mt-4">
+                <div class="row mt-0 mt-md-4">
                     <div class="col-md-6">
                         <div class="custom-card">
                             Card 3
@@ -197,7 +197,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row mt-4">
+                <div class="row mt-0 mt-md-4">
                     <div class="col-md-6">
                         <div class="custom-card">
                             Card 3
@@ -229,7 +229,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row mt-4">
+                <div class="row mt-0 mt-md-4">
                     <div class="col-md-6">
                         <div class="custom-card">
                             Card 3
