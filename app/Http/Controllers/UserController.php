@@ -14,6 +14,40 @@ class UserController extends Controller
      * Show the signup form.
      *
      * @return \Illuminate\View\View
+     * This method displays the signup form to the user.
+     */
+    public function showSignupForm()
+    {
+        // If user is already authenticated, redirect to home
+        if (auth()->check()) {
+            return redirect('/home')->with('info', 'You are already logged in.');
+        }
+
+        // Return the signup view
+        return view('authentication.signup');
+    }
+
+    /**
+     * Show the signin form.
+     *
+     * @return \Illuminate\View\View
+     * This method displays the signin form to the user.
+     */
+    public function showSigninForm()
+    {
+        // If user is already authenticated, redirect to home
+        if (auth()->check()) {
+            return redirect('/home')->with('info', 'You are already logged in.');
+        }
+
+        // Return the signin view
+        return view('authentication.signin');
+    }
+
+    /**
+     * Create a new user account.
+     *
+     * @return \Illuminate\View\View
      */
     public function signup(Request $request)
     {
