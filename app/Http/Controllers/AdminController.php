@@ -68,6 +68,7 @@ class AdminController extends Controller
 
     public function addResource(Request $request)
     {
+        // Validate the request data
         $validatedData = $request->validate([
             'ResourceTitle' => ['required', 'string', 'min:5', 'max:100'],
             'ResourceCategory' => ['required', 'integer', 'exists:resource_categories,ResourceCategoryID'],
