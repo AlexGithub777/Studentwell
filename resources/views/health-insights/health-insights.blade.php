@@ -1,5 +1,7 @@
 @include('main.header')
 @include('main.sidebar')
+<!-- Chart JS Library -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     document.title = "StudentWell | Health Insights";
 </script>
@@ -71,29 +73,45 @@
                 <!-- Overview content -->
                 <div class="row">
                     <div class="col-md-6">
-                        <div class="custom-card">
-                            Card 1
+                        <div class="custom-card mb-md-0 mb-3">
+                            <div class="d-flex justify-content-start align-items-center mb-3">
+                                <h5 class="fw-bold m-0 me-2">Your Weekly Wellness Activity</h5>
+                                <span> (log counts across features)</span>
+                            </div>
                             <!-- bar graph of logs across features (mood, exercise, sleep, goals) -->
+                            <canvas style="max-height:275px;" id="logsBarChart"></canvas>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="custom-card">
-                            Card 2
+                        <div class="custom-card mb-md-0 mb-3">
+                            <div class="d-flex justify-content-start align-items-center mb-3">
+                                <h5 class="fw-bold m-0 me-2">How Consistent Your Sleep Has Been</h5>
+                                <span> (daily hours of sleep)</span>
+                            </div>
                             <!-- donut graph of sleep consistency (daily hours of sleep) need to change -->
+                            <canvas style="max-height:275px;" id="sleepDonutChart"></canvas>
                         </div>
                     </div>
                 </div>
                 <div class="row mt-4">
                     <div class="col-md-6">
-                        <div class="custom-card">
-                            Card 3
+                        <div class="custom-card mb-md-0 mb-3">
+                            <div class="d-flex justify-content-start align-items-center mb-3">
+                                <h5 class="fw-bold m-0 me-2">How Your Mood Has Shifted</h5>
+                                <span> (14-day trend)</span>
+                            </div>
                             <!-- line graph of mood over time (30 days)-->
+                            <canvas style="max-height:275px;" id="moodLineChart"></canvas>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="custom-card">
+                        <div class="custom-card mb-md-0 mb-3">
+                            <div class="d-flex justify-content-start align-items-center mb-3">
+                                <h5 class="fw-bold m-0 me-2">Where Your Goals Are Focused</h5>
+                                <span> (goals by category)</span>
+                            </div>
                             <!-- pie chart of goals by category (exercise, sleep, mood) -->
-                            Card 4
+                            <canvas style="max-height:275px;" id="goalsPieChart"></canvas>
                         </div>
                     </div>
                 </div>
@@ -261,6 +279,73 @@
         window.addEventListener("popstate", function() {
             location.reload(); // Reload page to get correct tab state
         });
+    });
+</script>
+<script>
+    new Chart(document.getElementById("logsBarChart"), {
+        type: 'bar',
+        data: {
+            labels: ['Mood', 'Exercise', 'Sleep', 'Goals'],
+            datasets: [{
+                label: 'Logs Count',
+                data: [12, 19, 7, 5], // replace with dynamic data
+                backgroundColor: 'rgba(75, 192, 192, 0.6)'
+            }]
+        },
+        options: {
+            responsive: true,
+        }
+    });
+</script>
+<script>
+    new Chart(document.getElementById("moodLineChart"), {
+        type: 'line',
+        data: {
+            labels: Array.from({
+                length: 30
+            }, (_, i) => `Day ${i + 1}`), // 30 days
+            datasets: [{
+                label: 'Mood Score',
+                data: [3, 2, 5, 4, 6, 7, 5, 4, 3, 2, 4, 5, 6, 7, 8, 6, 5, 4, 3, 2, 1, 2, 3, 4, 5, 6, 7,
+                    8, 9, 10
+                ], // example data
+                borderColor: 'rgba(75,192,192,1)',
+                fill: false
+            }]
+        },
+        options: {
+            responsive: true,
+        }
+    });
+</script>
+<script>
+    new Chart(document.getElementById("sleepDonutChart"), {
+        type: 'doughnut',
+        data: {
+            labels: ['<6 hrs', '6–8 hrs', '8+ hrs'],
+            datasets: [{
+                data: [5, 15, 10], // example
+                backgroundColor: ['#ff6384', '#36a2eb', '#cc65fe']
+            }]
+        },
+        options: {
+            responsive: true,
+        }
+    });
+</script>
+<script>
+    new Chart(document.getElementById("goalsPieChart"), {
+        type: 'pie',
+        data: {
+            labels: ['Exercise', 'Sleep', 'Mood'],
+            datasets: [{
+                data: [10, 5, 3],
+                backgroundColor: ['#ffcd56', '#4bc0c0', '#9966ff']
+            }]
+        },
+        options: {
+            responsive: true,
+        }
     });
 </script>
 @include('main.footer')
