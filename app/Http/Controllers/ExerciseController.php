@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\ExercisePlan;
 use App\Models\ExerciseLog;
 use Carbon\Carbon;
+use Illuminate\Validation\Rule;
 
 class ExerciseController extends Controller
 {
@@ -64,7 +65,7 @@ class ExerciseController extends Controller
             return Carbon::parse($log->ExerciseDateTime)->isCurrentWeek();
         })->sum('DurationMinutes');
 
-        // streak calculation
+        // Streak calculation
         $exerciseLogsByDate = auth()->user()->exerciseLogs()
             ->orderBy('ExerciseDateTime', 'desc')
             ->pluck('ExerciseDateTime')
@@ -72,43 +73,55 @@ class ExerciseController extends Controller
                 return Carbon::parse($date)->format('Y-m-d');
             })
             ->unique()
-            ->values();
+            ->values()
+            ->toArray();
 
         $streak = 0;
+        $today = Carbon::now()->format('Y-m-d');
 
-        //get the current date
-        $currentDate = Carbon::now()->format('Y-m-d');
+        if (!empty($exerciseLogsByDate)) {
+            $mostRecentDate = $exerciseLogsByDate[0];
 
-        // Loop through the dates to calculate the streak
-        foreach ($exerciseLogsByDate as $date) {
-            if (Carbon::parse($date)->isToday()) {
-                $streak++;
-            } elseif (Carbon::parse($date)->isYesterday()) {
-                $streak++;
-            } elseif (Carbon::parse($date)->isSameDay(Carbon::now()->subDays(2))) {
-                $streak++;
-            } else {
-                break; // Stop counting streak if a gap is found
+            // Only start counting if the most recent exercise was today or yesterday
+            // This prevents counting old streaks that have been broken
+            if ($mostRecentDate === $today || $mostRecentDate === Carbon::yesterday()->format('Y-m-d')) {
+
+                // Expected next date (start from most recent exercise date)
+                $expectedDate = Carbon::parse($mostRecentDate);
+
+                // Count consecutive days
+                foreach ($exerciseLogsByDate as $exerciseDate) {
+                    if ($exerciseDate === $expectedDate->format('Y-m-d')) {
+                        $streak++;
+                        $expectedDate->subDay(); // Move to previous day
+                    } else {
+                        break; // Gap found, stop counting
+                    }
+                }
             }
         }
 
         $exerciseLogStreak = $streak;
 
-        /// Map the exercise types to fa icons
         $exerciseTypeIcons = [
-            'Running'       => 'fa-running',
-            'Walking'       => 'fa-person-walking',
-            'Cycling'       => 'fa-bicycle',
-            'Swimming'      => 'fa-swimmer',
-            'Yoga'          => 'fa-person-praying',
-            'Weightlifting' => 'fa-dumbbell',
+            'Basketball'     => 'fa-basketball-ball',
+            'Boxing'         => 'fa-hand-fist',
+            'Climbing'       => 'fa-mountain',
+            'Cycling'        => 'fa-bicycle',
+            'Dance'          => 'fa-music',
+            'Football'       => 'fa-futbol',
+            'Hiking'         => 'fa-person-hiking',
+            'Running'        => 'fa-running',
+            'Skating'        => 'fa-person-skating',
+            'Skiing'         => 'fa-skiing',
+            'Sports'         => 'fa-medal',
+            'Swimming'       => 'fa-swimmer',
+            'Tennis'         => 'fa-tennis-ball',
+            'Volleyball'     => 'fa-volleyball-ball',
+            'Walking'        => 'fa-person-walking',
             'Weight Lifting' => 'fa-dumbbell',
-            'Dance'         => 'fa-music',
-            'Basketball'    => 'fa-basketball-ball',
-            'Football'      => 'fa-football-ball',
-            'Volleyball'    => 'fa-volleyball-ball',
-            'Sports'        => 'fa-medal',
-            'Other'         => 'fa-star'
+            'Yoga'           => 'fa-person-praying',
+            'Other'          => 'fa-star',
         ];
 
         // add ExerciseTypeIcons to $plannedExercises and $loggedExercises
@@ -158,21 +171,26 @@ class ExerciseController extends Controller
      * @return \Illuminate\View\View
      */
 
-    public function logExercisePage()
+    public function logExercisePage($plannedExerciseID = null)
     {
-        // Ensure the user is authenticated
         if (!auth()->check()) {
             return redirect()->route('login')->with('error', 'You must be logged in to access this page.');
         }
 
-        // Fetch all planned exercises for the user
-        $plannedExercises = auth()->user()->exercisePlans()
-            ->doesntHave('exerciseLogs') // Only get planned exercises that have no logs
-            ->get();
+        $exercisePlan = null;
+        if ($plannedExerciseID) {
+            $exercisePlan = auth()->user()->exercisePlans()
+                ->where('PlannedExerciseID', $plannedExerciseID)
+                ->firstOrFail();
 
-        // Return the view for logging an exercise with the planned exercises
+            // If the planned exercise doesn't exist, redirect back with an error
+            if (!$exercisePlan) {
+                return redirect()->route('exercise.log')->with('error', 'Planned exercise not found.');
+            }
+        }
+
         return view('exercise.log-exercise', [
-            'plannedExercises' => $plannedExercises,
+            'exercisePlan' => $exercisePlan,
         ]);
     }
 
@@ -184,21 +202,81 @@ class ExerciseController extends Controller
      */
     public function storePlannedExercise(Request $request)
     {
-        // Validate the request data
-        $request->validate([
-            'exercise_type' => 'required|string|max:255',
-            'exercise_intensity' => 'required|string|max:255',
-            'duration_minutes' => 'required|integer|min:1',
-            'notes' => 'nullable|string|max:1000',
-        ]);
+        // Ensure the user is authenticated
+        if (!auth()->check()) {
+            return redirect()->route('login')->with('error', 'You must be logged in to access this page.');
+        }
+
+        // Extract the allowed exercise types from your icon map
+        $allowedExerciseTypes = [
+            'Basketball',
+            'Boxing',
+            'Climbing',
+            'Cycling',
+            'Dance',
+            'Football',
+            'Hiking',
+            'Running',
+            'Skating',
+            'Skiing',
+            'Sports',
+            'Swimming',
+            'Tennis',
+            'Volleyball',
+            'Walking',
+            'Weight Lifting',
+            'Yoga',
+            'Other',
+        ];
+
+        $allowedIntensities = ['High Intensity', 'Moderate Intensity', 'Low Intensity'];
+
+        $validatedData = $request->validate(
+            [
+                'ExerciseDateTime' => [
+                    'required',
+                    'date',
+                    'after_or_equal:' . now()->format('Y-m-d H:i:s'),
+                ],
+                'ExerciseType' => [
+                    'required',
+                    'string',
+                    'in:' . implode(',', $allowedExerciseTypes), // ✅ Enforce valid options
+                ],
+                'DurationMinutes' => [
+                    'required',
+                    'integer',
+                    'min:1',
+                ],
+                'ExerciseIntensity' => [
+                    'required',
+                    'string',
+                    'in:' . implode(',', $allowedIntensities), // ✅ Enforce allowed intensities
+                ],
+                'Notes' => [
+                    'nullable',
+                    'string',
+                    'max:255',
+                ],
+            ],
+            [
+                'ExerciseDateTime.after_or_equal' => 'The exercise date and time must be in the future.',
+                'ExerciseType.in' => 'The selected exercise type is invalid. Please choose a valid option.',
+                'DurationMinutes.min' => 'The duration must be at least 1 minute.',
+                'Notes.max' => 'The notes may not be greater than 255 characters.',
+            ]
+        );
 
         // Create a new planned exercise
-        $plannedExercise = auth()->user()->exercisePlans()->create([
-            'ExerciseType' => $request->input('exercise_type'),
-            'ExerciseIntensity' => $request->input('exercise_intensity'),
-            'DurationMinutes' => $request->input('duration_minutes'),
-            'Notes' => $request->input('notes'),
-        ]);
+        $exercisePlan = new ExercisePlan();
+        $exercisePlan->UserID = auth()->id(); // Set the UserID to the authenticated user's ID
+        $exercisePlan->ExerciseDateTime = $validatedData['ExerciseDateTime'];
+        $exercisePlan->ExerciseType = $validatedData['ExerciseType'];
+        $exercisePlan->DurationMinutes = $validatedData['DurationMinutes'];
+        $exercisePlan->ExerciseIntensity = $validatedData['ExerciseIntensity'];
+        $exercisePlan->Notes = $validatedData['Notes'] ?? null; // Set notes if provided    
+
+        $exercisePlan->save();
 
         return redirect()->route('exercise.index')->with('success', 'Planned exercise created successfully.');
     }
@@ -209,28 +287,91 @@ class ExerciseController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function storeLoggedExercise(Request $request)
+    public function storeLoggedExercise(Request $request, $plannedExerciseID = null)
     {
+        // Ensure the user is authenticated
+        if (!auth()->check()) {
+            return redirect()->route('login')->with('error', 'You must be logged in to access this page.');
+        }
+
+        if ($plannedExerciseID) {
+            // Validate the planned exercise exists
+            $plannedExercise = auth()->user()->exercisePlans()
+                ->where('PlannedExerciseID', $plannedExerciseID)
+                ->first();
+
+            if (!$plannedExercise) {
+                return redirect()->route('exercise.log')->with('error', 'Planned exercise not found.');
+            }
+        } else {
+            // Set Status manually if not already in request
+            $request->merge(['Status' => 'Completed']);
+        }
+
+        $allowedExerciseTypes = [
+            'Basketball',
+            'Boxing',
+            'Climbing',
+            'Cycling',
+            'Dance',
+            'Football',
+            'Hiking',
+            'Running',
+            'Skating',
+            'Skiing',
+            'Sports',
+            'Swimming',
+            'Tennis',
+            'Volleyball',
+            'Walking',
+            'Weight Lifting',
+            'Yoga',
+            'Other',
+        ];
+
+        $allowedIntensities = ['High Intensity', 'Moderate Intensity', 'Low Intensity'];
+
+        $rules = [
+            'Status' => 'required|string|in:Completed,Missed,Partially',
+            'ExerciseType' => 'required|string|in:' . implode(',', $allowedExerciseTypes),
+            'DurationMinutes' => 'required|integer|min:1',
+            'ExerciseIntensity' => 'required|string|in:' . implode(',', $allowedIntensities),
+            'Notes' => 'nullable|string|max:255',
+        ];
+
+        // If a planned exercise ID is provided, we need to ensure the exercise date is after or equal to the planned date
+        if ($plannedExerciseID) {
+            // Compare against the planned exercise date
+            $rules['ExerciseDateTime'] = 'required|date|after_or_equal:' . $plannedExercise->ExerciseDateTime;
+        } else {
+            // If no planned exercise ID is provided, just require a date and not in the future
+            $rules['ExerciseDateTime'] = 'required|date|before_or_equal:now';
+        }
+
         // Validate the request data
-        $request->validate([
-            'planned_exercise_id' => 'required|exists:planned_exercises,PlannedExerciseID',
-            'exercise_date_time' => 'required|date',
-            'exercise_type' => 'required|string|max:255',
-            'exercise_intensity' => 'required|string|max:255',
-            'duration_minutes' => 'required|integer|min:1',
-            'notes' => 'nullable|string|max:1000',
+        $validatedData = $request->validate($rules, [
+            'ExerciseDateTime.after_or_equal' => 'The exercise date and time must be after or equal to the planned date.',
+            'ExerciseDateTime.before_or_equal' => 'The exercise date and time cannot be in the future.',
+            'ExerciseType.in' => 'The selected exercise type is invalid.',
+            'DurationMinutes.min' => 'The duration must be at least 1 minute.',
+            'Notes.max' => 'Notes may not be greater than 255 characters.',
         ]);
 
-        // Create a new logged exercise
-        auth()->user()->exerciseLogs()->create([
-            'PlannedExerciseID' => $request->input('planned_exercise_id'),
-            'ExerciseDateTime' => $request->input('exercise_date_time'),
-            'ExerciseType' => $request->input('exercise_type'),
-            'ExerciseIntensity' => $request->input('exercise_intensity'),
-            'DurationMinutes' => $request->input('duration_minutes'),
-            'Notes' => $request->input('notes'),
-        ]);
+        // Create a new exercise log
+        $exerciseLog = new ExerciseLog();
+        $exerciseLog->UserID = auth()->id(); // Set the UserID to the authenticated user's ID
+        $exerciseLog->PlannedExerciseID = $plannedExerciseID; // Set the PlannedExerciseID if provided
+        $exerciseLog->Status = $validatedData['Status'];
+        $exerciseLog->ExerciseDateTime = $validatedData['ExerciseDateTime'];
+        $exerciseLog->ExerciseType = $validatedData['ExerciseType'];
+        $exerciseLog->DurationMinutes = $validatedData['DurationMinutes'];
+        $exerciseLog->ExerciseIntensity = $validatedData['ExerciseIntensity'];
+        $exerciseLog->Notes = $validatedData['Notes'] ?? null; // Set notes if provided
 
+        // Save the exercise log
+        $exerciseLog->save();
+
+        // redirect to the exercise index page with a success message
         return redirect()->route('exercise.index')->with('success', 'Logged exercise created successfully.');
     }
 

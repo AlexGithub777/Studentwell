@@ -73,8 +73,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/exercise', [ExerciseController::class, 'index'])->name('exercise.index');
     Route::get('/exercise/plan-exercise', [ExerciseController::class, 'addPlannedExercisePage'])->name('exercise.plan');
     Route::post('/exercise/plan-exercise', [ExerciseController::class, 'storePlannedExercise'])->name('exercise.store.plan');
-    Route::get('/exercise/log-exercise/{id?}', [ExerciseController::class, 'logExercisePage'])->name('exercise.log');
-    Route::post('/exercise/log-exercise/{id?}', [ExerciseController::class, 'storeLoggedExercise'])->name('exercise.store.log');
+    Route::get('/log-exercise/{plannedExerciseID}', [ExerciseController::class, 'logExercisePage'])->name('exercise.log');
+    Route::get('/log-exercise', [ExerciseController::class, 'logExercisePage'])->name('exercise.log.unplanned');
+    Route::post('/log-exercise/{plannedExerciseID?}', [ExerciseController::class, 'storeLoggedExercise'])->name('exercise.store.log');
+
     Route::get('/exercise/edit-exercise/{id}', [ExerciseController::class, 'editPlannedExercisePage'])->name('exercise.edit');
     Route::put('/exercise/edit-exercise/{id}', [ExerciseController::class, 'updatePlannedExercise'])->name('exercise.update');
 

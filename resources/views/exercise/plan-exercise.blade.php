@@ -29,14 +29,19 @@
                     <div class="col-lg-6 mb-3 mb-lg-0">
                         <div class="left-column-wrapper d-flex flex-column h-100">
                             <h1 class="custom-header-title fw-bold mb-1">Exercise Details</h1>
-                            <p class="custom-header-desc mb-1">Plan your physical activity</p>
+                            <p class="custom-header-desc mb-3">Plan your physical activity</p>
+
+                            @php
+                                $now = now()->format('Y-m-d\TH:i');
+                            @endphp
 
                             <!-- Exercise Date and Time -->
-                            <div class="mt-1 mb-3">
+                            <div class=" mb-3">
                                 <label for="ExerciseDateTime" class="form-label fw-semibold mb-1">Date and Time</label>
-                                <input type="datetime-local"
+                                <input type="datetime-local" min="{{ $now }}"
                                     class="form-control custom-input @error('ExerciseDateTime') is-invalid @enderror"
-                                    id="ExerciseDateTime" name="ExerciseDateTime" value="{{ old('ExerciseDateTime') }}">
+                                    id="ExerciseDateTime" name="ExerciseDateTime"
+                                    value="{{ old('ExerciseDateTime', $now) }}">
                                 @error('ExerciseDateTime')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -47,20 +52,27 @@
                                 <label for="ExerciseType" class="form-label fw-semibold mb-1">Exercise Type</label>
                                 @php
                                     $exerciseTypes = [
-                                        'Running' => '🏃',
-                                        'Walking' => '🚶',
-                                        'Cycling' => '🚴',
-                                        'Swimming' => '🏊',
-                                        'Yoga' => '🧘',
-                                        'Weightlifting' => '🏋️',
-                                        'Dance' => '💃',
                                         'Basketball' => '🏀',
-                                        'Football' => '🏈',
-                                        'Volleyball' => '🏐',
+                                        'Boxing' => '🥊',
+                                        'Climbing' => '🧗',
+                                        'Cycling' => '🚴',
+                                        'Dance' => '💃',
+                                        'Football' => '⚽',
+                                        'Hiking' => '🥾',
+                                        'Running' => '🏃',
+                                        'Skating' => '⛸️',
+                                        'Skiing' => '🎿',
                                         'Sports' => '🥇',
+                                        'Swimming' => '🏊',
+                                        'Tennis' => '🎾',
+                                        'Volleyball' => '🏐',
+                                        'Walking' => '🚶',
+                                        'Weight Lifting' => '🏋️',
+                                        'Yoga' => '🧘',
                                         'Other' => '❓',
                                     ];
                                 @endphp
+
 
                                 <select class="form-select custom-input @error('ExerciseType') is-invalid @enderror"
                                     id="ExerciseType" name="ExerciseType">
@@ -77,10 +89,6 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-
-                            @php
-                                $today = now()->toDateString();
-                            @endphp
 
                             <!-- Exercise Intensity -->
                             <div class="mb-3">
@@ -116,7 +124,6 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-
                         </div>
                     </div>
 

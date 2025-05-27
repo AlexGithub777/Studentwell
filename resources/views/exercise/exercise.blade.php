@@ -29,7 +29,7 @@
                     </a>
 
                     <!-- Log Exercise Button -->
-                    <a href="{{ route('exercise.log') }}" class="btn add-btn text-white"
+                    <a href="{{ route('exercise.log.unplanned') }}" class="btn add-btn text-white"
                         style="background-color: var(--secondary-colour);">
                         <i class="fas fa-plus me-1 fw-bold"></i> Log Exercise
                     </a>
@@ -145,8 +145,10 @@
                                         <!-- Display exercise log notes -->
                                         <div class="mt-1">
                                             <span style="font-size:1rem; color: var(--secondary-colour);">
-                                                {{ $exerciseLog->DurationMinutes ?? '' }} minutes -
-                                                {{ $exerciseLog->Notes ?? '' }}
+                                                {{ $exerciseLog->DurationMinutes ?? '' }} minutes
+                                                @if (!empty($exerciseLog->PlannedExercise->Notes))
+                                                    - {{ $exerciseLog->PlannedExercise->Notes }}
+                                                @endif
                                             </span>
                                         </div>
                                     </div>
@@ -159,9 +161,9 @@
                                         @elseif ($exerciseLog->Status === 'Missed')
                                             <i class="fas fa-xmark metric-icon p-0 mb-1"></i>
                                             <span style="font-size: 0.875rem;">Missed</span>
-                                        @elseif ($exerciseLog->Status === 'Unplanned')
-                                            <i class="fas fa-question metric-icon p-0 mb-1"></i>
-                                            <span style="font-size: 0.875rem;">Unplanned</span>
+                                        @elseif ($exerciseLog->Status === 'Partially')
+                                            <i class="fas fa-adjust metric-icon p-0 mb-1"></i>
+                                            <span style="font-size: 0.875rem;">Partially</span>
                                         @endif
                                     </div>
                                 </div>
@@ -176,6 +178,17 @@
                                             {{ $exerciseLog->ExerciseIntensity }}
                                         </span>
                                     </div>
+                                    <div>
+                                        <!-- exercise log notes -->
+                                        @if (!empty($exerciseLog->Notes))
+                                            <span>
+                                                <p class="ms-2"
+                                                    style="margin:0; font-size:0.9rem; color: var(--secondary-colour);">
+                                                    <b>Note:</b> {{ $exerciseLog->Notes }}
+                                                </p>
+                                            </span>
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -185,9 +198,9 @@
                     </div>
                 @endif
             </div>
-            <!-- Upcoming Exercises -->
+            <!-- Unlogged Exercises -->
             <div class="col-xxl-6">
-                <h3 class="page-subtitle">Upcoming Exercises</h3>
+                <h3 class="page-subtitle">Unlogged Exercises</h3>
                 @if ($plannedExercises->isEmpty())
                     <div class="alert alert-info">
                         No upcoming exercises found.
@@ -248,17 +261,19 @@
                                             @if (auth()->id() === $exercisePlan->UserID)
                                                 <!--edit button -->
                                                 <a href="{{ route('exercise.edit', $exercisePlan->PlannedExerciseID) }}"
-                                                    class="btn btn-sm me-1"
+                                                    class="btn btn-sm {{ $exerciseDate->isPast() ? 'me-1' : '' }}"
                                                     style="background-color: var(--secondary-colour); color: white; font-weight: bold;">
                                                     <i class="fas fa-pencil-alt"></i>
                                                 </a>
 
-                                                <!-- log button -->
-                                                <a href="{{ route('exercise.log', $exercisePlan->PlannedExerciseID) }}"
-                                                    class="btn btn-sm"
-                                                    style="background-color: var(--secondary-colour); color: white; font-weight: bold;">
-                                                    Log Exercise
-                                                </a>
+                                                <!-- log button - only show if exercise date is in the past -->
+                                                @if ($exerciseDate->isPast())
+                                                    <a href="{{ route('exercise.log', $exercisePlan->PlannedExerciseID) }}"
+                                                        class="btn btn-sm"
+                                                        style="background-color: var(--secondary-colour); color: white; font-weight: bold;">
+                                                        Log Exercise
+                                                    </a>
+                                                @endif
                                             @endif
                                         @endauth
                                     </div>
