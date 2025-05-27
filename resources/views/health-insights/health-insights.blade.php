@@ -93,7 +93,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row mt-4">
+                <div class="row mt-0 mt-md-4">
                     <div class="col-md-6">
                         <div class="custom-card mb-md-0 mb-3">
                             <div class="d-flex justify-content-start align-items-center mb-3">
