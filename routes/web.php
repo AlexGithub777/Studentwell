@@ -77,8 +77,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/log-exercise', [ExerciseController::class, 'logExercisePage'])->name('exercise.log.unplanned');
     Route::post('/log-exercise/{plannedExerciseID?}', [ExerciseController::class, 'storeLoggedExercise'])->name('exercise.store.log');
 
-    Route::get('/exercise/edit-exercise/{id}', [ExerciseController::class, 'editPlannedExercisePage'])->name('exercise.edit');
-    Route::put('/exercise/edit-exercise/{id}', [ExerciseController::class, 'updatePlannedExercise'])->name('exercise.update');
+    Route::get('/exercise/edit-exercise/{plannedExerciseID}', [ExerciseController::class, 'editPlannedExercisePage'])->name('exercise.edit');
+    Route::put('/exercise/edit-exercise/{plannedExerciseID}', [ExerciseController::class, 'updatePlannedExercise'])->name('exercise.update');
 
     // Goals Routes
     Route::get('/goals', [GoalSettingController::class, 'index'])->name('goals.index');

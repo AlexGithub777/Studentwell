@@ -185,7 +185,7 @@ class ExerciseController extends Controller
 
             // If the planned exercise doesn't exist, redirect back with an error
             if (!$exercisePlan) {
-                return redirect()->route('exercise.log')->with('error', 'Planned exercise not found.');
+                return redirect()->route('exercise.index')->with('error', 'Planned exercise not found.');
             }
         }
 
@@ -381,19 +381,26 @@ class ExerciseController extends Controller
      * @param int $plannedExerciseId
      * @return \Illuminate\View\View
      */
-    public function editPlannedExercisePage($plannedExerciseId)
+    public function editPlannedExercisePage($plannedExerciseID)
     {
-        // Ensure the user is authenticated
         if (!auth()->check()) {
             return redirect()->route('login')->with('error', 'You must be logged in to access this page.');
         }
 
-        // Find the planned exercise
-        $plannedExercise = auth()->user()->exercisePlans()->findOrFail($plannedExerciseId);
+        $exercisePlan = null;
+        if ($plannedExerciseID) {
+            $exercisePlan = auth()->user()->exercisePlans()
+                ->where('PlannedExerciseID', $plannedExerciseID)
+                ->firstOrFail();
 
+            // If the planned exercise doesn't exist, redirect back with an error
+            if (!$exercisePlan) {
+                return redirect()->route('exercise.index')->with('error', 'Planned exercise not found.');
+            }
+        }
         // Return the edit view with the planned exercise data
         return view('exercise.edit-exercise', [
-            'plannedExercise' => $plannedExercise,
+            'exercisePlan' => $exercisePlan,
         ]);
     }
 
@@ -402,27 +409,93 @@ class ExerciseController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function editPlannedExercise(Request $request)
+    public function updatePlannedExercise(Request $request, $plannedExerciseID)
     {
-        // Validate the request data
-        $request->validate([
-            'planned_exercise_id' => 'required|exists:planned_exercises,PlannedExerciseID',
-            'exercise_type' => 'required|string|max:255',
-            'exercise_intensity' => 'required|string|max:255',
-            'duration_minutes' => 'required|integer|min:1',
-            'notes' => 'nullable|string|max:1000',
-        ]);
+        // Ensure the user is authenticated
+        if (!auth()->check()) {
+            return redirect()->route('login')->with('error', 'You must be logged in to access this page.');
+        }
 
-        // Find the planned exercise
-        $plannedExercise = auth()->user()->exercisePlans()->findOrFail($request->input('planned_exercise_id'));
+        // Validate the planned exercise exists
+        $exercisePlan = auth()->user()->exercisePlans()
+            ->where('PlannedExerciseID', $plannedExerciseID)
+            ->first();
+        if (!$exercisePlan) {
+            return redirect()->route('exercise.index')->with('error', 'Planned exercise not found.');
+        }
+
+        // Ensure the planned exercise is not already logged
+        if ($exercisePlan->exerciseLogs()->exists()) {
+            return redirect()->route('exercise.index')->with('error', 'This planned exercise has already been logged and cannot be edited.');
+        }
+
+        // Extract the allowed exercise types from your icon map
+        $allowedExerciseTypes = [
+            'Basketball',
+            'Boxing',
+            'Climbing',
+            'Cycling',
+            'Dance',
+            'Football',
+            'Hiking',
+            'Running',
+            'Skating',
+            'Skiing',
+            'Sports',
+            'Swimming',
+            'Tennis',
+            'Volleyball',
+            'Walking',
+            'Weight Lifting',
+            'Yoga',
+            'Other',
+        ];
+
+        $allowedIntensities = ['High Intensity', 'Moderate Intensity', 'Low Intensity'];
+
+        $validatedData = $request->validate(
+            [
+                'ExerciseDateTime' => [
+                    'required',
+                    'date',
+                    'after_or_equal:' . now()->format('Y-m-d H:i:s'),
+                ],
+                'ExerciseType' => [
+                    'required',
+                    'string',
+                    'in:' . implode(',', $allowedExerciseTypes), // ✅ Enforce valid options
+                ],
+                'DurationMinutes' => [
+                    'required',
+                    'integer',
+                    'min:1',
+                ],
+                'ExerciseIntensity' => [
+                    'required',
+                    'string',
+                    'in:' . implode(',', $allowedIntensities), // ✅ Enforce allowed intensities
+                ],
+                'Notes' => [
+                    'nullable',
+                    'string',
+                    'max:255',
+                ],
+            ],
+            [
+                'ExerciseDateTime.after_or_equal' => 'The exercise date and time must be in the future.',
+                'ExerciseType.in' => 'The selected exercise type is invalid. Please choose a valid option.',
+                'DurationMinutes.min' => 'The duration must be at least 1 minute.',
+                'Notes.max' => 'The notes may not be greater than 255 characters.',
+            ]
+        );
 
         // Update the planned exercise
-        $plannedExercise->update([
-            'ExerciseType' => $request->input('exercise_type'),
-            'ExerciseIntensity' => $request->input('exercise_intensity'),
-            'DurationMinutes' => $request->input('duration_minutes'),
-            'Notes' => $request->input('notes'),
-        ]);
+        $exercisePlan->ExerciseDateTime = $validatedData['ExerciseDateTime'];
+        $exercisePlan->ExerciseType = $validatedData['ExerciseType'];
+        $exercisePlan->DurationMinutes = $validatedData['DurationMinutes'];
+        $exercisePlan->ExerciseIntensity = $validatedData['ExerciseIntensity'];
+        $exercisePlan->Notes = $validatedData['Notes'] ?? null; // Set notes if provided
+        $exercisePlan->save();
 
         return redirect()->route('exercise.index')->with('success', 'Planned exercise updated successfully.');
     }

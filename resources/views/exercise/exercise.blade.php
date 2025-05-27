@@ -137,6 +137,8 @@
                                             <p style="margin:0; font-size:0.9rem; color: var(--secondary-colour);">
                                                 @if ($exerciseDate->isYesterday())
                                                     Yesterday {{ $exerciseDate->format('g:ia') }}
+                                                @elseif ($exerciseDate->isToday())
+                                                    Today {{ $exerciseDate->format('g:ia') }}
                                                 @else
                                                     {{ $exerciseDate->format('F jS, Y g:ia') }}
                                                 @endif
@@ -198,12 +200,12 @@
                     </div>
                 @endif
             </div>
-            <!-- Unlogged Exercises -->
+            <!-- Planned Exercises -->
             <div class="col-xxl-6">
-                <h3 class="page-subtitle">Unlogged Exercises</h3>
+                <h3 class="page-subtitle">Planned Exercises</h3>
                 @if ($plannedExercises->isEmpty())
                     <div class="alert alert-info">
-                        No upcoming exercises found.
+                        No planned exercises found.
                     </div>
                 @else
                     @foreach ($plannedExercises as $exercisePlan)
