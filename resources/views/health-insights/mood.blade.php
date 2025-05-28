@@ -183,8 +183,9 @@
                         callbacks: {
                             label: function(context) {
                                 const value = context.raw;
+                                var moodLogLabel = value === 1 ? 'log' : 'logs';
                                 const percentage = ((value / moodTotal) * 100).toFixed(0);
-                                return `${context.label}: ${value} logs (${percentage}%)`;
+                                return `${context.label}: ${value} ${moodLogLabel} (${percentage}%)`;
                             }
                         }
                     },
@@ -196,9 +197,10 @@
                                 if (data.labels.length && data.datasets.length) {
                                     return data.labels.map((label, i) => {
                                         const value = data.datasets[0].data[i];
+                                        var moodLogLabel = value === 1 ? 'log' : 'logs';
                                         const percentage = ((value / moodTotal) * 100).toFixed(0);
                                         return {
-                                            text: `${label}: ${value} logs (${percentage}%)`,
+                                            text: `${label}: ${value} ${moodLogLabel} (${percentage}%)`,
                                             fillStyle: data.datasets[0].backgroundColor[i],
                                             strokeStyle: data.datasets[0].backgroundColor[i],
                                             lineWidth: 0,
@@ -252,8 +254,8 @@
                         label: function(context) {
                             const value = context.raw;
                             const label = context.label;
-                            const daysLabel = value === 1 ? 'day' : 'days';
-                            const days = label === 'Days Logged' ? loggedDays : unloggedDays;
+                            var days = label === 'Days Logged' ? loggedDays : unloggedDays;
+                            var daysLabel = days === 1 ? 'day' : 'days';
                             return `${label}: ${days} ${daysLabel} (${value.toFixed(1)}%)`;
                         }
                     }
@@ -265,11 +267,11 @@
                             if (data.labels.length && data.datasets.length) {
                                 return data.labels.map((label, i) => {
                                     const value = data.datasets[0].data[i];
-                                    const daysLegendLabel = value === 1 ? 'day' : 'days';
-                                    const days = label === 'Days Logged' ? loggedDays :
+                                    var days = label === 'Days Logged' ? loggedDays :
                                         unloggedDays;
+                                    var daysLabel = days === 1 ? 'day' : 'days';
                                     return {
-                                        text: `${label}: ${days} ${daysLegendLabel} (${value.toFixed(1)}%)`,
+                                        text: `${label}: ${days} ${daysLabel} (${value.toFixed(1)}%)`,
                                         fillStyle: data.datasets[0].backgroundColor[i],
                                         strokeStyle: data.datasets[0].backgroundColor[i],
                                         lineWidth: 0,

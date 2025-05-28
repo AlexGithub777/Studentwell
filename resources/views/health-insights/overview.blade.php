@@ -96,7 +96,10 @@
         // Sort descending by value
         rawData.sort((a, b) => b.value - a.value);
 
-        const barLabels = rawData.map(item => item.label);
+        const barLabels = rawData.map(item =>
+            item.label.charAt(0).toUpperCase() + item.label.slice(1)
+        );
+
         const barData = rawData.map(item => item.value);
 
         new Chart(document.getElementById("logsBarChart"), {
