@@ -26,11 +26,14 @@ class GoalSettingController extends Controller
         $user = auth()->user();
 
         // Calculate key metrics for goals
+        // Goals pagination
         $goals = $user->goals()
             ->doesntHave('goalLogs')
             ->with('user')
             ->paginate(5, ['*'], 'goalsPage')
-            ->appends(['goalsPage' => request('goalsPage')]);
+            ->appends([
+                'goalLogsPage' => request('goalLogsPage'), // preserve other param
+            ]);
 
         // Active goals
         $activeGoals = $user->goals()
@@ -41,11 +44,13 @@ class GoalSettingController extends Controller
         $activeGoalCount = $activeGoals->count();
         $activeGoalUniqueCategoryCount = $activeGoals->pluck('GoalCategory')->unique()->count();
 
-        // Goal logs for this month
+        // Goal logs pagination
         $goalLogs = $user->goalLogs()
             ->with('user')
             ->paginate(5, ['*'], 'goalLogsPage')
-            ->appends(['goalLogsPage' => request('goalLogsPage')]);
+            ->appends([
+                'goalsPage' => request('goalsPage'), // preserve other param
+            ]);
 
         // fetch all goals logs wihout pagination
         $allGoalLogs = $user->goalLogs()
