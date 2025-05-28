@@ -168,10 +168,12 @@
                     data: moodScores,
                     borderColor: '#1e1e76',
                     backgroundColor: '#1e1e76',
-                    fill: false
+                    fill: false,
+                    tension: 0.1, // smooth line
                 }]
             },
             options: {
+                maintainAspectRatio: false,
                 responsive: true,
                 plugins: {
                     tooltip: {
@@ -324,6 +326,10 @@
                 }]
             },
             options: {
+                animation: {
+                    animateScale: true, // Enables scaling animation
+                    animateRotate: true // Optional: animates rotation from 0 to full
+                },
                 responsive: true,
                 plugins: {
                     tooltip: {
@@ -344,11 +350,8 @@
                                 const data = chart.data;
                                 if (data.labels.length && data.datasets.length) {
                                     return data.labels.map((label, i) => {
-                                        const value = data.datasets[0].data[i];
-                                        const legendLabel = value === 1 ? 'log' : 'logs';
-                                        const percentage = ((value / goalTotal) * 100).toFixed(0);
                                         return {
-                                            text: `${label}: ${value} ${legendLabel} (${percentage}%)`,
+                                            text: `${label}`,
                                             fillStyle: data.datasets[0].backgroundColor[i],
                                             strokeStyle: data.datasets[0].backgroundColor[i],
                                             lineWidth: 0,

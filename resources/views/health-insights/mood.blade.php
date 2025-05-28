@@ -93,9 +93,11 @@
                     borderColor: '#1e1e76',
                     backgroundColor: '#1e1e76',
                     fill: false,
+                    tension: 0.1, // smooth line
                 }]
             },
             options: {
+                maintainAspectRatio: false,
                 responsive: true,
                 plugins: {
                     tooltip: {
@@ -177,6 +179,10 @@
                 }]
             },
             options: {
+                animation: {
+                    animateScale: true, // Enables scaling animation
+                    animateRotate: true // Optional: animates rotation from 0 to full
+                },
                 responsive: true,
                 plugins: {
                     tooltip: {
@@ -196,11 +202,8 @@
                                 const data = chart.data;
                                 if (data.labels.length && data.datasets.length) {
                                     return data.labels.map((label, i) => {
-                                        const value = data.datasets[0].data[i];
-                                        var moodLogLabel = value === 1 ? 'log' : 'logs';
-                                        const percentage = ((value / moodTotal) * 100).toFixed(0);
                                         return {
-                                            text: `${label}: ${value} ${moodLogLabel} (${percentage}%)`,
+                                            text: `${label}`,
                                             fillStyle: data.datasets[0].backgroundColor[i],
                                             strokeStyle: data.datasets[0].backgroundColor[i],
                                             lineWidth: 0,
@@ -338,6 +341,10 @@
                 }]
             },
             options: {
+                animation: {
+                    animateScale: true, // Enables scaling animation
+                    animateRotate: true // Optional: animates rotation from 0 to full
+                },
                 responsive: true,
                 plugins: {
                     tooltip: {
@@ -357,10 +364,8 @@
                                 const data = chart.data;
                                 return data.labels.map((label, i) => {
                                     const value = data.datasets[0].data[i];
-                                    var daysLegendLabel = value === 1 ? 'log' : 'logs';
-                                    const percentage = ((value / emotionTotal) * 100).toFixed(0);
                                     return {
-                                        text: `${label}: ${value} ${daysLegendLabel} (${percentage}%)`,
+                                        text: `${label}`,
                                         fillStyle: data.datasets[0].backgroundColor[i],
                                         strokeStyle: data.datasets[0].backgroundColor[i],
                                         lineWidth: 0,

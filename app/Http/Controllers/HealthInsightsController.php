@@ -204,35 +204,12 @@ class HealthInsightsController extends Controller
             'durations' => $durations,
             'exerciseChartData' => $exerciseChartData,
             'exerciseTypesDistribution' => $exerciseTypesDistribution,
+            'sleepLogs' => $sleepLogs,
+            'totalSleepDays' => $totalSleepDays,
+            'sleepLoggingRate' => $sleepLoggingRate,
+            'sleepDaysLogged' => $sleepDaysLogged,
+            'sleepDaysUnlogged' => $sleepDaysUnlogged,
+            'sleepQualityDistribution' => $sleepQualityDistribution,
         ]);
-    }
-
-    public function mood()
-    {
-        //<!-- line graph of mood over time (30 days)-->
-        $moodRatings = auth()->user()->moodLogs()
-            ->where('MoodDate', '>=', now()->subDays(30))
-            ->orderBy('MoodDate')
-            ->get(['MoodDate', 'MoodRating']);
-
-        return view('health-insights.health-insights', [
-            'currentTab' => 'mood',
-            'moodRatings' => $moodRatings
-        ]);
-    }
-
-    public function exercise()
-    {
-        return view('health-insights.health-insights', ['currentTab' => 'exercise']);
-    }
-
-    public function sleep()
-    {
-        return view('health-insights.health-insights', ['currentTab' => 'sleep']);
-    }
-
-    public function goals()
-    {
-        return view('health-insights.health-insights', ['currentTab' => 'goals']);
     }
 }

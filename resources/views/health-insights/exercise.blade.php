@@ -91,9 +91,11 @@
                     borderColor: '#1e1e76',
                     backgroundColor: '#1e1e76',
                     fill: false,
+                    tension: 0.1, // smooth line
                 }]
             },
             options: {
+                maintainAspectRatio: false,
                 responsive: true,
                 scales: {
                     x: {
@@ -232,6 +234,27 @@
 @if (!$exerciseLogs->isEmpty())
     <!-- Pie chart for exercise types -->
     <script>
+        const exerciseTypeEmojis = {
+            'Basketball': '🏀',
+            'Boxing': '🥊',
+            'Climbing': '🧗',
+            'Cycling': '🚴',
+            'Dance': '💃',
+            'Football': '⚽',
+            'Hiking': '🥾',
+            'Running': '🏃',
+            'Skating': '⛸️',
+            'Skiing': '🎿',
+            'Sports': '🥇',
+            'Swimming': '🏊',
+            'Tennis': '🎾',
+            'Volleyball': '🏐',
+            'Walking': '🚶',
+            'Weight Lifting': '🏋️',
+            'Yoga': '🧘',
+            'Other': '❓'
+        };
+
         const exerciseTypesData = @json($exerciseTypesDistribution);
 
         const rawLabels = Object.keys(exerciseTypesData);
@@ -239,13 +262,19 @@
         const totalLogs = rawExerciseData.reduce((sum, val) => sum + val, 0);
 
         const exerciseTypeBackgroundColours = [
-            'rgba(255, 99, 132, 1)', // Red
-            'rgba(54, 162, 235, 1)', // Blue
-            'rgba(255, 206, 86, 1)', // Yellow
-            'rgba(75, 192, 192, 1)', // Green
-            'rgba(153, 102, 255, 1)', // Purple
-            'rgba(255, 159, 64, 1)' // Orange
+            '#3498db', // blue
+            '#9b59b6', // purple
+            '#e67e22', // orange
+            '#1abc9c', // teal
+            '#f39c12', // yellow
+            '#c0392b', // red
+            '#2ecc71', // green
+            '#34495e', // dark blue-grey
+            '#e74c3c', // bright red
+            '#16a085', // dark teal
+            '#8e44ad', // deep purple
         ];
+
 
         // Combine label and count
         let exerciseData = rawLabels.map((label, i) => ({
@@ -263,12 +292,16 @@
         });
 
         const sortedData = exerciseData.map(item => item.count);
-        const sortedRawLabels = exerciseData.map(item => item.label);
+        const sortedRawLabels = exerciseData.map(item => {
+            const emoji = exerciseTypeEmojis[item.label] || '';
+            return `${emoji} ${item.label}`;
+        });
+
 
         new Chart(document.getElementById('exercisePieChart'), {
             type: 'pie',
             data: {
-                labels: sortedLabels,
+                labels: sortedRawLabels,
                 datasets: [{
                     data: sortedData,
                     backgroundColor: sortedData.map((_, i) => exerciseTypeBackgroundColours[i %
@@ -279,6 +312,10 @@
                 }]
             },
             options: {
+                animation: {
+                    animateScale: true, // Enables scaling animation
+                    animateRotate: true // Optional: animates rotation from 0 to full
+                },
                 responsive: true,
                 plugins: {
                     legend: {

@@ -9,9 +9,9 @@
     <div class="alert alert-success" id="alert-success">
         {{ session('success') }}
     </div>
-@elseif (session('noDataMessage'))
+@elseif (session('error'))
     <div class="alert alert-danger" id="alert-success">
-        {{ session('noDataMessage') }}
+        {{ session('error') }}
     </div>
 @endif
 <div class="content-area py-4">
@@ -28,15 +28,15 @@
         <!-- Tabs (Overview, Mood, Exercise, Sleep, Goals) -->
         <ul class="nav nav-pills mb-4" id="insightsTabs" role="tablist">
             <li class="nav-item" role="presentation">
-                <a class="nav-link {{ ($currentTab ?? 'overview') === 'overview' ? 'active' : '' }}" id="overview-tab"
-                    data-bs-toggle="pill" href="#overview" role="tab" aria-controls="overview"
+                <a class="mb-2 mb-sm-0 nav-link {{ ($currentTab ?? 'overview') === 'overview' ? 'active' : '' }}"
+                    id="overview-tab" data-bs-toggle="pill" href="#overview" role="tab" aria-controls="overview"
                     aria-selected="{{ ($currentTab ?? 'overview') === 'overview' ? 'true' : 'false' }}"
                     data-tab="overview">
                     Overview
                 </a>
             </li>
             <li class="nav-item" role="presentation">
-                <a class="nav-link {{ ($currentTab ?? 'overview') === 'mood' ? 'active' : '' }}" id="mood-tab"
+                <a class="nav-link  {{ ($currentTab ?? 'overview') === 'mood' ? 'active' : '' }}" id="mood-tab"
                     data-bs-toggle="pill" href="#mood" role="tab" aria-controls="mood"
                     aria-selected="{{ ($currentTab ?? 'overview') === 'mood' ? 'true' : 'false' }}" data-tab="mood">
                     Mood
