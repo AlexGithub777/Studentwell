@@ -106,7 +106,7 @@
 
 
         <div class="row row-cols-1 row-cols-md-2 g-4">
-            <!-- Exericse History -->
+            <!-- Exercise History -->
             <div class="col-xxl-6">
                 <h3 class="page-subtitle">Exercise History</h3>
                 @if ($loggedExercises->isEmpty())
@@ -241,8 +241,12 @@
                                         <!-- Display exercise plan notes -->
                                         <div class="mt-1">
                                             <span style="font-size:1rem; color: var(--secondary-colour);">
-                                                {{ $exercisePlan->Notes ?? '' }}
+                                                {{ $exercisePlan->DurationMinutes ?? '' }} minutes
+                                                @if (!empty($exercisePlan->Notes))
+                                                    - {{ $exercisePlan->Notes }}
+                                                @endif
                                             </span>
+
                                         </div>
                                     </div>
                                 </div>

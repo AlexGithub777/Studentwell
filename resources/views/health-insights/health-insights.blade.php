@@ -71,178 +71,27 @@
             <div class="tab-pane fade {{ ($currentTab ?? 'overview') === 'overview' ? 'show active' : '' }}"
                 id="overview" role="tabpanel" aria-labelledby="overview-tab">
                 <!-- Overview content -->
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="custom-card mb-md-0 mb-3">
-                            <div class="d-flex justify-content-start align-items-center mb-3">
-                                <h5 class="fw-bold m-0 me-2">Your Weekly Wellness Activity</h5>
-                                <span> (log counts across features)</span>
-                            </div>
-                            <!-- bar graph of logs across features (mood, exercise, sleep, goals) -->
-                            <canvas style="max-height:275px;" id="logsBarChart"></canvas>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="custom-card mb-md-0 mb-3">
-                            <div class="d-flex justify-content-start align-items-center mb-3">
-                                <h5 class="fw-bold m-0 me-2">How Consistent Your Sleep Has Been</h5>
-                                <span> (daily hours of sleep)</span>
-                            </div>
-                            <!-- donut graph of sleep consistency (daily hours of sleep) need to change -->
-                            <canvas style="max-height:275px;" id="sleepDonutChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-                <div class="row mt-0 mt-md-4">
-                    <div class="col-md-6">
-                        <div class="custom-card mb-md-0 mb-3">
-                            <div class="d-flex justify-content-start align-items-center mb-3">
-                                <h5 class="fw-bold m-0 me-2">How Your Mood Has Shifted</h5>
-                                <span> (14-day trend)</span>
-                            </div>
-                            <!-- line graph of mood over time (14 days)-->
-                            <canvas style="max-height:275px;" id="moodLineChart"></canvas>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="custom-card mb-md-0 mb-3">
-                            <div class="d-flex justify-content-start align-items-center mb-3">
-                                <h5 class="fw-bold m-0 me-2">Where Your Goals Are Focused</h5>
-                                <span> (goals by category)</span>
-                            </div>
-                            <!-- pie chart of goals by category (exercise, sleep, mood) -->
-                            <canvas style="max-height:275px;" id="goalsPieChart"></canvas>
-                        </div>
-                    </div>
-                </div>
+                @include('health-insights.overview')
             </div>
             <div class="tab-pane fade {{ ($currentTab ?? 'overview') === 'mood' ? 'show active' : '' }}" id="mood"
                 role="tabpanel" aria-labelledby="mood-tab">
                 <!-- Mood content -->
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="custom-card">
-                            Card 1
-                            <!-- bar graph of logs across features (mood, exercise, sleep, goals) -->
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="custom-card">
-                            Card 2
-                            <!-- donut graph of sleep consistency (daily hours of sleep) need to change -->
-                        </div>
-                    </div>
-                </div>
-                <div class="row mt-0 mt-md-4">
-                    <div class="col-md-6">
-                        <div class="custom-card">
-                            Card 3
-                            <!-- line graph of mood over time (30 days)-->
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="custom-card">
-                            <!-- pie chart of goals by category (exercise, sleep, mood) -->
-                            Card 4
-                        </div>
-                    </div>
-                </div>
+                @include('health-insights.mood')
             </div>
             <div class="tab-pane fade {{ ($currentTab ?? 'overview') === 'exercise' ? 'show active' : '' }}"
                 id="exercise" role="tabpanel" aria-labelledby="exercise-tab">
                 <!-- Exercise content -->
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="custom-card">
-                            Card 1
-                            <!-- bar graph of logs across features (mood, exercise, sleep, goals) -->
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="custom-card">
-                            Card 2
-                            <!-- donut graph of sleep consistency (daily hours of sleep) need to change -->
-                        </div>
-                    </div>
-                </div>
-                <div class="row mt-0 mt-md-4">
-                    <div class="col-md-6">
-                        <div class="custom-card">
-                            Card 3
-                            <!-- line graph of mood over time (30 days)-->
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="custom-card">
-                            <!-- pie chart of goals by category (exercise, sleep, mood) -->
-                            Card 4
-                        </div>
-                    </div>
-                </div>
+                @include('health-insights.exercise')
             </div>
             <div class="tab-pane fade {{ ($currentTab ?? 'overview') === 'sleep' ? 'show active' : '' }}"
                 id="sleep" role="tabpanel" aria-labelledby="sleep-tab">
                 <!-- Sleep content -->
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="custom-card">
-                            Card 1
-                            <!-- bar graph of logs across features (mood, exercise, sleep, goals) -->
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="custom-card">
-                            Card 2
-                            <!-- donut graph of sleep consistency (daily hours of sleep) need to change -->
-                        </div>
-                    </div>
-                </div>
-                <div class="row mt-0 mt-md-4">
-                    <div class="col-md-6">
-                        <div class="custom-card">
-                            Card 3
-                            <!-- line graph of mood over time (30 days)-->
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="custom-card">
-                            <!-- pie chart of goals by category (exercise, sleep, mood) -->
-                            Card 4
-                        </div>
-                    </div>
-                </div>
+                @include('health-insights.sleep')
             </div>
             <div class="tab-pane fade {{ ($currentTab ?? 'overview') === 'goals' ? 'show active' : '' }}"
                 id="goals" role="tabpanel" aria-labelledby="goals-tab">
                 <!-- Goals content -->
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="custom-card">
-                            Card 1
-                            <!-- bar graph of logs across features (mood, exercise, sleep, goals) -->
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="custom-card">
-                            Card 2
-                            <!-- donut graph of sleep consistency (daily hours of sleep) need to change -->
-                        </div>
-                    </div>
-                </div>
-                <div class="row mt-0 mt-md-4">
-                    <div class="col-md-6">
-                        <div class="custom-card">
-                            Card 3
-                            <!-- line graph of mood over time (30 days)-->
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="custom-card">
-                            <!-- pie chart of goals by category (exercise, sleep, mood) -->
-                            Card 4
-                        </div>
-                    </div>
-                </div>
+                @include('health-insights.goals')
             </div>
         </div>
     </div>
@@ -281,6 +130,7 @@
         });
     });
 </script>
+<!-- Js for overview content -->
 <script>
     const rawData = [{
             label: 'Mood',
@@ -307,10 +157,10 @@
 
     // Use different colors for each bar
     const barBackgroundColors = [
-        'rgba(255, 99, 132, 0.6)', // Red
-        'rgba(54, 162, 235, 0.6)', // Blue
-        'rgba(255, 206, 86, 0.6)', // Yellow
-        'rgba(75, 192, 192, 0.6)' // Green
+        'rgba(255, 99, 132, 1)', // Red
+        'rgba(54, 162, 235, 1)', // Blue
+        'rgba(255, 206, 86, 1)', // Yellow
+        'rgba(75, 192, 192, 1)' // Green
     ];
 
     new Chart(document.getElementById("logsBarChart"), {
@@ -320,7 +170,8 @@
             datasets: [{
                 label: 'Logs Count',
                 data: barData,
-                backgroundColor: barBackgroundColors
+                backgroundColor: barBackgroundColors,
+                borderRadius: 4
             }]
         },
         options: {
@@ -364,15 +215,15 @@
         5: '😄 Great'
     };
 
-    new Chart(document.getElementById("moodLineChart"), {
+    new Chart(document.getElementById("overviewMoodLineChart"), {
         type: 'line',
         data: {
             labels: moodLabels,
             datasets: [{
-                label: 'Mood Score',
+                label: 'Mood Rating:',
                 data: moodScores,
-                borderColor: '#3498db',
-                backgroundColor: '#3498db33',
+                borderColor: '#1e1e76',
+                backgroundColor: '#1e1e76',
                 fill: false,
             }]
         },
@@ -386,8 +237,6 @@
                     }
                 },
                 y: {
-                    min: 1,
-                    max: 5,
                     title: {
                         display: true,
                         text: 'Mood Rating'
@@ -403,7 +252,6 @@
         }
     });
 </script>
-
 <!-- Sleep Donut Chart -->
 <script>
     const sleepData = @json(array_values($sleepConsistency));
@@ -566,11 +414,516 @@
                     formatter: function(value, context) {
                         const percentage = ((value / goalTotal) * 100).toFixed(0);
                         return percentage >= 5 ? percentage + '%' :
-                        ''; // Only show percentage if slice is >= 5%
+                            ''; // Only show percentage if slice is >= 5%
                     }
                 }
             }
         }
     });
 </script>
+<!-- Mood insights -->
+@php
+    $reversedMood30days = $moodRatings30days->sortBy('MoodDate');
+    $moodLabels30days = $reversedMood30days->pluck('MoodDate')->map(fn($d) => \Carbon\Carbon::parse($d)->format('M d'));
+    $moodScores30days = $reversedMood30days->pluck('MoodRating');
+@endphp
+<script>
+    const moodLabels30days = @json($moodLabels30days);
+    const moodScores30days = @json($moodScores30days);
+
+    const moodMap30days = {
+        1: '😢 Sad',
+        2: '😔 Down',
+        3: '😐 Okay',
+        4: '😊 Good',
+        5: '😄 Great'
+    };
+
+    new Chart(document.getElementById("moodLineChart"), {
+        type: 'line',
+        data: {
+            labels: moodLabels30days,
+            datasets: [{
+                label: 'Mood Rating:',
+                data: moodScores30days,
+                borderColor: '#1e1e76',
+                backgroundColor: '#1e1e76',
+                fill: false,
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Mood Date'
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Mood Rating'
+                    },
+                    ticks: {
+                        stepSize: 1,
+                        callback: function(value) {
+                            return moodMap30days[value] || value;
+                        }
+                    }
+                }
+            }
+        }
+    });
+</script>
+<!-- Mood Distribution Pie Chart -->
+<script>
+    const moodsMap = {
+        1: '😢 Sad',
+        2: '😔 Down',
+        3: '😐 Okay',
+        4: '😊 Good',
+        5: '😄 Great'
+    };
+
+    const moodCounts = @json($moodDistribution);
+
+    // Process the data to create labels and values
+    const moodPieLabels = moodCounts.map(item => moodsMap[item.MoodRating]);
+    const moodData = moodCounts.map(item => item.count);
+    const moodTotal = moodData.reduce((a, b) => a + b, 0);
+
+    // Define colors for each mood (matching the emotional tone)
+    const moodColors = {
+        1: '#e74c3c', // Red for Sad
+        2: '#f39c12', // Orange for Down
+        3: '#f1c40f', // Yellow for Okay
+        4: '#2ecc71', // Green for Good
+        5: '#27ae60' // Darker green for Great
+    };
+
+    // Map colors to match the data order
+    const backgroundColorsMoods = moodCounts.map(item => moodColors[item.MoodRating]);
+
+    new Chart(document.getElementById("moodDistributionPieChart"), {
+        type: 'pie',
+        data: {
+            labels: moodPieLabels,
+            datasets: [{
+                data: moodData,
+                backgroundColor: backgroundColorsMoods,
+                borderWidth: 2,
+                borderColor: '#fff'
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const value = context.raw;
+                            const percentage = ((value / moodTotal) * 100).toFixed(0);
+                            return `${context.label}: ${value} logs (${percentage}%)`;
+                        }
+                    }
+                },
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        generateLabels: function(chart) {
+                            const data = chart.data;
+                            if (data.labels.length && data.datasets.length) {
+                                return data.labels.map((label, i) => {
+                                    const value = data.datasets[0].data[i];
+                                    const percentage = ((value / moodTotal) * 100).toFixed(0);
+                                    return {
+                                        text: `${label}: ${value} logs (${percentage}%)`,
+                                        fillStyle: data.datasets[0].backgroundColor[i],
+                                        strokeStyle: data.datasets[0].backgroundColor[i],
+                                        lineWidth: 0,
+                                        index: i
+                                    };
+                                });
+                            }
+                            return [];
+                        }
+                    }
+                },
+                datalabels: {
+                    display: true,
+                    color: 'white',
+                    font: {
+                        weight: 'bold',
+                        size: 12
+                    },
+                    formatter: function(value, context) {
+                        const percentage = ((value / moodTotal) * 100).toFixed(0);
+                        return percentage >= 3 ? percentage + '%' : ''; // Only show if >= 3%
+                    }
+                }
+            }
+        }
+    });
+</script>
+<!-- Mood Logging Rate Donut Chart -->
+<script>
+    const moodLoggingRate = {{ is_numeric($moodLoggingRate) ? $moodLoggingRate : 0 }};
+    const loggedDays = {{ $loggedDays }};
+    const totalDays = {{ $totalDays }};
+    const unloggedDays = totalDays - loggedDays;
+    const loggingData = [moodLoggingRate, 100 - moodLoggingRate];
+
+    new Chart(document.getElementById("moodLoggingRateDonut"), {
+        type: 'doughnut',
+        data: {
+            labels: ['Days Logged', 'Days Not Logged'],
+            datasets: [{
+                data: loggingData,
+                backgroundColor: ['#2ecc71', '#e74c3c'] // Green for logged, Red for not logged
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const value = context.raw;
+                            const label = context.label;
+                            const days = label === 'Days Logged' ? loggedDays : unloggedDays;
+                            return `${label}: ${days} days (${value.toFixed(1)}%)`;
+                        }
+                    }
+                },
+                legend: {
+                    labels: {
+                        generateLabels: function(chart) {
+                            const data = chart.data;
+                            if (data.labels.length && data.datasets.length) {
+                                return data.labels.map((label, i) => {
+                                    const value = data.datasets[0].data[i];
+                                    const days = label === 'Days Logged' ? loggedDays :
+                                        unloggedDays;
+                                    return {
+                                        text: `${label}: ${days} days (${value.toFixed(1)}%)`,
+                                        fillStyle: data.datasets[0].backgroundColor[i],
+                                        strokeStyle: data.datasets[0].backgroundColor[i],
+                                        lineWidth: 0,
+                                        index: i
+                                    };
+                                });
+                            }
+                            return [];
+                        }
+                    }
+                },
+                datalabels: {
+                    display: true,
+                    color: 'white',
+                    font: {
+                        weight: 'bold',
+                        size: 14
+                    },
+                    formatter: function(value, context) {
+                        return value.toFixed(1) + '%';
+                    }
+                }
+            }
+        },
+        plugins: [{
+            beforeInit: function(chart) {
+                // Register the datalabels plugin inline
+                chart.options.plugins.datalabels = chart.options.plugins.datalabels || {};
+            }
+        }]
+    });
+</script>
+<!-- Emotion Distribution Pie Chart -->
+<script>
+    const emotionsData = @json($emotionsDistribution);
+    const emotionLabels = emotionsData.map(item => item.emotion);
+    const emotionCounts = emotionsData.map(item => item.count);
+    const emotionTotal = emotionCounts.reduce((a, b) => a + b, 0);
+
+    const emotionColors = [
+        '#3498db', // blue
+        '#9b59b6', // purple
+        '#e67e22', // orange
+        '#1abc9c', // teal
+        '#f39c12', // yellow
+        '#c0392b', // red
+        '#2ecc71', // green
+        '#34495e', // dark blue-grey
+        '#e74c3c', // bright red
+        '#16a085', // dark teal
+        '#8e44ad', // deep purple
+    ];
+
+    new Chart(document.getElementById("emotionPieChart"), {
+        type: 'pie',
+        data: {
+            labels: emotionLabels,
+            datasets: [{
+                data: emotionCounts,
+                backgroundColor: emotionColors.slice(0, emotionLabels.length),
+                borderWidth: 2,
+                borderColor: '#fff'
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const value = context.raw;
+                            const percentage = ((value / emotionTotal) * 100).toFixed(0);
+                            return `${context.label}: ${value} logs (${percentage}%)`;
+                        }
+                    }
+                },
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        generateLabels: function(chart) {
+                            const data = chart.data;
+                            return data.labels.map((label, i) => {
+                                const value = data.datasets[0].data[i];
+                                const percentage = ((value / emotionTotal) * 100).toFixed(0);
+                                return {
+                                    text: `${label}: ${value} logs (${percentage}%)`,
+                                    fillStyle: data.datasets[0].backgroundColor[i],
+                                    strokeStyle: data.datasets[0].backgroundColor[i],
+                                    lineWidth: 0,
+                                    index: i
+                                };
+                            });
+                        }
+                    }
+                }
+            }
+        }
+    });
+</script>
+<!-- Exercise insights -->
+@php
+    $reversedExercise = $exerciseLogs->sortBy('ExerciseDateTime');
+    $exerciseLabels = $reversedExercise
+        ->pluck('ExerciseDateTime')
+        ->map(fn($d) => \Carbon\Carbon::parse($d)->format('M d'));
+    $exerciseDurations = $reversedExercise->pluck('DurationMinutes');
+@endphp
+<script>
+    const exerciseLabels = @json($exerciseLabels);
+    const exerciseDurations = @json($exerciseDurations);
+
+    new Chart(document.getElementById("exerciseLineChart"), {
+        type: 'line',
+        data: {
+            labels: exerciseLabels,
+            datasets: [{
+                label: 'Duration',
+                data: exerciseDurations,
+                borderColor: '#1e1e76',
+                backgroundColor: '#1e1e76',
+                fill: false,
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Exercise Log Date'
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Exercise Duration (mins)'
+                    }
+                }
+            },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            // context.dataset.label is 'Duration'
+                            // context.parsed.y is the data value (duration in mins)
+                            return `Duration: ${context.parsed.y} minutes`;
+                        }
+                    }
+                }
+            }
+        }
+    });
+</script>
+
+<script>
+    const weekLabels = @json($weekLabels);
+    const durations = @json($durations);
+
+    new Chart(document.getElementById('exerciseBarChart'), {
+        type: 'bar',
+        data: {
+            labels: weekLabels,
+            datasets: [{
+                label: 'Total Duration (mins)',
+                data: durations,
+                backgroundColor: backgroundColors,
+                borderRadius: 4
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Duration (minutes)'
+                    },
+                    beginAtZero: true
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Week Starting Date'
+                    }
+                }
+            },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return `Duration: ${context.parsed.x} minutes`;
+                        }
+                    }
+                },
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
+</script>
+<script>
+    const chartData = @json($exerciseChartData);
+
+    const exerciseDonutlabels = chartData.map(entry => `${entry.status}: ${entry.count} logs (${entry.percentage}%)`);
+    const exerciseDonutData = chartData.map(entry => entry.count);
+    const percentages = chartData.map(entry => entry.percentage);
+    const statuses = chartData.map(entry => entry.status);
+
+    const exerciseDonutBackgroundColours = {
+        'Completed': '#2ecc71', // Green
+        'Missed': '#e74c3c', // Red
+        'Partially': '#f1c40f' // Yellow
+    };
+
+    new Chart(document.getElementById('exerciseDonutChart'), {
+        type: 'doughnut',
+        data: {
+            labels: exerciseDonutlabels,
+            datasets: [{
+                data: exerciseDonutData,
+                backgroundColor: statuses.map(status => exerciseDonutBackgroundColours[status] ||
+                    'rgba(201, 203, 207, 1)'),
+                borderColor: 'white',
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const index = context.dataIndex;
+                            const status = statuses[index];
+                            const count = data[index];
+                            const percentage = percentages[index];
+                            return `${status}: ${count} logs (${percentage}%)`;
+                        }
+                    }
+                }
+            }
+        }
+    });
+</script>
+<script>
+    const exerciseTypesData = @json($exerciseTypesDistribution);
+
+    const rawLabels = Object.keys(exerciseTypesData);
+    const rawExerciseData = Object.values(exerciseTypesData);
+    const totalLogs = rawExerciseData.reduce((sum, val) => sum + val, 0);
+
+    const exerciseTypeBackgroundColours = [
+        'rgba(255, 99, 132, 1)', // Red
+        'rgba(54, 162, 235, 1)', // Blue
+        'rgba(255, 206, 86, 1)', // Yellow
+        'rgba(75, 192, 192, 1)', // Green
+        'rgba(153, 102, 255, 1)', // Purple
+        'rgba(255, 159, 64, 1)' // Orange
+    ];
+
+    // Combine label and count
+    let exerciseData = rawLabels.map((label, i) => ({
+        label: label,
+        count: rawExerciseData[i]
+    }));
+
+    // Sort descending by count
+    exerciseData.sort((a, b) => b.count - a.count);
+
+    // Build formatted data
+    const sortedLabels = exerciseData.map(item => {
+        const percentage = totalLogs > 0 ? ((item.count / totalLogs) * 100).toFixed(1) : 0;
+        return `${item.label}: ${item.count} log${item.count !== 1 ? 's' : ''} (${percentage}%)`;
+    });
+
+    const sortedData = exerciseData.map(item => item.count);
+    const sortedRawLabels = exerciseData.map(item => item.label);
+
+    new Chart(document.getElementById('exercisePieChart'), {
+        type: 'pie',
+        data: {
+            labels: sortedLabels,
+            datasets: [{
+                data: sortedData,
+                backgroundColor: sortedData.map((_, i) => exerciseTypeBackgroundColours[i %
+                    exerciseTypeBackgroundColours
+                    .length]),
+                borderColor: 'white',
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const index = context.dataIndex;
+                            const label = sortedRawLabels[index];
+                            const value = sortedData[index];
+                            const percentage = totalLogs > 0 ? ((value / totalLogs) * 100).toFixed(1) : 0;
+                            return `${label}: ${value} log${value !== 1 ? 's' : ''} (${percentage}%)`;
+                        }
+                    }
+                }
+            }
+        }
+    });
+</script>
+
+
 @include('main.footer')
