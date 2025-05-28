@@ -558,11 +558,6 @@ body {
     transition: transform 0.2s ease;
 }
 
-.custom-card:hover {
-    transform: translateY(-5px);
-    cursor: pointer;
-}
-
 .liked {
     background-color: var(--secondary-colour) !important;
     color: white !important;
@@ -817,10 +812,6 @@ body {
 
 .resource-card .card-text i {
     color: var(--secondary-colour);
-}
-
-.resource-card:hover {
-    transform: translateY(-5px);
 }
 
 /* Mood Tracking styles */
