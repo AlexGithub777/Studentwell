@@ -95,14 +95,26 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/edit-sleep/{id}', [SleepLogController::class, 'update'])->name('sleep.update');
     });
 
-    // Health Insights Routes
     Route::prefix('health-insights')->group(function () {
         Route::get('/', [HealthInsightsController::class, 'index'])->name('health-insights.index');
-        Route::get('/mood', [HealthInsightsController::class, 'mood'])->name('health-insights.mood');
-        Route::get('/exercise', [HealthInsightsController::class, 'exercise'])->name('health-insights.exercise');
-        Route::get('/sleep', [HealthInsightsController::class, 'sleep'])->name('health-insights.sleep');
-        Route::get('/goals', [HealthInsightsController::class, 'goals'])->name('health-insights.goals');
+
+        Route::get('/mood', function () {
+            return redirect()->route('health-insights.index', ['tab' => 'mood']);
+        })->name('health-insights.mood');
+
+        Route::get('/exercise', function () {
+            return redirect()->route('health-insights.index', ['tab' => 'exercise']);
+        })->name('health-insights.exercise');
+
+        Route::get('/sleep', function () {
+            return redirect()->route('health-insights.index', ['tab' => 'sleep']);
+        })->name('health-insights.sleep');
+
+        Route::get('/goals', function () {
+            return redirect()->route('health-insights.index', ['tab' => 'goals']);
+        })->name('health-insights.goals');
     });
+
 
     // Forum Routes
     Route::prefix('forum')->group(function () {
