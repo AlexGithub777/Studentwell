@@ -92,7 +92,7 @@ class GoalSettingController extends Controller
                 'Hobbies' => 'fa-solid fa-palette',
                 'Mental Health' => 'fa-solid fa-brain',
                 'Nutrition' => 'fa-solid fa-apple-alt',
-                'Physical Health' => 'fa-solid fa-dumbell',
+                'Physical Health' => 'fa-solid fa-heart-pulse',
                 'Productivity' => 'fa-solid fa-clipboard-check',
                 'Sleep' => 'fa-solid fa-bed',
                 'Social' => 'fa-solid fa-users',
