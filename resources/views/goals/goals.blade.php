@@ -54,7 +54,7 @@
                     <div class="d-flex">
                         <i class="fas fa-circle-check metric-icon"></i>
                         <div class="metric-text ms-4 mt-3">
-                            <h5 class="fw-bold metric-value mb-1">{{ $GoalCompletionRate ?? 'No data' }}%</h5>
+                            <h5 class="fw-bold metric-value mb-1">{{ $GoalCompletionRate ?? '0' }}%</h5>
                             <p class="tracked-time mb-0">This Month</p>
                         </div>
                     </div>

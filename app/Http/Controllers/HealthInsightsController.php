@@ -28,6 +28,15 @@ class HealthInsightsController extends Controller
         // get count of logs for goals
         $goalsLogCount = auth()->user()->goalLogs()->count();
 
+        $rawLogData = [
+            'mood' => $moodLogCount,
+            'exercise' => $exerciseLogCount,
+            'sleep' => $sleepLogCount,
+            'goals' => $goalsLogCount,
+        ];
+
+        // check if the user has any logs, if all are 0, then we will not show the graphs but a message "No data available"
+
         //<!-- donut graph of sleep consistency (daily hours of sleep) count of <6hrs, 6-8 hrs, 8+ hours)
         $sleepConsistency = [
             'less_than_6' => auth()->user()->sleepLogs()->where('SleepDurationMinutes', '<', 360)->count(),
@@ -60,7 +69,7 @@ class HealthInsightsController extends Controller
             ->groupBy('MoodRating')
             ->get();
 
-        $totalDays = 31;
+        $totalDays = 30;
 
         $loggedDays = auth()->user()->moodLogs()
             ->whereDate('MoodDate', '>=', now()->subDays(30)->toDateString())
@@ -140,10 +149,6 @@ class HealthInsightsController extends Controller
             ];
         })->values()->toArray();
 
-        // Now you have:
-        // $exerciseStatusCounts = ['Completed' => n1, 'Missed' => n2, 'Partially' => n3]
-        // $exerciseCompletionRate = percentage of Completed exercises
-
         // <!-- pie chart of exercise types distribution -->
         $exerciseTypesDistribution = $exerciseLogs
             ->groupBy('ExerciseType')
@@ -152,6 +157,30 @@ class HealthInsightsController extends Controller
             });
 
         // Sleep insights
+        //<!-- line graph of sleep duration over time (30 days) -->
+        $sleepLogs = auth()->user()->sleepLogs()
+            ->where('SleepDurationMinutes', '>', 0)
+            ->where('SleepDate', '>=', now()->subDays(30))
+            ->orderBy('SleepDate')
+            ->get(['SleepDate', 'SleepDurationMinutes', 'BedTime', 'WakeTime', 'SleepQuality']);
+
+        //<!-- line graph of bedtime and wake-up time over time (30 days) use $sleepLogs -->
+
+        //<!-- donut chart of sleep logging rate (if sleep is Logged or not logged in the last 30 days)
+        $sleepLoggedCount = $sleepLogs->count();
+        $totalSleepDays = 30; // we want to check for the last 30 days
+        $sleepLoggingRate = $totalSleepDays > 0 ? round(($sleepLoggedCount / $totalSleepDays) * 100, 1) : 0;
+        // calculate the sleep days logged and unlogged
+        $sleepDaysLogged = $sleepLogs->pluck('SleepDate')->unique()->count();
+        $sleepDaysUnlogged = $totalSleepDays - $sleepDaysLogged;
+
+        //<!-- pie chart of sleep quality distribution (1, 2, 3) -->
+        $sleepQualityDistribution = $sleepLogs
+            ->groupBy('SleepQuality')
+            ->map(function ($group) {
+                return $group->count();
+            });
+
 
         // Goals insights
 
@@ -159,10 +188,7 @@ class HealthInsightsController extends Controller
 
         return view('health-insights.health-insights', [
             'currentTab' => $currentTab,
-            'moodLogCount' => $moodLogCount,
-            'exerciseLogCount' => $exerciseLogCount,
-            'sleepLogCount' => $sleepLogCount,
-            'goalsLogCount' => $goalsLogCount,
+            'rawLogData' => $rawLogData,
             'sleepConsistency' => $sleepConsistency,
             'moodRatings' => $moodRatings,
             'goalsByCategory' => $goalsByCategory,
