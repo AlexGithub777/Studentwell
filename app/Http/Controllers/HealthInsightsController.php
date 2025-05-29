@@ -17,8 +17,8 @@ class HealthInsightsController extends Controller
     public function index(Request $request)
     {
         $currentTab = $request->query('tab', 'overview');
-        // get thew data for the overview tab
-        //<!-- bar graph of logs across features (mood, exercise, sleep, goals) -->
+        // get the data for the overview tab
+        // bar graph of logs across features (mood, exercise, sleep, goals) -->
         // get count of logs for mood
         $moodLogCount = auth()->user()->moodLogs()->count();
         // get count of logs for exercise
@@ -35,9 +35,7 @@ class HealthInsightsController extends Controller
             'goals' => $goalsLogCount,
         ];
 
-        // check if the user has any logs, if all are 0, then we will not show the graphs but a message "No data available"
-
-        //<!-- donut graph of sleep consistency (daily hours of sleep) count of <6hrs, 6-8 hrs, 8+ hours)
+        // data for donut graph of sleep consistency (daily hours of sleep) count of <6hrs, 6-8 hrs, 8+ hours)
         $sleepConsistency = [
             'less_than_6' => auth()->user()->sleepLogs()->where('SleepDurationMinutes', '<', 360)->count(),
             'between_6_and_8' => auth()->user()->sleepLogs()->whereBetween('SleepDurationMinutes', [360, 480])->count(),
@@ -209,7 +207,7 @@ class HealthInsightsController extends Controller
             return $total > 0 ? round(($completed / $total) * 100, 1) : 0;
         })->values();
 
-        $weekLabels = $weeks->map(function ($weekKey) {
+        $weekGoalsLabels = $weeks->map(function ($weekKey) {
             [$year, $weekNumber] = explode('-', $weekKey);
             $start = Carbon::now()->setISODate((int)$year, (int)$weekNumber)->startOfWeek();
             return $start->format('d M');
@@ -290,7 +288,7 @@ class HealthInsightsController extends Controller
             'fullGoalStatusCounts' => $fullGoalStatusCounts,
             'completedGoalsByCategory' => $completedGoalsByCategory,
             'weeklyCompletionRates' => $weeklyCompletionRates,
-            'weekLabels' => $weekLabels,
+            'weekGoalsLabels' => $weekGoalsLabels,
         ]);
     }
 }

@@ -229,7 +229,7 @@
 @endif
 @if (!$weeklyCompletionRates->isEmpty())
     <script>
-        const weekGoalsLabels = @json($weekLabels);
+        const weekGoalsLabels = @json($weekGoalsLabels);
         const weeklyRates = @json($weeklyCompletionRates);
 
         new Chart(document.getElementById("goalsLineChart"), {

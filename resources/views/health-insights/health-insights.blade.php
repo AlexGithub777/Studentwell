@@ -3,7 +3,7 @@
 <!-- Chart JS Library -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    document.title = "StudentWell | Health Insights";
+    document.title = "StudentWell | Health Insights - Overview";
 </script>
 @if (session('success'))
     <div class="alert alert-success" id="alert-success">
@@ -117,6 +117,10 @@
 
                 // Update URL without page reload
                 history.pushState(null, null, routes[tabName]);
+
+                // update the page title append - Mood, Exercise, Sleep, Goals
+                document.title =
+                    `StudentWell | Health Insights - ${tabName.charAt(0).toUpperCase() + tabName.slice(1)}`;
 
                 // Trigger Bootstrap tab functionality
                 const tabTrigger = new bootstrap.Tab(this);
