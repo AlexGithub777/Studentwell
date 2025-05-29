@@ -176,6 +176,10 @@
                 maintainAspectRatio: false,
                 responsive: true,
                 plugins: {
+                    legend: {
+                        display: true,
+                        position: 'bottom'
+                    },
                     tooltip: {
                         callbacks: {
                             label: function(context) {

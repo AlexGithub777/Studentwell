@@ -105,6 +105,7 @@
                     },
                     legend: {
                         display: true,
+                        position: 'bottom',
                         labels: {
                             color: '#555'
                         }
@@ -211,6 +212,10 @@
                     }
                 },
                 plugins: {
+                    legend: {
+                        display: true,
+                        position: 'bottom'
+                    },
                     tooltip: {
                         callbacks: {
                             label: function(context) {
@@ -257,6 +262,7 @@
                     }
                 },
                 legend: {
+                    position: 'bottom',
                     labels: {
                         generateLabels: function(chart) {
                             const data = chart.data;
@@ -299,6 +305,7 @@
         }]
     });
 </script>
+<!-- Pie chart for sleep quality distribution -->
 @if (!$sleepQualityDistribution->isEmpty())
     <script>
         const sleepQualityDistribution = @json($sleepQualityDistribution);

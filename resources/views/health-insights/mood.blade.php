@@ -100,6 +100,10 @@
                 maintainAspectRatio: false,
                 responsive: true,
                 plugins: {
+                    legend: {
+                        display: true,
+                        position: 'bottom'
+                    },
                     tooltip: {
                         callbacks: {
                             label: function(context) {
@@ -264,6 +268,7 @@
                     }
                 },
                 legend: {
+                    position: 'bottom',
                     labels: {
                         generateLabels: function(chart) {
                             const data = chart.data;

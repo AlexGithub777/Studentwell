@@ -181,10 +181,87 @@ class HealthInsightsController extends Controller
                 return $group->count();
             });
 
-
         // Goals insights
+        //<!-- line graph of goals completion rate (last 6 weeks)) -->
+        $goalLogs = auth()->user()->goalLogs()
+            ->where('GoalLogDate', '>=', now()->subWeeks(6)->startOfWeek())
+            ->orderBy('GoalLogDate')
+            ->get(['GoalLogDate', 'GoalStatus']);
+
+        $weeks = collect(range(0, 5))->map(function ($i) {
+            $startOfWeek = now()->subWeeks($i)->startOfWeek();
+            return $startOfWeek->format('o-W');
+        })->reverse();
+
+        $weeklyCompletionRates = $weeks->map(function ($weekKey) use ($goalLogs) {
+            [$year, $weekNumber] = explode('-', $weekKey);
+            $start = Carbon::now()->setISODate((int)$year, (int)$weekNumber)->startOfWeek();
+            $end = $start->copy()->endOfWeek();
+
+            $weekLogs = $goalLogs->filter(function ($log) use ($start, $end) {
+                $logDate = Carbon::parse($log->GoalLogDate);
+                return $logDate->between($start, $end);
+            });
+
+            $total = $weekLogs->count();
+            $completed = $weekLogs->where('GoalStatus', 'completed')->count();
+
+            return $total > 0 ? round(($completed / $total) * 100, 1) : 0;
+        })->values();
+
+        $weekLabels = $weeks->map(function ($weekKey) {
+            [$year, $weekNumber] = explode('-', $weekKey);
+            $start = Carbon::now()->setISODate((int)$year, (int)$weekNumber)->startOfWeek();
+            return $start->format('d M');
+        })->values();
 
 
+        //<!-- bar graph of completed goals by category (Career, Finance, Wellness) -->
+        $goalLogsAllTime = auth()->user()->goalLogs()
+            ->where('GoalStatus', 'completed')
+            ->with('goal')  // eager load related goal
+            ->get();
+
+        $completedGoalsByCategory = $goalLogsAllTime->groupBy(fn($log) => $log->goal->GoalCategory ?? 'Unknown')
+            ->map(fn($group) => $group->count())
+            ->map(function ($count, $category) {
+                return ['GoalCategory' => $category, 'count' => $count];
+            })
+            ->values();
+
+
+
+        //<!-- donut graph of goal completion status (completed, incomplete, partially, add unlogged and upcoming (where goal target gate is in the future))-->
+        $goalStatusCounts = auth()->user()->goalLogs()
+            ->select('GoalStatus', \DB::raw('COUNT(*) as count'))
+            ->groupBy('GoalStatus')
+            ->pluck('count', 'GoalStatus');
+
+        // Clone counts so we can add extra status groups
+        $fullGoalStatusCounts = $goalStatusCounts->toBase();
+
+        // Fetch all user's goals that don't have logs
+        $unloggedGoals = auth()->user()->goals()->doesntHave('goalLogs')->get();
+
+        // Add unlogged and upcoming counts
+        $unloggedCount = 0;
+        $upcomingCount = 0;
+
+        foreach ($unloggedGoals as $goal) {
+            if ($goal->TargetDate > now()) {
+                $upcomingCount++;
+            } else {
+                $unloggedCount++;
+            }
+        }
+
+        // Append new statuses
+        if ($unloggedCount > 0) {
+            $fullGoalStatusCounts['unlogged'] = $unloggedCount;
+        }
+        if ($upcomingCount > 0) {
+            $fullGoalStatusCounts['upcoming'] = $upcomingCount;
+        }
 
         return view('health-insights.health-insights', [
             'currentTab' => $currentTab,
@@ -210,6 +287,10 @@ class HealthInsightsController extends Controller
             'sleepDaysLogged' => $sleepDaysLogged,
             'sleepDaysUnlogged' => $sleepDaysUnlogged,
             'sleepQualityDistribution' => $sleepQualityDistribution,
+            'fullGoalStatusCounts' => $fullGoalStatusCounts,
+            'completedGoalsByCategory' => $completedGoalsByCategory,
+            'weeklyCompletionRates' => $weeklyCompletionRates,
+            'weekLabels' => $weekLabels,
         ]);
     }
 }
