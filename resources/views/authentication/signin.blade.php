@@ -62,7 +62,7 @@
                             <button class="btn position-absolute top-50 end-0 translate-middle-y border-0 bg-transparent"
                                 type="button" id="togglePassword"
                                 style="padding: 0; margin-right: 12px; color: var(--secondary-colour);">
-                                <i class="fas fa-eye" id="toggleIcon"></i>
+                                <i class="fas fa-eye-slash" id="toggleIcon"></i>
                             </button>
                         </div>
                         @error('signinpassword')
@@ -92,12 +92,12 @@
 
         if (passwordField.type === 'password') {
             passwordField.type = 'text';
-            toggleIcon.classList.remove('fa-eye');
-            toggleIcon.classList.add('fa-eye-slash');
-        } else {
-            passwordField.type = 'password';
             toggleIcon.classList.remove('fa-eye-slash');
             toggleIcon.classList.add('fa-eye');
+        } else {
+            passwordField.type = 'password';
+            toggleIcon.classList.remove('fa-eye');
+            toggleIcon.classList.add('fa-eye-slash');
         }
     });
 </script>
