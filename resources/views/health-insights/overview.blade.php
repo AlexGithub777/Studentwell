@@ -255,6 +255,7 @@
                         }
                     },
                     legend: {
+                        position: 'bottom',
                         labels: {
                             generateLabels: function(chart) {
                                 const data = chart.data;
