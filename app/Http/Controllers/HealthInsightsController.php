@@ -51,7 +51,7 @@ class HealthInsightsController extends Controller
         $goalsByCategory = auth()->user()->goals()
             ->selectRaw('GoalCategory, COUNT(*) as count, MAX(created_at) as latest_created_at')
             ->groupBy('GoalCategory')
-            ->orderByDesc('latest_created_at') // alias of MAX(created_at)
+            ->orderByDesc(DB::raw('MAX(created_at)')) // Use raw aggregate expression here
             ->get();
 
 
