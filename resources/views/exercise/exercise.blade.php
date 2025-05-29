@@ -113,7 +113,7 @@
                     <h3 class="page-subtitle">Exercise History</h3>
                     {{-- Status Dropdown --}}
                     <div class="dropdown">
-                        <button class="btn dropdown-toggle" style="background-color: #1e1e76; color: white;"
+                        <button class="btn dropdown-toggle ms-2" style="background-color: #1e1e76; color: white;"
                             type="button" id="statusDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                             @if ($statusFilter)
                                 @switch($statusFilter)
@@ -261,7 +261,7 @@
                     <h3 class="page-subtitle">Planned Exercises</h3>
                     {{-- Exercise Type Dropdown --}}
                     <div class="dropdown">
-                        <button class="btn  dropdown-toggle" style="background-color: #1e1e76; color: white;"
+                        <button class="btn dropdown-toggle ms-2" style="background-color: #1e1e76; color: white;"
                             type="button" id="exerciseTypeDropdown" data-bs-toggle="dropdown"
                             aria-expanded="false">
                             @if ($exerciseTypeFilter)

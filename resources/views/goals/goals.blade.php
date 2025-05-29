@@ -109,7 +109,7 @@
                     @endphp
 
                     <div class="dropdown">
-                        <button class="btn dropdown-toggle" style="background-color: #1e1e76; color: white;"
+                        <button class="btn dropdown-toggle ms-2" style="background-color: #1e1e76; color: white;"
                             type="button" id="goalStatusDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                             @if (request('goal_status'))
                                 {{ $goalStatuses[request('goal_status')] ?? '' }} {{ ucfirst(request('goal_status')) }}
@@ -236,7 +236,7 @@
                     @endphp
 
                     <div class="dropdown">
-                        <button class="btn dropdown-toggle" style="background-color: #1e1e76; color: white;"
+                        <button class="btn dropdown-toggle ms-2" style="background-color: #1e1e76; color: white;"
                             type="button" id="goalCategoryDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                             @if (request('goal_category'))
                                 {{ $goalCategories[request('goal_category')] ?? '' }} {{ request('goal_category') }}

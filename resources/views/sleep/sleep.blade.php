@@ -106,7 +106,7 @@
             @endphp
 
             <div class="dropdown mb-3">
-                <button style="background-color: #1e1e76; color: white;" class="btn dropdown-toggle" type="button"
+                <button style="background-color: #1e1e76; color: white;" class="btn dropdown-toggle ms-2" type="button"
                     id="sleepFilterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                     @if ($selectedFilter && $selectedEntry)
                         {{ $selectedEntry->Emoji }} {{ $selectedFilter }}
