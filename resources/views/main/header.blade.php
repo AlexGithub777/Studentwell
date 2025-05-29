@@ -39,7 +39,7 @@
 
             <!-- Right side -->
             @guest
-                <div class="d-flex align-items-center">
+                <div class="d-none d-md-flex align-items-center">
                     <!-- Sign In Button -->
                     <a href="{{ route('login') }}" class="btn add-btn me-4 text-white"
                         style="background-color: var(--secondary-colour);">
