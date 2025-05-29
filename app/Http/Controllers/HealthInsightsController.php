@@ -51,8 +51,9 @@ class HealthInsightsController extends Controller
         $goalsByCategory = auth()->user()->goals()
             ->selectRaw('GoalCategory, COUNT(*) as count, MAX(created_at) as latest_created_at')
             ->groupBy('GoalCategory')
-            ->orderByDesc(DB::raw('MAX(created_at)'))
+            ->orderByDesc('latest_created_at') // alias of MAX(created_at)
             ->get();
+
 
         // line graph of mood over time (30 days)
         $moodRatings30days = auth()->user()->moodLogs()
