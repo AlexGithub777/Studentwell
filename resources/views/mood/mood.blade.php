@@ -110,7 +110,7 @@
             @endphp
 
             <div class="dropdown">
-                <button style="background-color: #1e1e76; color: white;" class="btn add-btn dropdown-toggle mb-2"
+                <button style="background-color: #1e1e76; color: white;" class="btn dropdown-toggle mb-2"
                     type="button" id="moodFilterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                     @if ($selectedMood && $selectedMoodEntry)
                         {{ $selectedMoodEntry['emoji'] }} {{ $selectedMood }}
