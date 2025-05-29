@@ -1,7 +1,7 @@
 <!-- Overview content -->
 <div class="row">
-    <div class="col-md-6">
-        <div class="custom-card mb-md-0 mb-3">
+    <div class="col-lg-6">
+        <div class="custom-card mb-3 mb-lg-0">
             <div class="d-flex justify-content-start align-items-center mb-3">
                 <h5 class="fw-bold m-0 me-2">Goals Completion Rate Over Time</h5>
                 <span> (Last 6 weeks)</span>
@@ -16,8 +16,8 @@
             @endif
         </div>
     </div>
-    <div class="col-md-6">
-        <div class="custom-card mb-md-0 mb-3">
+    <div class="col-lg-6">
+        <div class="custom-card mb-3 mb-lg-0">
             <div class="d-flex justify-content-start align-items-center mb-3">
                 <h5 class="fw-bold m-0 me-2">Completed Goals by Category</h5>
                 <span> (all time)</span>
@@ -33,9 +33,9 @@
         </div>
     </div>
 </div>
-<div class="row mt-0 mt-md-4">
-    <div class="col-md-6">
-        <div class="custom-card mb-md-0 mb-3">
+<div class="row mt-0 mt-lg-4">
+    <div class="col-lg-6">
+        <div class="custom-card mb-3 mb-lg-0">
             <div class="d-flex justify-content-start align-items-center mb-3">
                 <h5 class="fw-bold m-0 me-2">Goal Completion Status</h5>
                 <span> (all time)</span>
@@ -50,8 +50,8 @@
             @endif
         </div>
     </div>
-    <div class="col-md-6">
-        <div class="custom-card mb-md-0 mb-3">
+    <div class="col-lg-6">
+        <div class="custom-card mb-3 mb-lg-0">
             <div class="d-flex justify-content-start align-items-center mb-3">
                 <h5 class="fw-bold m-0 me-2">Goals by Category</h5>
                 <span> (all goals)</span>
@@ -146,6 +146,23 @@
         $goalInsightLabels = $orderedInsightGoals->pluck('GoalCategory');
         $goalInsightData = $orderedInsightGoals->pluck('count');
         $goalTotal = $goalInsightData->sum();
+
+        $goalInsightCategories = [
+            'Academic' => '📘',
+            'Career' => '💼',
+            'Finance' => '🐖',
+            'Hobbies' => '🎨',
+            'Mental Health' => '🧠',
+            'Nutrition' => '🍎',
+            'Physical Health' => '🏋️',
+            'Productivity' => '📋',
+            'Sleep' => '🛏️',
+            'Social' => '👥',
+            'Spiritual' => '🙏',
+            'Travel' => '✈️',
+            'Wellness' => '❤️',
+            'Other' => '❓',
+        ];
     @endphp
 
     <!-- Goals Pie Chart -->
@@ -153,6 +170,7 @@
         const goalLabels = @json($goalInsightLabels);
         const goalInsightData = @json($goalInsightData);
         const goalDataTotal = goalInsightData.reduce((a, b) => a + b, 0);
+        const categoryInisghtsEmojis = @json($goalInsightCategories);
 
         const colorInsightPalette = [
             '#e74c3c', '#3498db', '#2ecc71', '#f39c12', '#9b59b6',
@@ -182,11 +200,12 @@
                     tooltip: {
                         callbacks: {
                             label: function(context) {
-                                var label = context.label;
-                                var value = context.raw;
-                                var logLabel = value === 1 ? 'log' : 'logs';
-                                var percent = ((value / goalTotal) * 100).toFixed(0);
-                                return `${label}: ${value} ${logLabel} (${percent}%)`;
+                                const label = context.label;
+                                const emoji = categoryEmojis[label] || '';
+                                const value = context.raw;
+                                const logLabel = value === 1 ? 'log' : 'logs';
+                                const percent = ((value / goalTotal) * 100).toFixed(0);
+                                return `${emoji} ${label}: ${value} ${logLabel} (${percent}%)`;
                             }
                         }
                     },
@@ -194,11 +213,12 @@
                         position: 'bottom',
                         labels: {
                             generateLabels: function(chart) {
-                                var data = chart.data;
+                                const data = chart.data;
                                 if (data.labels.length && data.datasets.length) {
                                     return data.labels.map((label, i) => {
+                                        const emoji = categoryEmojis[label] || '';
                                         return {
-                                            text: `${label}`,
+                                            text: `${emoji} ${label}`,
                                             fillStyle: data.datasets[0].backgroundColor[i],
                                             strokeStyle: data.datasets[0].backgroundColor[i],
                                             lineWidth: 0,
@@ -282,19 +302,47 @@
     </script>
 @endif
 @if (!$completedGoalsByCategory->isEmpty())
+    @php
+        $completedCategoryData = $completedGoalsByCategory->pluck('count');
+        $completedCategoryLabels = $completedGoalsByCategory->pluck('GoalCategory');
+        $completedCategoryEmojis = [
+            'Academic' => '📘',
+            'Career' => '💼',
+            'Finance' => '🐖',
+            'Hobbies' => '🎨',
+            'Mental Health' => '🧠',
+            'Nutrition' => '🍎',
+            'Physical Health' => '🏋️',
+            'Productivity' => '📋',
+            'Sleep' => '🛏️',
+            'Social' => '👥',
+            'Spiritual' => '🙏',
+            'Travel' => '✈️',
+            'Wellness' => '❤️',
+            'Other' => '❓',
+        ];
+    @endphp
+
     <script>
-        const categoryLabels = @json($completedGoalsByCategory->pluck('GoalCategory'));
-        const categoryCounts = @json($completedGoalsByCategory->pluck('count'));
+        const completedBarLabels = @json($completedCategoryLabels);
+        const completedBarData = @json($completedCategoryData);
+        const completedBarEmojis = @json($completedCategoryEmojis);
+
+        const completedBarLabelsWithEmojis = completedBarLabels.map(label => {
+            const emoji = completedBarEmojis[label] || '';
+            return `${emoji} ${label}`;
+        });
 
         new Chart(document.getElementById("goalsBarChart"), {
             type: 'bar',
             data: {
-                labels: categoryLabels,
+                labels: completedBarLabelsWithEmojis,
                 datasets: [{
                     label: 'Completed Goals',
-                    data: categoryCounts,
-                    backgroundColor: ['#3498db', '#2ecc71', '#e67e22', '#9b59b6', '#f1c40f', '#e74c3c',
-                        '#1abc9c', '#34495e'
+                    data: completedBarData,
+                    backgroundColor: [
+                        '#3498db', '#2ecc71', '#e67e22', '#9b59b6',
+                        '#f1c40f', '#e74c3c', '#1abc9c', '#34495e'
                     ],
                     borderColor: '#34495e',
                     borderWidth: 1
@@ -323,6 +371,12 @@
                     },
                     tooltip: {
                         callbacks: {
+                            title: function(context) {
+                                const index = context[0].dataIndex;
+                                const label = completedBarLabels[index];
+                                const emoji = completedBarEmojis[label] || '';
+                                return `${emoji} ${label}`;
+                            },
                             label: function(context) {
                                 return `${context.parsed.y} completed`;
                             }

@@ -110,8 +110,8 @@
             @endphp
 
             <div class="dropdown">
-                <button style="background-color: #1e1e76; color: white;" class="btn dropdown-toggle mb-2"
-                    type="button" id="moodFilterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <button style="background-color: #1e1e76; color: white;" class="btn dropdown-toggle mb-2" type="button"
+                    id="moodFilterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                     @if ($selectedMood && $selectedMoodEntry)
                         {{ $selectedMoodEntry['emoji'] }} {{ $selectedMood }}
                     @else
@@ -140,7 +140,7 @@
                 No mood history found.
             </div>
         @else
-            <div class="row row-cols-1 row-cols-md-2 g-4">
+            <div class="row row-cols-1 row-cols-lg-2 g-4">
                 @foreach ($moodLogs as $moodLog)
                     <div class="col">
                         <div class="custom-card d-flex flex-column justify-content-between h-100"
@@ -185,7 +185,7 @@
 
                                         @if (is_array($emotions) && count($emotions) > 0)
                                             @foreach ($emotions as $emotion)
-                                                <span class="badge rounded-pill mb-md-2 px-3 py-2"
+                                                <span class="badge rounded-pill mb-2 mb-lg-0 px-3 py-2"
                                                     style="background-color: var(--secondary-colour); color: white; width: fit-content;">
                                                     {{ $emotion }}
                                                 </span>

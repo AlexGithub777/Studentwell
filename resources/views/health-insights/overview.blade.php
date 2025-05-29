@@ -1,7 +1,7 @@
 <!-- Overview content -->
 <div class="row">
-    <div class="col-md-6">
-        <div class="custom-card mb-md-0 mb-3">
+    <div class="col-lg-6">
+        <div class="custom-card mb-3 mb-lg-0">
             <div class="d-flex justify-content-start align-items-center mb-3">
                 <h5 class="fw-bold m-0 me-2">Your Weekly Wellness Activity</h5>
                 <span> (log counts across features)</span>
@@ -20,8 +20,8 @@
             @endif
         </div>
     </div>
-    <div class="col-md-6">
-        <div class="custom-card mb-md-0 mb-3">
+    <div class="col-lg-6">
+        <div class="custom-card mb-3 mb-lg-0">
             <div class="d-flex justify-content-start align-items-center mb-3">
                 <h5 class="fw-bold m-0 me-2">How Consistent Your Sleep Has Been</h5>
                 <span> (daily hours of sleep)</span>
@@ -41,9 +41,9 @@
         </div>
     </div>
 </div>
-<div class="row mt-0 mt-md-4">
-    <div class="col-md-6">
-        <div class="custom-card mb-md-0 mb-3">
+<div class="row mt-0 mt-lg-4">
+    <div class="col-lg-6">
+        <div class="custom-card mb-3 mb-lg-0">
             <div class="d-flex justify-content-start align-items-center mb-3">
                 <h5 class="fw-bold m-0 me-2">How Your Mood Has Shifted</h5>
                 <span> (14-day trend)</span>
@@ -58,8 +58,8 @@
             @endif
         </div>
     </div>
-    <div class="col-md-6">
-        <div class="custom-card mb-md-0 mb-3">
+    <div class="col-lg-6">
+        <div class="custom-card mb-3 mb-lg-0">
             <div class="d-flex justify-content-start align-items-center mb-3">
                 <h5 class="fw-bold m-0 me-2">Where Your Goals Are Focused</h5>
                 <span> (goals by category)</span>
@@ -303,6 +303,23 @@
         $goalLabels = $orderedGoals->pluck('GoalCategory');
         $goalData = $orderedGoals->pluck('count');
         $goalTotal = $goalData->sum();
+
+        $goalCategories = [
+            'Academic' => '📘',
+            'Career' => '💼',
+            'Finance' => '🐖',
+            'Hobbies' => '🎨',
+            'Mental Health' => '🧠',
+            'Nutrition' => '🍎',
+            'Physical Health' => '🏋️',
+            'Productivity' => '📋',
+            'Sleep' => '🛏️',
+            'Social' => '👥',
+            'Spiritual' => '🙏',
+            'Travel' => '✈️',
+            'Wellness' => '❤️',
+            'Other' => '❓',
+        ];
     @endphp
 
     <!-- Goals Pie Chart -->
@@ -310,6 +327,7 @@
         const labels = @json($goalLabels);
         const data = @json($goalData);
         const goalTotal = data.reduce((a, b) => a + b, 0);
+        const categoryEmojis = @json($goalCategories);
 
         const colorPalette = [
             '#e74c3c', '#3498db', '#2ecc71', '#f39c12', '#9b59b6',
@@ -331,8 +349,8 @@
             },
             options: {
                 animation: {
-                    animateScale: true, // Enables scaling animation
-                    animateRotate: true // Optional: animates rotation from 0 to full
+                    animateScale: true,
+                    animateRotate: true
                 },
                 responsive: true,
                 plugins: {
@@ -340,10 +358,11 @@
                         callbacks: {
                             label: function(context) {
                                 const label = context.label;
+                                const emoji = categoryEmojis[label] || '';
                                 const value = context.raw;
                                 const logLabel = value === 1 ? 'log' : 'logs';
                                 const percent = ((value / goalTotal) * 100).toFixed(0);
-                                return `${label}: ${value} ${logLabel} (${percent}%)`;
+                                return `${emoji} ${label}: ${value} ${logLabel} (${percent}%)`;
                             }
                         }
                     },
@@ -354,8 +373,9 @@
                                 const data = chart.data;
                                 if (data.labels.length && data.datasets.length) {
                                     return data.labels.map((label, i) => {
+                                        const emoji = categoryEmojis[label] || '';
                                         return {
-                                            text: `${label}`,
+                                            text: `${emoji} ${label}`,
                                             fillStyle: data.datasets[0].backgroundColor[i],
                                             strokeStyle: data.datasets[0].backgroundColor[i],
                                             lineWidth: 0,

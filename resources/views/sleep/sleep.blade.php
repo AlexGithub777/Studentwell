@@ -136,7 +136,7 @@
                 No sleep log history found.
             </div>
         @else
-            <div class="row row-cols-1 row-cols-md-2 g-4">
+            <div class="row row-cols-1 row-cols-lg-2 g-4">
                 @foreach ($sleepLogs as $sleepLog)
                     <div class="col">
                         <div class="custom-card d-flex flex-column justify-content-between h-100"

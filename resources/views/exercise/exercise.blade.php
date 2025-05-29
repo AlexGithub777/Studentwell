@@ -21,11 +21,12 @@
                     <h1 class="page-title mb-1">Exercise Planning & Tracking</h1>
                 </div>
 
-                <div>
+                <div
+                    class="d-flex flex-column flex-md-row align-items-start align-items-lg-center gap-2 mt-md-3 mt-lg-0">
                     <!-- Plan Exercise Button -->
-                    <a href="{{ route('exercise.plan') }}" class="btn add-btn me-0 mb-2 mb-lg-0 me-lg-2 text-white"
+                    <a href="{{ route('exercise.plan') }}" class="btn add-btn text-white"
                         style="background-color: var(--secondary-colour);">
-                        <i class="fas fa-plus me-1 fw-bold"></i> Plan Exericse
+                        <i class="fas fa-plus me-1 fw-bold"></i> Plan Exercise
                     </a>
 
                     <!-- Log Exercise Button -->
@@ -105,7 +106,7 @@
 
 
 
-        <div class="row row-cols-1 row-cols-md-2 g-4">
+        <div class="row row-cols-1 row-cols-lg-2 g-4">
             <!-- Exercise History -->
             <div class="col-xxl-6">
                 <div class="d-flex justify-content-between align-items-center mb-2">

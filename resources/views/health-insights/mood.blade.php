@@ -1,7 +1,7 @@
 <!-- Overview content -->
 <div class="row">
-    <div class="col-md-6">
-        <div class="custom-card mb-md-0 mb-3">
+    <div class="col-lg-6">
+        <div class="custom-card mb-3 mb-lg-0">
             <div class="d-flex justify-content-start align-items-center mb-3">
                 <h5 class="fw-bold m-0 me-2">How Your Mood Has Shifted</h5>
                 <span> (Last 30 days)</span>
@@ -16,8 +16,8 @@
             @endif
         </div>
     </div>
-    <div class="col-md-6">
-        <div class="custom-card mb-md-0 mb-3">
+    <div class="col-lg-6">
+        <div class="custom-card mb-3 mb-lg-0">
             <div class="d-flex justify-content-start align-items-center mb-3">
                 <h5 class="fw-bold m-0 me-2">Mood Distribution</h5>
                 <span> (Last 30 days)</span>
@@ -33,9 +33,9 @@
         </div>
     </div>
 </div>
-<div class="row mt-0 mt-md-4">
-    <div class="col-md-6">
-        <div class="custom-card mb-md-0 mb-3">
+<div class="row mt-0 mt-lg-4">
+    <div class="col-lg-6">
+        <div class="custom-card mb-3 mb-lg-0">
             <div class="d-flex justify-content-start align-items-center mb-3">
                 <h5 class="fw-bold m-0 me-2">Mood Logging Rate</h5>
                 <span> (Last 30 days)</span>
@@ -44,8 +44,8 @@
             <canvas style="max-height:275px;" id="moodLoggingRateDonut"></canvas>
         </div>
     </div>
-    <div class="col-md-6">
-        <div class="custom-card mb-md-0 mb-3">
+    <div class="col-lg-6">
+        <div class="custom-card mb-3 mb-lg-0">
             <div class="d-flex justify-content-start align-items-center mb-3">
                 <h5 class="fw-bold m-0 me-2">Emotion Distribution</h5>
                 <span> (Top 10 over last 30 days)</span>
@@ -247,7 +247,7 @@
     new Chart(document.getElementById("moodLoggingRateDonut"), {
         type: 'doughnut',
         data: {
-            labels: ['Days Logged', 'Days Not Logged'],
+            labels: ['✅ Days Logged', '❌ Days Not Logged'],
             datasets: [{
                 data: loggingData,
                 backgroundColor: ['#2ecc71', '#e74c3c'] // Green for logged, Red for not logged

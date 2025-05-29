@@ -1,7 +1,7 @@
 <!-- Overview content -->
 <div class="row">
-    <div class="col-md-6">
-        <div class="custom-card mb-md-0 mb-3">
+    <div class="col-lg-6">
+        <div class="custom-card mb-3 mb-lg-0">
             <div class="d-flex justify-content-start align-items-center mb-3">
                 <h5 class="fw-bold m-0 me-2">Daily Exercise Duration</h5>
                 <span> (Last 30 days)</span>
@@ -16,8 +16,8 @@
             @endif
         </div>
     </div>
-    <div class="col-md-6">
-        <div class="custom-card mb-md-0 mb-3">
+    <div class="col-lg-6">
+        <div class="custom-card mb-3 mb-lg-0">
             <div class="d-flex justify-content-start align-items-center mb-3">
                 <h5 class="fw-bold m-0 me-2">Weekly Exercise Duration</h5>
                 <span> (Last 4 weeks)</span>
@@ -33,9 +33,9 @@
         </div>
     </div>
 </div>
-<div class="row mt-0 mt-md-4">
-    <div class="col-md-6">
-        <div class="custom-card mb-md-0 mb-3">
+<div class="row mt-0 mt-lg-4">
+    <div class="col-lg-6">
+        <div class="custom-card mb-3 mb-lg-0">
             <div class="d-flex justify-content-start align-items-center mb-3">
                 <h5 class="fw-bold m-0 me-2">Exercise Completion Rate</h5>
                 <span> (Last 30 days)</span>
@@ -50,8 +50,8 @@
             @endif
         </div>
     </div>
-    <div class="col-md-6">
-        <div class="custom-card mb-md-0 mb-3">
+    <div class="col-lg-6">
+        <div class="custom-card mb-3 mb-lg-0">
             <div class="d-flex justify-content-start align-items-center mb-3">
                 <h5 class="fw-bold m-0 me-2">Exercise Type Breakdown</h5>
                 <span> (Last 30 days)</span>
@@ -186,25 +186,45 @@
     <script>
         const chartData = @json($exerciseChartData);
 
-        const exerciseDonutlabels = chartData.map(entry => `${entry.status}: ${entry.count} logs (${entry.percentage}%)`);
-        const exerciseDonutData = chartData.map(entry => entry.count);
-        const percentages = chartData.map(entry => entry.percentage);
-        const statuses = chartData.map(entry => entry.status);
+        // map emojis to statuses
+        const statusEmojis = {
+            'Completed': '✅',
+            'Missed': '❌',
+            'Partially': '🟡'
+        };
 
+        const rawStatuses = chartData.map(entry => entry.status); // ['Completed', 'Missed', 'Partially']
+
+        // Add emojis and calculate percentages
+        const totalCount = chartData.reduce((sum, e) => sum + e.count, 0);
+        chartData.forEach(entry => {
+            entry.emoji = statusEmojis[entry.status] || '';
+            entry.labelWithEmoji = `${entry.emoji} ${entry.status}`;
+            entry.percentage = (entry.count / totalCount * 100).toFixed(1);
+        });
+
+        const exerciseDonutLabels = chartData.map(entry =>
+            `${entry.labelWithEmoji}: ${entry.count} logs (${entry.percentage}%)`);
+        const exerciseDonutData = chartData.map(entry => entry.count);
+        const exerciseDonutEmojis = chartData.map(entry => entry.emoji);
+        const exerciseDonutStatuses = chartData.map(entry => entry.labelWithEmoji);
+
+        // Background colors mapped by raw status
         const exerciseDonutBackgroundColours = {
             'Completed': '#2ecc71', // Green
             'Missed': '#e74c3c', // Red
             'Partially': '#f1c40f' // Yellow
         };
 
+        const exercisePieBackgroundColors = rawStatuses.map(status => exerciseDonutBackgroundColours[status] || '#cccccc');
+
         new Chart(document.getElementById('exerciseDonutChart'), {
             type: 'doughnut',
             data: {
-                labels: exerciseDonutlabels,
+                labels: exerciseDonutStatuses,
                 datasets: [{
                     data: exerciseDonutData,
-                    backgroundColor: statuses.map(status => exerciseDonutBackgroundColours[status] ||
-                        'rgba(201, 203, 207, 1)'),
+                    backgroundColor: exercisePieBackgroundColors,
                     borderColor: 'white',
                     borderWidth: 2
                 }]
@@ -213,20 +233,35 @@
                 responsive: true,
                 plugins: {
                     legend: {
-                        position: 'bottom'
+                        position: 'bottom',
+                        labels: {
+                            generateLabels: function(chart) {
+                                const data = chart.data;
+                                if (data.labels.length && data.datasets.length) {
+                                    return data.labels.map((label, i) => ({
+                                        text: label,
+                                        fillStyle: data.datasets[0].backgroundColor[i],
+                                        strokeStyle: data.datasets[0].borderColor,
+                                        lineWidth: 2,
+                                        hidden: isNaN(data.datasets[0].data[i]) || chart
+                                            .getDatasetMeta(0).data[i].hidden,
+                                        index: i
+                                    }));
+                                }
+                                return [];
+                            }
+                        }
                     },
                     tooltip: {
                         callbacks: {
                             title: function(context) {
-                                const index = context[0].dataIndex;
-                                return statuses[index]; // Just the status in the header
+                                return context[0].label;
                             },
                             label: function(context) {
                                 const index = context.dataIndex;
-                                const status = statuses[index];
                                 const count = exerciseDonutData[index];
-                                const percentage = percentages[index];
-                                return `${status}: ${count} log${count !== 1 ? 's' : ''} (${percentage}%)`;
+                                const percentage = chartData[index].percentage;
+                                return `${count} log${count !== 1 ? 's' : ''} (${percentage}%)`;
                             }
                         }
                     }
