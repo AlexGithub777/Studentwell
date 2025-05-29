@@ -33,13 +33,13 @@ class UserController extends Controller
      * @return \Illuminate\View\View
      * This method displays the signin form to the user.
      */
-    public function showSigninForm(Request $request)
+    public function showSigninForm()
     {
-        dd($request->getScheme(), $request->isSecure(), request()->header()); // Dumps all headers
-        logger()->info('Request Scheme: ' . $request->getScheme());
-        logger()->info('Is Secure: ' . ($request->isSecure() ? 'Yes' : 'No'));
-        logger()->info('X-Forwarded-Proto Header: ' . $request->header('X-Forwarded-Proto'));
-        logger()->info('All Headers: ', $request->headers->all());
+        // dd($request->getScheme(), $request->isSecure(), request()->header()); // Dumps all headers
+        // logger()->info('Request Scheme: ' . $request->getScheme());
+        // logger()->info('Is Secure: ' . ($request->isSecure() ? 'Yes' : 'No'));
+        // logger()->info('X-Forwarded-Proto Header: ' . $request->header('X-Forwarded-Proto'));
+        // logger()->info('All Headers: ', $request->headers->all());
         // If user is already authenticated, redirect to home
         if (auth()->check()) {
             return redirect('/home')->with('info', 'You are already logged in.');

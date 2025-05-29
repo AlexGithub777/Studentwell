@@ -2,23 +2,21 @@
 
 namespace App\Http\Middleware;
 
-use Illuminate\Http\Request;
 use Illuminate\Http\Middleware\TrustProxies as Middleware;
 
 class TrustProxies extends Middleware
 {
     /**
-     * The trusted proxies for this application.
-     * Use '*' to trust all proxies (for platforms like DigitalOcean, Heroku, etc.)
+     * Trust all proxies (DigitalOcean App Platform uses proxies).
      *
      * @var array|string|null
      */
     protected $proxies = '*';
 
     /**
-     * The headers that should be used to detect proxies.
+     * Laravel 11 uses 'X-Forwarded-*' headers directly — use this string instead of a constant.
      *
-     * @var int
+     * @var string
      */
-    protected $headers = Request::HEADER_X_FORWARDED_ALL;
+    protected $headers = 'x-forwarded-all';
 }

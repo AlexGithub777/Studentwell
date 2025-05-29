@@ -11,8 +11,11 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        // Global Middleware
+        $middleware->prepend(\App\Http\Middleware\TrustProxies::class);
 
 
+        // Middleware for all routes
         $middleware->alias([
             'IsAdmin' => \App\Http\Middleware\IsAdmin::class,
         ]);
