@@ -18,35 +18,51 @@ class ExerciseController extends Controller
      */
     public function index()
     {
-        // Ensure the user is authenticated
         if (!auth()->check()) {
             return redirect()->route('login')->with('error', 'You must be logged in to access this page.');
         }
 
-        // Get the authenticated user
         $user = auth()->user();
 
-        // Fetch the planned exercises and logged exercises for the 
-        $plannedExercises = $user->exercisePlans()
-            ->doesntHave('exerciseLogs') // Only get planned exercises that have no logs
-            ->with('user')
+        // Handle filtering input
+        $statusFilter = request('status'); // For logged
+        $exerciseTypeFilter = request('type'); // For planned
+
+        // Planned Exercises Filtered by ExerciseType
+        $plannedExercisesQuery = $user->exercisePlans()
+            ->doesntHave('exerciseLogs')
+            ->with('user');
+
+        if (!empty($exerciseTypeFilter)) {
+            $plannedExercisesQuery->where('ExerciseType', $exerciseTypeFilter);
+        }
+
+        $plannedExercises = $plannedExercisesQuery
             ->paginate(5, ['*'], 'planned_exercises_page')
             ->appends([
-                'logged_exercises_page' => request('logged_exercises_page')
+                'planned_exercises_page' => request('planned_exercises_page'),   // Current planned page
+                'logged_exercises_page' => request('logged_exercises_page'),     // Current logged page
+                'type' => $exerciseTypeFilter,                                  // Planned filter
+                'status' => $statusFilter                                        // Logged filter
             ]);
 
-        //get unpaginated logged exercises
-        // Fetch the logged exercises for the user
-        $allLoggedExercises = $user->exerciseLogs()
-            ->with('user')
-            ->get();
+        // Logged Exercises Filtered by Status
+        $loggedExercisesQuery = $user->exerciseLogs()->with('user');
 
-        $loggedExercises = $user->exerciseLogs()
-            ->with('user')
+        if (!empty($statusFilter)) {
+            $loggedExercisesQuery->where('Status', $statusFilter);
+        }
+
+        $loggedExercises = $loggedExercisesQuery
             ->paginate(5, ['*'], 'logged_exercises_page')
             ->appends([
-                'planned_exercises_page' => request('planned_exercises_page')
+                'planned_exercises_page' => request('planned_exercises_page'),  // Current planned page
+                'logged_exercises_page' => request('logged_exercises_page'),    // Current logged page
+                'type' => $exerciseTypeFilter,                                  // Planned filter
+                'status' => $statusFilter                                        // Logged filter
             ]);
+
+        $allLoggedExercises = $user->exerciseLogs()->with('user')->get();
 
         // add 4 key metrics
 
@@ -103,28 +119,49 @@ class ExerciseController extends Controller
 
         $exerciseLogStreak = $streak;
 
-        $exerciseTypeIcons = [
-            'Basketball'     => 'fa-basketball-ball',
-            'Boxing'         => 'fa-hand-fist',
-            'Climbing'       => 'fa-mountain',
-            'Cycling'        => 'fa-bicycle',
-            'Dance'          => 'fa-music',
-            'Football'       => 'fa-futbol',
-            'Hiking'         => 'fa-person-hiking',
-            'Running'        => 'fa-running',
-            'Skating'        => 'fa-person-skating',
-            'Skiing'         => 'fa-skiing',
-            'Sports'         => 'fa-medal',
-            'Swimming'       => 'fa-swimmer',
-            'Tennis'         => 'fa-tennis-ball',
-            'Volleyball'     => 'fa-volleyball-ball',
-            'Walking'        => 'fa-person-walking',
-            'Weight Lifting' => 'fa-dumbbell',
-            'Yoga'           => 'fa-person-praying',
-            'Other'          => 'fa-star',
+        // Icons for dropdowns
+        $exerciseTypes = [
+            'Basketball' => '🏀',
+            'Boxing' => '🥊',
+            'Climbing' => '🧗',
+            'Cycling' => '🚴',
+            'Dance' => '💃',
+            'Football' => '⚽',
+            'Hiking' => '🥾',
+            'Running' => '🏃',
+            'Skating' => '⛸️',
+            'Skiing' => '🎿',
+            'Sports' => '🥇',
+            'Swimming' => '🏊',
+            'Tennis' => '🎾',
+            'Volleyball' => '🏐',
+            'Walking' => '🚶',
+            'Weight Lifting' => '🏋️',
+            'Yoga' => '🧘',
+            'Other' => '❓',
         ];
 
-        // add ExerciseTypeIcons to $plannedExercises and $loggedExercises
+        $exerciseTypeIcons = [
+            'Basketball' => 'fa-basketball-ball',
+            'Boxing' => 'fa-hand-fist',
+            'Climbing' => 'fa-mountain',
+            'Cycling' => 'fa-bicycle',
+            'Dance' => 'fa-music',
+            'Football' => 'fa-futbol',
+            'Hiking' => 'fa-person-hiking',
+            'Running' => 'fa-running',
+            'Skating' => 'fa-person-skating',
+            'Skiing' => 'fa-skiing',
+            'Sports' => 'fa-medal',
+            'Swimming' => 'fa-swimmer',
+            'Tennis' => 'fa-tennis-ball',
+            'Volleyball' => 'fa-volleyball-ball',
+            'Walking' => 'fa-person-walking',
+            'Weight Lifting' => 'fa-dumbbell',
+            'Yoga' => 'fa-person-praying',
+            'Other' => 'fa-star',
+        ];
+
         $plannedExercises->transform(function ($exercise) use ($exerciseTypeIcons) {
             $exercise->ExerciseTypeIcon = $exerciseTypeIcons[$exercise->ExerciseType] ?? 'fa-question';
             return $exercise;
@@ -136,19 +173,18 @@ class ExerciseController extends Controller
         });
 
         // Return the view with the data
-        return view(
-            'exercise.exercise',
-            compact(
-                'plannedExercises',
-                'loggedExercises',
-                'totalCompletedExercisesThisWeek',
-                'totalMissedExercisesThisWeek',
-                'totalTimeExercisedThisWeek',
-                'exerciseLogStreak',
-            )
-        );
+        return view('exercise.exercise', compact(
+            'plannedExercises',
+            'loggedExercises',
+            'totalCompletedExercisesThisWeek',
+            'totalMissedExercisesThisWeek',
+            'totalTimeExercisedThisWeek',
+            'exerciseLogStreak',
+            'exerciseTypes',
+            'statusFilter',
+            'exerciseTypeFilter'
+        ));
     }
-
     /**
      * Show the page to add a new planned exercise
      * 

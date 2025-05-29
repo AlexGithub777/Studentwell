@@ -97,7 +97,44 @@
         <div class="row row-cols-1 row-cols-md-2 g-4">
             <!-- Goal History -->
             <div class="col-xxl-6">
-                <h3 class="page-subtitle">Goal History</h3>
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h3 class="page-subtitle">Goal History</h3>
+                    <!-- Goal completion status filter -->
+                    @php
+                        $goalStatuses = [
+                            'completed' => '✅',
+                            'incomplete' => '❌',
+                            'partially' => '🟡',
+                        ];
+                    @endphp
+
+                    <div class="dropdown">
+                        <button class="btn add-btn dropdown-toggle" style="background-color: #1e1e76; color: white;"
+                            type="button" id="goalStatusDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            @if (request('goal_status'))
+                                {{ $goalStatuses[request('goal_status')] ?? '' }} {{ ucfirst(request('goal_status')) }}
+                            @else
+                                Filter by Goal Status
+                            @endif
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="goalStatusDropdown">
+                            <li>
+                                <a class="dropdown-item"
+                                    href="{{ route('goals.index', request()->except('goal_status')) }}">
+                                    All Statuses
+                                </a>
+                            </li>
+                            @foreach ($goalStatuses as $status => $emoji)
+                                <li>
+                                    <a class="dropdown-item"
+                                        href="{{ route('goals.index', array_merge(request()->except('goal_status'), ['goal_status' => $status])) }}">
+                                        {{ $emoji }} {{ ucfirst($status) }}
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
                 @if ($goalLogs->isEmpty())
                     <div class="alert alert-info">
                         No goal history found.
@@ -121,7 +158,8 @@
                                     <div>
                                         <div class="d-flex">
                                             <h5 class="mb-0 me-2 fw-bold" style="color: var(--secondary-colour);">
-                                                {{ $goalLog->goal->GoalTitle }} <!-- Check if correct implemented -->
+                                                {{ $goalLog->goal->GoalTitle }}
+                                                <!-- Check if correct implemented -->
                                             </h5>
                                             <p style="margin:0; font-size:0.9rem; color: var(--secondary-colour);">
                                                 {{ $goalLog->GoalDays }} days - @if ($goalLog->GoalStatus === 'completed')
@@ -175,7 +213,55 @@
             </div>
             <!-- Active Goals -->
             <div class="col-xxl-6">
-                <h3 class="page-subtitle">Active Goals</h3>
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h3 class="page-subtitle">Active Goals</h3>
+                    <!-- Goal Category filter -->
+                    @php
+                        $goalCategories = [
+                            'Academic' => '📘',
+                            'Career' => '💼',
+                            'Finance' => '🐖',
+                            'Hobbies' => '🎨',
+                            'Mental Health' => '🧠',
+                            'Nutrition' => '🍎',
+                            'Physical Health' => '🏋️',
+                            'Productivity' => '📋',
+                            'Sleep' => '🛏️',
+                            'Social' => '👥',
+                            'Spiritual' => '🙏',
+                            'Travel' => '✈️',
+                            'Wellness' => '❤️',
+                            'Other' => '❓',
+                        ];
+                    @endphp
+
+                    <div class="dropdown">
+                        <button class="btn add-btn dropdown-toggle" style="background-color: #1e1e76; color: white;"
+                            type="button" id="goalCategoryDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            @if (request('goal_category'))
+                                {{ $goalCategories[request('goal_category')] ?? '' }} {{ request('goal_category') }}
+                            @else
+                                Filter by Goal Category
+                            @endif
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="goalCategoryDropdown">
+                            <li>
+                                <a class="dropdown-item"
+                                    href="{{ route('goals.index', request()->except('goal_category')) }}">
+                                    All Categories
+                                </a>
+                            </li>
+                            @foreach ($goalCategories as $category => $emoji)
+                                <li>
+                                    <a class="dropdown-item"
+                                        href="{{ route('goals.index', array_merge(request()->except('goal_category'), ['goal_category' => $category])) }}">
+                                        {{ $emoji }} {{ $category }}
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
                 @if ($goals->isEmpty())
                     <div class="alert alert-info">
                         No active goals found.
@@ -200,7 +286,8 @@
                                             </h5>
                                             <!-- Add goal start and target date -->
                                             <p style="margin:0; font-size:0.9rem; color: var(--secondary-colour);">
-                                                {{ \Carbon\Carbon::parse($goal->GoalStartDate)->format('F jS, Y') }} to
+                                                {{ \Carbon\Carbon::parse($goal->GoalStartDate)->format('F jS, Y') }}
+                                                to
                                                 {{ \Carbon\Carbon::parse($goal->GoalTargetDate)->format('F jS, Y') }}
                                             </p>
                                         </div>
@@ -229,7 +316,8 @@
                                         @auth
                                             @if (auth()->id() === $goal->UserID)
                                                 <!--edit button -->
-                                                <a href="{{ route('goals.edit', $goal->GoalID) }}" class="btn btn-sm me-1"
+                                                <a href="{{ route('goals.edit', $goal->GoalID) }}"
+                                                    class="btn btn-sm me-1"
                                                     style="background-color: var(--secondary-colour); color: white; font-weight: bold;">
                                                     <i class="fas fa-pencil-alt"></i>
                                                 </a>

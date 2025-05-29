@@ -52,7 +52,7 @@
                                         'Hobbies' => '🎨',
                                         'Mental Health' => '🧠',
                                         'Nutrition' => '🍎',
-                                        'Physical Health' => '🏃‍♂️',
+                                        'Physical Health' => '🏋️',
                                         'Productivity' => '📋',
                                         'Sleep' => '🛏️',
                                         'Social' => '👥',

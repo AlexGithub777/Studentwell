@@ -16,72 +16,9 @@ class SleepLogController extends Controller
      */
     public function index(Request $request)
     {
-        // Fetch the user's sleep logs with pagination
-        $sleepLogs = auth()->user()->sleepLogs()->with('user')->paginate(10);
+        $user = auth()->user();
 
-        // Calculate average sleep duration and quality for the current week
-        $weeklyLogsQuery = auth()->user()->sleepLogs()
-            ->whereBetween('SleepDate', [now()->startOfWeek(), now()->endOfWeek()]);
-
-        // Calculate average sleep duration and quality
-        $averageSleepDuration = null;
-        $averageSleepDurationRaw = $weeklyLogsQuery->avg('SleepDurationMinutes');
-        $averageSleepQualityRaw = $weeklyLogsQuery->avg('SleepQuality');
-
-        // calculate nights logged this week
-        $nightsLoggedThisWeek = $weeklyLogsQuery
-            ->distinct('SleepDate')
-            ->count('SleepDate');
-
-        // Streak calculation
-        $sleepLogsByDate = auth()->user()->sleepLogs()
-            ->orderBy('SleepDate', 'desc')
-            ->pluck('SleepDate')
-            ->map(fn($d) => \Carbon\Carbon::parse($d)->format('Y-m-d'))
-            ->unique()
-            ->values();
-
-        // Initialize streak counter
-        $streak = 0;
-        $currentDate = \Carbon\Carbon::today();
-        $sleepLogDatesSet = collect($sleepLogsByDate)->flip();
-
-        // Check today first
-        if ($sleepLogDatesSet->has($currentDate->format('Y-m-d'))) {
-            // Today has a log, count backwards from today
-            while ($sleepLogDatesSet->has($currentDate->format('Y-m-d'))) {
-                $streak++;
-                $currentDate->subDay();
-            }
-        } else {
-            // Today doesn't have a log, check yesterday
-            $currentDate->subDay(); // Move to yesterday
-
-            if ($sleepLogDatesSet->has($currentDate->format('Y-m-d'))) {
-                // Yesterday has a log, count backwards from yesterday
-                while ($sleepLogDatesSet->has($currentDate->format('Y-m-d'))) {
-                    $streak++;
-                    $currentDate->subDay();
-                }
-            } else {
-                // Neither today nor yesterday have logs, check day before yesterday
-                $currentDate->subDay(); // Move to day before yesterday
-
-                if ($sleepLogDatesSet->has($currentDate->format('Y-m-d'))) {
-                    // Day before yesterday has a log, count backwards
-                    while ($sleepLogDatesSet->has($currentDate->format('Y-m-d'))) {
-                        $streak++;
-                        $currentDate->subDay();
-                    }
-                }
-                // If even day before yesterday is missing, streak = 0 (2+ day gap)
-            }
-        }
-
-        // If streak is 0, it means no logs for today, yesterday, or the day before yesterday
-        $sleepLogStreak = $streak;
-
-        // Emoji map
+        // Sleep quality map (for dropdown and labels)
         $sleepQualityMap = [
             1 => ['emoji' => '😣', 'label' => 'Very Poor Quality'],
             2 => ['emoji' => '😩', 'label' => 'Poor Quality'],
@@ -90,23 +27,41 @@ class SleepLogController extends Controller
             5 => ['emoji' => '😴', 'label' => 'Excellent Quality']
         ];
 
-        // Add emojis to each sleep log
+        $filter = $request->query('filter');
+
+        // Create base query
+        $sleepQuery = $user->sleepLogs()->with('user');
+
+        if ($filter) {
+            // Get rating from label
+            $rating = collect($sleepQualityMap)
+                ->filter(fn($value) => $value['label'] === $filter)
+                ->keys()
+                ->first();
+
+            if ($rating) {
+                $sleepQuery->where('SleepQuality', $rating);
+            }
+        }
+
+        $sleepLogs = $sleepQuery->paginate(10);
+
+        // Add emoji + label to logs
         $sleepLogs->transform(function ($log) use ($sleepQualityMap) {
             $log->SleepQualityEmoji = $sleepQualityMap[$log->SleepQuality]['emoji'] ?? '❓';
             $log->SleepQualityLabel = $sleepQualityMap[$log->SleepQuality]['label'] ?? 'Unknown';
             return $log;
         });
 
-        // Format average sleep duration
-        if ($averageSleepDurationRaw !== null) {
-            $averageHours = floor($averageSleepDurationRaw / 60);
-            $averageMinutes = $averageSleepDurationRaw % 60;
-            $averageSleepDuration = sprintf('%dh %02dm', $averageHours, $averageMinutes);
-        } else {
-            $averageSleepDuration = '❓';
-        }
+        // Averages (weekly)
+        $weeklyLogsQuery = $user->sleepLogs()->whereBetween('SleepDate', [now()->startOfWeek(), now()->endOfWeek()]);
+        $averageSleepDurationRaw = $weeklyLogsQuery->avg('SleepDurationMinutes');
+        $averageSleepQualityRaw = $weeklyLogsQuery->avg('SleepQuality');
 
-        // Format average sleep quality
+        $averageSleepDuration = $averageSleepDurationRaw !== null
+            ? sprintf('%dh %02dm', floor($averageSleepDurationRaw / 60), $averageSleepDurationRaw % 60)
+            : '❓';
+
         if ($averageSleepQualityRaw !== null) {
             $roundedQuality = round($averageSleepQualityRaw);
             $averageSleepQualityEmoji = $sleepQualityMap[$roundedQuality]['emoji'] ?? '❓';
@@ -116,9 +71,42 @@ class SleepLogController extends Controller
             $averageSleepQualityLabel = 'Unknown';
         }
 
-        // Return the view with all the data
+        // Nights logged this week
+        $nightsLoggedThisWeek = $weeklyLogsQuery
+            ->distinct('SleepDate')
+            ->count('SleepDate');
+
+        // Sleep log streak
+        $sleepLogsByDate = $user->sleepLogs()
+            ->orderBy('SleepDate', 'desc')
+            ->pluck('SleepDate')
+            ->map(fn($d) => \Carbon\Carbon::parse($d)->format('Y-m-d'))
+            ->unique()
+            ->values();
+
+        $streak = 0;
+        $currentDate = \Carbon\Carbon::today();
+        $sleepLogDatesSet = collect($sleepLogsByDate)->flip();
+
+        while ($sleepLogDatesSet->has($currentDate->format('Y-m-d'))) {
+            $streak++;
+            $currentDate->subDay();
+        }
+
+        $sleepLogStreak = $streak;
+
+        // Prepare dropdown options
+        $uniqueQualities = collect($sleepQualityMap)
+            ->reverse() // Show best to worst
+            ->map(fn($item, $rating) => (object)[
+                'Rating' => $rating,
+                'Label' => $item['label'],
+                'Emoji' => $item['emoji']
+            ]);
+
         return view('sleep.sleep', compact(
             'sleepLogs',
+            'uniqueQualities',
             'averageSleepDuration',
             'averageSleepQualityEmoji',
             'averageSleepQualityLabel',
@@ -126,8 +114,6 @@ class SleepLogController extends Controller
             'sleepLogStreak'
         ));
     }
-
-
     /**
      * Show the form to log a new sleep session.
      *

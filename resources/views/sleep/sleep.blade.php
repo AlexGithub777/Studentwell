@@ -94,7 +94,42 @@
             </div>
         </div>
 
-        <h3 class="page-subtitle">Sleep Records</h3>
+        <div class="col d-flex justify-content-between align-items-center mt-4">
+            <div>
+                <h3 class="page-subtitle">Sleep Records</h3>
+            </div>
+
+            <!-- Sleep Quality Dropdown -->
+            @php
+                $selectedFilter = request()->query('filter');
+                $selectedEntry = collect($uniqueQualities)->firstWhere('Label', $selectedFilter);
+            @endphp
+
+            <div class="dropdown mb-3">
+                <button style="background-color: #1e1e76; color: white;" class="btn add-btn dropdown-toggle"
+                    type="button" id="sleepFilterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    @if ($selectedFilter && $selectedEntry)
+                        {{ $selectedEntry->Emoji }} {{ $selectedFilter }}
+                    @else
+                        Filter by Sleep Quality
+                    @endif
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="sleepFilterDropdown">
+                    <li>
+                        <a class="dropdown-item" href="{{ route('sleep.index') }}">
+                            All
+                        </a>
+                    </li>
+                    @foreach ($uniqueQualities as $quality)
+                        <li>
+                            <a class="dropdown-item" href="{{ route('sleep.index', ['filter' => $quality->Label]) }}">
+                                {{ $quality->Emoji }} {{ $quality->Label }}
+                            </a>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
         <!-- Sleep Log History -->
         @if ($sleepLogs->isEmpty())
             <div class="alert alert-info">

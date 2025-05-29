@@ -98,7 +98,42 @@
             </div>
         </div>
 
-        <h3 class="page-subtitle">Mood History</h3>
+        <div class="col d-flex justify-content-between align-items-center mt-4">
+            <div>
+                <h3 class="page-subtitle">Mood History</h3>
+            </div>
+
+            <!-- Mood Filter Dropdown -->
+            @php
+                $selectedMood = request()->query('filter');
+                $selectedMoodEntry = collect($moodMap)->firstWhere('label', $selectedMood);
+            @endphp
+
+            <div class="dropdown">
+                <button style="background-color: #1e1e76; color: white;" class="btn add-btn dropdown-toggle mb-2"
+                    type="button" id="moodFilterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    @if ($selectedMood && $selectedMoodEntry)
+                        {{ $selectedMoodEntry['emoji'] }} {{ $selectedMood }}
+                    @else
+                        Filter by Mood
+                    @endif
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="moodFilterDropdown">
+                    <li>
+                        <a class="dropdown-item" href="{{ route('mood.index') }}">
+                            All
+                        </a>
+                    </li>
+                    @foreach ($uniqueMoods as $mood)
+                        <li>
+                            <a class="dropdown-item" href="{{ route('mood.index', ['filter' => $mood->MoodLabel]) }}">
+                                {{ $mood->MoodEmoji }} {{ $mood->MoodLabel }}
+                            </a>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
         <!-- Mood History -->
         @if ($moodLogs->isEmpty())
             <div class="alert alert-info">

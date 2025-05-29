@@ -15,69 +15,10 @@ class MoodTrackingController extends Controller
      */
     public function index(Request $request)
     {
-        // Load all mood logs for the authenticated user
-        $moodLogs = auth()->user()->moodLogs()->with('user')->paginate(10);
+        $user = auth()->user();
+        $filter = $request->query('filter');
 
-        // Load mood metrics (todays mood, avergae mood this week, Days tracked this week and mood log streak)
-
-        // Get today's mood log if it exists
-        $todayMood = auth()->user()->moodLogs()
-            ->whereDate('MoodDate', now())
-            ->first();
-
-        // Calculate average mood for the current week
-        $averageMood = auth()->user()->moodLogs()
-            ->whereBetween('MoodDate', [now()->startOfWeek(), now()->endOfWeek()])
-            ->avg('MoodRating');
-
-        // Count distinct days with mood logs this week
-        $daysTrackedThisWeek = auth()->user()->moodLogs()
-            ->whereBetween('MoodDate', [now()->startOfWeek(), now()->endOfWeek()])
-            ->distinct('MoodDate')
-            ->count('MoodDate');
-
-        // Calculate mood streak (consecutive days with logs starting today or yesterday)
-        $moodLogsByDate = auth()->user()->moodLogs()
-            ->orderBy('MoodDate', 'desc')
-            ->pluck('MoodDate')
-            ->map(fn($d) => \Carbon\Carbon::parse($d)->format('Y-m-d'))
-            ->unique()
-            ->values();
-
-        // Initialize streak counter
-        $streak = 0;
-        // Get today's date
-        $today = \Carbon\Carbon::today();
-
-        // Check if today or yesterday's mood log exists
-        foreach ($moodLogsByDate as $date) {
-            $logDate = \Carbon\Carbon::parse($date);
-
-            // if streak is 0, check if today or yesterday's mood log exists
-            if ($streak === 0) {
-                // Check if today or yesterday's mood log exists
-                if ($logDate->equalTo($today) || $logDate->equalTo($today->copy()->subDay())) {
-                    // Start the streak
-                    $streak++;
-                } else {
-                    break; // if neither today nor yesterday's log exists, break the loop
-                }
-            } else { // if streak is greater than 0, check for consecutive days
-                // Check if the previous date is consecutive
-                $previousDate = \Carbon\Carbon::parse($moodLogsByDate[$streak - 1]);
-                // If the log date is the previous date minus one day, increment the streak
-                if ($logDate->equalTo($previousDate->copy()->subDay())) {
-                    $streak++;
-                } else { // if the log date is not consecutive, break the loop
-                    break;
-                }
-            }
-        }
-
-        // Set the mood log streak
-        $moodLogStreak = $streak;
-
-        // Define the mood rating map with emojis and labels
+        // Mood map
         $moodMap = [
             1 => ['emoji' => '😢', 'label' => 'Sad'],
             2 => ['emoji' => '😔', 'label' => 'Down'],
@@ -86,22 +27,57 @@ class MoodTrackingController extends Controller
             5 => ['emoji' => '😄', 'label' => 'Great'],
         ];
 
-        // map MoodRating to emoji and string
-        $moodLogs->transform(function ($moodLog) use ($moodMap) {
-            $rating = $moodLog->MoodRating;
-            $moodLog->MoodEmoji = $moodMap[$rating]['emoji'] ?? '❓';
-            $moodLog->MoodLabel = $moodMap[$rating]['label'] ?? 'Unknown';
-            return $moodLog;
+        // Query mood logs
+        $query = $user->moodLogs()->with('user');
+
+        // Apply filter if provided
+        if ($filter) {
+            // Reverse map MoodLabel to MoodRating
+            $labelToRating = collect($moodMap)
+                ->mapWithKeys(fn($item, $key) => [$item['label'] => $key]);
+
+            $rating = $labelToRating[$filter] ?? null;
+
+            if ($rating !== null) {
+                $query->where('MoodRating', $rating);
+            }
+        }
+
+        $moodLogs = $query->orderBy('MoodDate', 'desc')->paginate(10);
+
+        // Add emoji/label to each mood log
+        $moodLogs->transform(function ($log) use ($moodMap) {
+            $rating = $log->MoodRating;
+            $log->MoodEmoji = $moodMap[$rating]['emoji'] ?? '❓';
+            $log->MoodLabel = $moodMap[$rating]['label'] ?? 'Unknown';
+            return $log;
         });
 
-        // If today's mood exists, map its rating to emoji and label
+        // Unique moods for dropdown
+        $uniqueMoods = collect($moodMap)
+            ->reverse() // Great to Sad
+            ->map(function ($item, $rating) {
+                return (object)[
+                    'Rating' => $rating,
+                    'MoodLabel' => $item['label'],
+                    'MoodEmoji' => $item['emoji'],
+                ];
+            });
+
+
+        // Today's mood
+        $todayMood = $user->moodLogs()->whereDate('MoodDate', now())->first();
         if ($todayMood) {
             $rating = $todayMood->MoodRating;
             $todayMood->MoodEmoji = $moodMap[$rating]['emoji'] ?? '❓';
             $todayMood->MoodLabel = $moodMap[$rating]['label'] ?? 'Unknown';
         }
 
-        // If average mood is numeric, round it and map to emoji and label
+        // Average mood this week
+        $averageMood = $user->moodLogs()
+            ->whereBetween('MoodDate', [now()->startOfWeek(), now()->endOfWeek()])
+            ->avg('MoodRating');
+
         if (is_numeric($averageMood)) {
             $rounded = round($averageMood);
             $averageMoodEmoji = $moodMap[$rounded]['emoji'] ?? '❓';
@@ -111,9 +87,46 @@ class MoodTrackingController extends Controller
             $averageMoodLabel = null;
         }
 
-        // Return the view and pass the mood logs
+        // Days tracked this week
+        $daysTrackedThisWeek = $user->moodLogs()
+            ->whereBetween('MoodDate', [now()->startOfWeek(), now()->endOfWeek()])
+            ->distinct('MoodDate')
+            ->count('MoodDate');
+
+        // Mood streak
+        $moodLogsByDate = $user->moodLogs()
+            ->orderBy('MoodDate', 'desc')
+            ->pluck('MoodDate')
+            ->map(fn($d) => \Carbon\Carbon::parse($d)->format('Y-m-d'))
+            ->unique()
+            ->values();
+
+        $today = \Carbon\Carbon::today();
+        $streak = 0;
+        foreach ($moodLogsByDate as $date) {
+            $logDate = \Carbon\Carbon::parse($date);
+            if ($streak === 0) {
+                if ($logDate->equalTo($today) || $logDate->equalTo($today->copy()->subDay())) {
+                    $streak++;
+                } else {
+                    break;
+                }
+            } else {
+                $previousDate = \Carbon\Carbon::parse($moodLogsByDate[$streak - 1]);
+                if ($logDate->equalTo($previousDate->copy()->subDay())) {
+                    $streak++;
+                } else {
+                    break;
+                }
+            }
+        }
+
+        $moodLogStreak = $streak;
+
         return view('mood.mood', compact(
             'moodLogs',
+            'moodMap',
+            'uniqueMoods',
             'todayMood',
             'averageMoodEmoji',
             'averageMoodLabel',
@@ -121,7 +134,6 @@ class MoodTrackingController extends Controller
             'moodLogStreak'
         ));
     }
-
     /** Display the mood tracking form.
      * 
      * 

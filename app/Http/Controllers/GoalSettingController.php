@@ -17,73 +17,87 @@ class GoalSettingController extends Controller
      */
     public function index()
     {
-        // Ensure the user is authenticated
         if (!auth()->check()) {
             return redirect()->route('login')->with('error', 'You must be logged in to view your goals.');
         }
 
-        // Get the authenticated user
         $user = auth()->user();
 
-        // Calculate key metrics for goals
-        // Goals pagination
-        $goals = $user->goals()
+        // Get filter inputs from request
+        $goalStatusFilter = request('goal_status');        // for Goal History filter dropdown
+        $goalCategoryFilter = request('goal_category');    // for Active Goals filter dropdown
+
+        // Goals (Active Goals) query with optional category filter
+        $goalsQuery = $user->goals()
             ->doesntHave('goalLogs')
-            ->with('user')
+            ->with('user');
+
+        if (!empty($goalCategoryFilter)) {
+            $goalsQuery->where('GoalCategory', $goalCategoryFilter);
+        }
+
+        $goals = $goalsQuery
             ->paginate(5, ['*'], 'goalsPage')
             ->appends([
-                'goalLogsPage' => request('goalLogsPage'), // preserve other param
+                'goalLogsPage' => request('goalLogsPage'),
+                'goal_status' => $goalStatusFilter,    // preserve Goal History filter on this pagination
+                'goal_category' => $goalCategoryFilter // preserve this filter too
             ]);
 
-        // Active goals
-        $activeGoals = $user->goals()
-            ->with('user')
+        // Active goals count and unique categories for stats, apply same category filter
+        $activeGoalsQuery = $user->goals()
             ->doesntHave('goalLogs');
 
+        if (!empty($goalCategoryFilter)) {
+            $activeGoalsQuery->where('GoalCategory', $goalCategoryFilter);
+        }
 
-        $activeGoalCount = $activeGoals->count();
-        $activeGoalUniqueCategoryCount = $activeGoals->pluck('GoalCategory')->unique()->count();
+        $activeGoalCount = $activeGoalsQuery->count();
+        $activeGoalUniqueCategoryCount = $activeGoalsQuery->pluck('GoalCategory')->unique()->count();
 
-        // Goal logs pagination
-        $goalLogs = $user->goalLogs()
-            ->with('user')
+        // Goal logs (Goal History) with optional status filter
+        $goalLogsQuery = $user->goalLogs()
+            ->with('user');
+
+        if (!empty($goalStatusFilter)) {
+            $goalLogsQuery->where('GoalStatus', $goalStatusFilter);
+        }
+
+        $goalLogs = $goalLogsQuery
             ->paginate(5, ['*'], 'goalLogsPage')
             ->appends([
-                'goalsPage' => request('goalsPage'), // preserve other param
+                'goalsPage' => request('goalsPage'),
+                'goal_status' => $goalStatusFilter,    // preserve filter
+                'goal_category' => $goalCategoryFilter // preserve other filter
             ]);
 
-        // fetch all goals logs wihout pagination
-        $allGoalLogs = $user->goalLogs()
-            ->with('user')
-            ->get();
-
+        // Fetch all goal logs without pagination (filtered by status too)
+        $allGoalLogs = $goalStatusFilter
+            ? $user->goalLogs()->where('GoalStatus', $goalStatusFilter)->with('user')->get()
+            : $user->goalLogs()->with('user')->get();
 
         $completedGoalsThisMonth = $allGoalLogs
             ->where('GoalStatus', 'completed')
-            ->filter(function ($log) {
-                return \Carbon\Carbon::parse($log->created_at)->isCurrentMonth();
-            });
+            ->filter(fn($log) => \Carbon\Carbon::parse($log->created_at)->isCurrentMonth());
 
         $completedGoalCount = $completedGoalsThisMonth->count();
-        $totalGoalLogsThisMonth = $allGoalLogs->filter(function ($log) {
-            return \Carbon\Carbon::parse($log->GoalLogDate)->isCurrentMonth();
-        })->count();
 
-        // Calculate goal completion rate
+        $totalGoalLogsThisMonth = $allGoalLogs->filter(
+            fn($log) =>
+            \Carbon\Carbon::parse($log->GoalLogDate)->isCurrentMonth()
+        )->count();
+
         $GoalCompletionRate = $totalGoalLogsThisMonth > 0
             ? round(($completedGoalCount / $totalGoalLogsThisMonth) * 100)
             : null;
 
-        // Calculate number of incomplete goals this month
         $incompleteGoalsThisMonth = $allGoalLogs
             ->where('GoalStatus', '!=', 'completed')
-            ->filter(function ($log) {
-                return \Carbon\Carbon::parse($log->GoalLogDate)->isCurrentMonth();
-            });
+            ->filter(fn($log) => \Carbon\Carbon::parse($log->GoalLogDate)->isCurrentMonth());
+
         $incompleteGoalCount = $incompleteGoalsThisMonth->count();
 
-
-        // map active goals categories to fa-icons (add GoalCategoryIcon attribute to goals list)
+        // Map active goals categories to fa-icons (add GoalCategoryIcon attribute to goals list)
         $goals->map(function ($goal) {
             $goal->GoalCategoryIcon = match ($goal->GoalCategory) {
                 'Academic' => 'fa-solid fa-book',
@@ -111,12 +125,12 @@ class GoalSettingController extends Controller
                 $log->GoalDays = \Carbon\Carbon::parse($log->goal->GoalStartDate)
                     ->diffInDays(\Carbon\Carbon::parse($log->goal->GoalTargetDate));
             } else {
-                $log->GoalDays = null; // Or 0, or fallback if goal is missing
+                $log->GoalDays = null;
             }
             return $log;
         });
 
-        // Return the view with all the necessary data
+        // Pass filters to the view for dropdown selected values
         return view('goals.goals', compact(
             'activeGoalCount',
             'activeGoalUniqueCategoryCount',
@@ -124,11 +138,11 @@ class GoalSettingController extends Controller
             'incompleteGoalCount',
             'GoalCompletionRate',
             'goalLogs',
-            'goals'
+            'goals',
+            'goalStatusFilter',
+            'goalCategoryFilter'
         ));
     }
-
-
     /** Show the goal setting form.
      *
      * @return \Illuminate\View\View

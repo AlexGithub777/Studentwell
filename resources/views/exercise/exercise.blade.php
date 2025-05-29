@@ -23,7 +23,7 @@
 
                 <div>
                     <!-- Plan Exercise Button -->
-                    <a href="{{ route('exercise.plan') }}" class="btn add-btn me-2 text-white"
+                    <a href="{{ route('exercise.plan') }}" class="btn add-btn me-0 mb-2 mb-lg-0 me-lg-2 text-white"
                         style="background-color: var(--secondary-colour);">
                         <i class="fas fa-plus me-1 fw-bold"></i> Plan Exericse
                     </a>
@@ -108,7 +108,61 @@
         <div class="row row-cols-1 row-cols-md-2 g-4">
             <!-- Exercise History -->
             <div class="col-xxl-6">
-                <h3 class="page-subtitle">Exercise History</h3>
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h3 class="page-subtitle">Exercise History</h3>
+                    {{-- Status Dropdown --}}
+                    <div class="dropdown">
+                        <button class="btn add-btn dropdown-toggle" style="background-color: #1e1e76; color: white;"
+                            type="button" id="statusDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            @if ($statusFilter)
+                                @switch($statusFilter)
+                                    @case('Completed')
+                                        ✅ Completed
+                                    @break
+
+                                    @case('Missed')
+                                        ❌ Missed
+                                    @break
+
+                                    @case('Partially')
+                                        ➗ Partially
+                                    @break
+
+                                    @default
+                                        Filter by Status
+                                @endswitch
+                            @else
+                                Filter by Status
+                            @endif
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="statusDropdown">
+                            <li>
+                                <a class="dropdown-item"
+                                    href="{{ route('exercise.index', ['type' => $exerciseTypeFilter]) }}">
+                                    All Statuses
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item"
+                                    href="{{ route('exercise.index', ['status' => 'Completed', 'type' => $exerciseTypeFilter]) }}">
+                                    ✅ Completed
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item"
+                                    href="{{ route('exercise.index', ['status' => 'Missed', 'type' => $exerciseTypeFilter]) }}">
+                                    ❌ Missed
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item"
+                                    href="{{ route('exercise.index', ['status' => 'Partially', 'type' => $exerciseTypeFilter]) }}">
+                                    ➗ Partially
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
                 @if ($loggedExercises->isEmpty())
                     <div class="alert alert-info">
                         No exercise history found.
@@ -202,7 +256,37 @@
             </div>
             <!-- Planned Exercises -->
             <div class="col-xxl-6">
-                <h3 class="page-subtitle">Planned Exercises</h3>
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h3 class="page-subtitle">Planned Exercises</h3>
+                    {{-- Exercise Type Dropdown --}}
+                    <div class="dropdown">
+                        <button class="btn add-btn dropdown-toggle" style="background-color: #1e1e76; color: white;"
+                            type="button" id="exerciseTypeDropdown" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            @if ($exerciseTypeFilter)
+                                {{ $exerciseTypes[$exerciseTypeFilter] ?? '' }} {{ $exerciseTypeFilter }}
+                            @else
+                                Filter by Exercise Type
+                            @endif
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="exerciseTypeDropdown">
+                            <li>
+                                <a class="dropdown-item"
+                                    href="{{ route('exercise.index', ['status' => $statusFilter]) }}">
+                                    All Types
+                                </a>
+                            </li>
+                            @foreach ($exerciseTypes as $type => $emoji)
+                                <li>
+                                    <a class="dropdown-item"
+                                        href="{{ route('exercise.index', ['type' => $type, 'status' => $statusFilter]) }}">
+                                        {{ $emoji }} {{ $type }}
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
                 @if ($plannedExercises->isEmpty())
                     <div class="alert alert-info">
                         No planned exercises found.
