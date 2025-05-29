@@ -174,7 +174,7 @@
                             class="custom-card d-flex flex-column justify-content-between mb-3"
                             style="background-color: var(--main-colour); color: var(--secondary-colour); padding: 1.5rem; border-radius: 1rem;">
                             <div class="card-header">
-                                <div class="d-flex align-items-center">
+                                <div class="d-flex flex-wrap flex-sm-nowrap align-items-center">
                                     <div class="me-2">
                                         <!-- Add icon based on Exercise Type (from controller) -->
                                         <i class="fas {{ $exerciseLog->ExerciseTypeIcon }} metric-icon me-2 p-0">
@@ -346,7 +346,8 @@
                                             {{ $exercisePlan->ExerciseIntensity }}
                                         </span>
                                     </div>
-                                    <div>
+                                    <div
+                                        class="d-flex flex-column flex-md-row align-items-start align-items-lg-center gap-2 mt-md-3 mt-lg-0 ">
                                         <!-- Edit and log Button -->
                                         @auth
                                             @if (auth()->id() === $exercisePlan->UserID)
