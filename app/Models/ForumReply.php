@@ -9,7 +9,7 @@ class ForumReply extends Model
 {
     use HasFactory;
 
-    protected $table = 'Forum_Replies';
+    protected $table = 'forum_replies';
     protected $primaryKey = 'ReplyID';
     public $timestamps = false;
 
