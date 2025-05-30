@@ -16,6 +16,8 @@ class HealthInsightsController extends Controller
      */
     public function index(Request $request)
     {
+        // For the GROUP BY issue:
+        DB::statement("SET SESSION sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''))");
         $currentTab = $request->query('tab', 'overview');
         // get the data for the overview tab
         // bar graph of logs across features (mood, exercise, sleep, goals) -->
@@ -48,9 +50,6 @@ class HealthInsightsController extends Controller
             ->orderBy('MoodDate')
             ->get(['MoodDate', 'MoodRating']);
 
-
-        // For the GROUP BY issue:
-        DB::statement("SET SESSION sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''))");
         //<!-- pie chart of goals by category (exercise, sleep, mood) -->
         $goalsByCategory = auth()->user()->goals()
             ->selectRaw('GoalCategory, COUNT(*) as count, MAX(created_at) as latest_created_at, MAX(GoalTargetDate) as latest_goal_date')
