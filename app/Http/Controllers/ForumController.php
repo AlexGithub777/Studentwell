@@ -189,7 +189,7 @@ class ForumController extends Controller
         $reply = ForumReply::findOrFail($replyId);
 
         // Only allow the author to delete the reply
-        if ((auth()->id() != $reply->UserID) {
+        if (auth()->id() != $reply->UserID) {
             return redirect()->back()->with('error', 'You do not have permission to delete this reply.');
         }
 
