@@ -28,7 +28,6 @@ class MoodLog extends Model
         'MoodRating',
         'Emotions',
         'Reflection',
-        'created_at',
     ];
 
     // relationships
@@ -37,5 +36,5 @@ class MoodLog extends Model
         return $this->belongsTo(User::class, 'UserID', 'id');
         //                                                ^ foreign key in mood_logs
         //                                                                   ^ local key in users
-    }   
+    }
 }

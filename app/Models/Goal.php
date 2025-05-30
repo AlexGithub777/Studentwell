@@ -30,7 +30,6 @@ class Goal extends Model
         'GoalStartDate',
         'GoalTargetDate',
         'Notes',
-        'created_at',
     ];
 
     // relationships

@@ -65,37 +65,37 @@ class User extends Authenticatable
 
     public function moodLogs()
     {
-        // Order by created_at in descending order
+        // Order by MoodDate in descending order
         return $this->hasMany(MoodLog::class, 'UserID', 'id')->orderBy('MoodDate', 'desc');
     }
 
     public function sleepLogs()
     {
-        // Order by created_at in descending order
+        // Order by SleepDate in descending order
         return $this->hasMany(SleepLog::class, 'UserID', 'id')->orderBy('SleepDate', 'desc');
     }
 
     public function goals() // ACTIVE GOALS
     {
-        // Order by created_at in descending order
-        return $this->hasMany(Goal::class, 'UserID', 'id')->orderBy('created_at', 'desc');
+        // Order by GoalTargetDate in descending order
+        return $this->hasMany(Goal::class, 'UserID', 'id')->orderBy('GoalTargetDate', 'desc');
     }
 
     public function goalLogs() // COMPLETED GOALS
     {
-        // Order by created_at in descending order
+        // Order by GoalLogDate in descending order
         return $this->hasMany(GoalLog::class, 'UserID', 'id')->orderBy('GoalLogDate', 'desc');
     }
 
     public function exerciseLogs()
     {
-        // Order by created_at in descending order
+        // Order by ExerciseDateTime in descending order
         return $this->hasMany(ExerciseLog::class, 'UserID', 'id')->orderBy('ExerciseDateTime', 'desc');
     }
 
     public function exercisePlans()
     {
-        // Order by created_at in descending order
+        // Order by ExerciseDateTime in descending order
         return $this->hasMany(ExercisePlan::class, 'UserID', 'id')->orderBy('ExerciseDateTime', 'desc');
     }
 }

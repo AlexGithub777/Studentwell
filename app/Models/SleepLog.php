@@ -32,7 +32,6 @@ class SleepLog extends Model
         'SleepDurationMinutes',
         'SleepQuality',
         'Notes',
-        'created_at',
     ];
 
     // relationships
@@ -43,5 +42,4 @@ class SleepLog extends Model
         //                                                ^ foreign key in sleep_logs
         //                                                                   ^ local key in users
     }
-
 }

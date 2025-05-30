@@ -23,7 +23,6 @@ class GoalLog extends Model
         'GoalStatus',
         'Notes',
         'UserID',
-        'created_at',
     ];
 
     protected $casts = [

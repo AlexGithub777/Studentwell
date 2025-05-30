@@ -24,7 +24,6 @@ class ExerciseLog extends Model
         'ExerciseIntensity',
         'DurationMinutes',
         'Notes',
-        'created_at',
     ];
 
     protected $casts = [

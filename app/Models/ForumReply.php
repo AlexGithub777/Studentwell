@@ -25,7 +25,6 @@ class ForumReply extends Model
         'UserID',
         'PostID',
         'Content',
-        'created_at',
     ];
 
     public function user()
