@@ -10,6 +10,12 @@ class MoodLog extends Model
 
     protected $primaryKey = 'MoodLogID'; // primary key
 
+    // ensure the primary key is an integer
+    protected $keyType = 'int';
+
+    // ensure the primary key is incrementing
+    public $incrementing = true;
+
     // disable timestamps
     public $timestamps = false;
 
