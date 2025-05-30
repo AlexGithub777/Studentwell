@@ -11,8 +11,22 @@ use App\Http\Controllers\GoalSettingController;
 use App\Http\Controllers\ExerciseController;
 use App\Http\Controllers\HealthInsightsController;
 use App\Http\Controllers\HomeController;
-use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\DB;
+
+// Add this to web.php temporarily
+Route::get('/debug-mood-table', function () {
+    try {
+        $structure = DB::select("DESCRIBE mood_logs");
+        $createStatement = DB::select("SHOW CREATE TABLE mood_logs")[0]->{'Create Table'};
+
+        return response()->json([
+            'structure' => $structure,
+            'create_statement' => $createStatement
+        ]);
+    } catch (\Exception $e) {
+        return response()->json(['error' => $e->getMessage()]);
+    }
+});
 
 // Home Routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
