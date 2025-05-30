@@ -17,7 +17,6 @@ class SupportResource extends Model
 
     // fillable fields
     protected $fillable = [
-        'SupportResourceID',
         'ResourceTitle',
         'ResourceCategory',
         'Phone',

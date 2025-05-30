@@ -17,7 +17,6 @@ class GoalLog extends Model
 
     // fillable fields
     protected $fillable = [
-        'GoalLogID',
         'GoalID',
         'GoalLogDate',
         'GoalStatus',

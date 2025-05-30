@@ -22,7 +22,6 @@ class MoodLog extends Model
 
     // fillable fields
     protected $fillable = [
-        'MoodLogID',
         'UserID',
         'MoodDate',
         'MoodRating',

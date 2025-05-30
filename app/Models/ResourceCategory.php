@@ -16,7 +16,6 @@ class ResourceCategory extends Model
 
     // fillable fields
     protected $fillable = [
-        'ResourceCategoryID',
         'Name'
     ];
 

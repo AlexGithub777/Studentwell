@@ -24,7 +24,6 @@ class SleepLog extends Model
 
     // fillable fields
     protected $fillable = [
-        'SleepLogID',
         'UserID',
         'SleepDate',
         'BedTime',
