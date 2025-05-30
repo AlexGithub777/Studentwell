@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 25, 2025 at 12:07 PM
+-- Generation Time: May 29, 2025 at 12:01 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -128,6 +128,48 @@ CREATE TABLE `forum_replies` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `forum_replies`
+--
+
+INSERT INTO `forum_replies` (`ReplyID`, `UserID`, `PostID`, `Content`, `created_at`) VALUES
+(54, 2, 1, 'I feel you. Setting small goals each day helped me get back on track.', '2025-05-29 06:02:56'),
+(55, 3, 1, 'Try journaling or talking to someone. It really helps.', '2025-05-29 06:02:56'),
+(56, 1, 2, 'A cold shower and quick 10-minute meditation wakes me up!', '2025-05-29 06:02:56'),
+(57, 4, 2, 'I prep my breakfast the night before. Smooth mornings = smooth days.', '2025-05-29 06:02:56'),
+(58, 2, 3, 'Breathing techniques and short walks work wonders for me.', '2025-05-29 06:02:56'),
+(59, 5, 3, 'I also listen to calming music. It really grounds me.', '2025-05-29 06:02:56'),
+(60, 1, 4, 'Start with bodyweight exercises – squats, push-ups, etc.', '2025-05-29 06:02:56'),
+(61, 3, 4, 'YouTube has tons of beginner-friendly videos. That’s how I started!', '2025-05-29 06:02:56'),
+(62, 2, 5, 'Try reducing screen time before bed. Blue light affects sleep.', '2025-05-29 06:02:56'),
+(63, 4, 5, 'Chamomile tea and a warm bath help me wind down.', '2025-05-29 06:02:56'),
+(64, 1, 9, 'Excited to be here! Looking forward to connecting with everyone.', '2025-05-29 06:02:56'),
+(65, 5, 9, 'This is awesome. Thanks for creating a space like this!', '2025-05-29 06:02:56'),
+(66, 3, 17, 'There’s a coding bootcamp in July. I’ll drop the link.', '2025-05-29 06:02:56'),
+(67, 2, 17, 'Hackathon NZ is in two weeks! Great prizes too.', '2025-05-29 06:02:56'),
+(68, 4, 18, 'Can you share your route file? Maybe missing a method.', '2025-05-29 06:02:56'),
+(69, 1, 18, 'Check your controller binding. That’s usually the culprit.', '2025-05-29 06:02:56'),
+(70, 2, 19, 'Thanks for this! It finally clicked after your example.', '2025-05-29 06:02:56'),
+(71, 5, 19, 'Clear and simple explanation. Bookmarked!', '2025-05-29 06:02:56'),
+(72, 3, 20, 'GitHub Student Pack has some great stuff!', '2025-05-29 06:02:56'),
+(73, 1, 20, 'Don’t forget about Notion and Spotify student plans.', '2025-05-29 06:02:56'),
+(74, 2, 23, 'Great guidelines. Let’s keep this space respectful.', '2025-05-29 06:02:56'),
+(75, 5, 28, 'Love the clean layout. Maybe dark mode soon?', '2025-05-29 06:02:56'),
+(76, 3, 28, 'Great start! Would be cool to have user badges.', '2025-05-29 06:02:56'),
+(77, 1, 30, 'Start with 5 mins a day. Consistency matters more than length.', '2025-05-29 06:02:56'),
+(78, 4, 31, 'I recommend Brooks or Asics. Super comfy.', '2025-05-29 06:02:56'),
+(79, 3, 32, 'Break readings into chunks and summarize each section.', '2025-05-29 06:02:56'),
+(80, 2, 33, 'Sheet pan meals and overnight oats are lifesavers!', '2025-05-29 06:02:56'),
+(81, 5, 34, 'Stick to the same bedtime daily—even weekends.', '2025-05-29 06:02:56'),
+(82, 3, 35, 'I love my Garmin—it’s accurate and durable.', '2025-05-29 06:02:56'),
+(83, 1, 36, 'Totally agree. It helps me process emotions.', '2025-05-29 06:02:56'),
+(84, 4, 37, 'Set mini-goals per module and reward yourself.', '2025-05-29 06:02:56'),
+(85, 2, 38, 'Neck rolls and seated spinal twists help me tons.', '2025-05-29 06:02:56'),
+(86, 1, 39, 'Same here! 16:8 helped me feel more focused.', '2025-05-29 06:02:56'),
+(87, 3, 40, 'Neti pots and local honey help reduce symptoms.', '2025-05-29 06:02:56'),
+(88, 5, 41, 'Start by just waking up 30 mins earlier. Add 1 habit at a time.', '2025-05-29 06:02:56'),
+(89, 2, 42, 'Try “Atomic Habits” and “The Power of Now.” Both are amazing.', '2025-05-29 06:02:56');
+
 -- --------------------------------------------------------
 
 --
@@ -170,7 +212,8 @@ INSERT INTO `goals` (`GoalID`, `UserID`, `GoalTitle`, `GoalCategory`, `GoalStart
 (18, 1, 'Read Spiritual Text', 'Spiritual', '2025-05-01', '2025-06-01', 'Morning reading habit', '2025-05-22 07:08:27'),
 (19, 1, 'Weekly Hikes', 'Physical Health', '2025-05-01', '2025-08-01', 'Explore local trails', '2025-05-22 07:08:27'),
 (20, 1, 'Miscellaneous Tasks', 'Other', '2025-05-01', '2025-07-01', 'Stuff that doesn’t fit', '2025-05-22 07:08:27'),
-(22, 1, 'Finish all my assignments', 'Academic', '2025-05-25', '2025-06-08', 'Get all my school work done', '2025-05-25 10:05:57');
+(22, 1, 'Finish all my assignments', 'Academic', '2025-05-25', '2025-06-08', 'Get all my school work done', '2025-05-25 10:05:57'),
+(23, 3, 'finish assignments', 'Academic', '2025-05-05', '2025-06-25', NULL, '2025-05-29 05:30:32');
 
 -- --------------------------------------------------------
 
@@ -202,7 +245,8 @@ INSERT INTO `goal_logs` (`GoalLogID`, `GoalID`, `GoalLogDate`, `GoalStatus`, `No
 (7, 7, '2025-05-21', 'completed', 'Got sick, resting for a week', '2025-05-22 19:08:27', 1),
 (8, 8, '2025-05-22', 'partially', 'Sometimes used to-do list every day', '2025-05-22 19:08:27', 1),
 (9, 9, '2025-05-23', 'completed', 'Slept by 10:30pm last night', '2025-05-22 19:08:27', 1),
-(10, 10, '2025-05-24', 'completed', 'Had coffee with 3 friends', '2025-05-22 19:08:27', 1);
+(10, 10, '2025-05-24', 'completed', 'Had coffee with 3 friends', '2025-05-22 19:08:27', 1),
+(14, 23, '2025-05-29', 'completed', NULL, '2025-05-29 17:31:00', 3);
 
 -- --------------------------------------------------------
 
@@ -259,7 +303,44 @@ CREATE TABLE `likes` (
 
 INSERT INTO `likes` (`id`, `user_id`, `forum_post_id`, `created_at`, `updated_at`) VALUES
 (51, 4, 30, '2025-05-13 08:03:15', '2025-05-13 08:03:15'),
-(58, 1, 30, '2025-05-25 09:46:29', '2025-05-25 09:46:29');
+(58, 1, 30, '2025-05-25 09:46:29', '2025-05-25 09:46:29'),
+(61, 2, 1, '2025-05-29 06:04:45', '2025-05-29 06:04:45'),
+(62, 3, 1, '2025-05-29 06:04:45', '2025-05-29 06:04:45'),
+(63, 4, 2, '2025-05-29 06:04:45', '2025-05-29 06:04:45'),
+(64, 3, 2, '2025-05-29 06:04:45', '2025-05-29 06:04:45'),
+(65, 2, 3, '2025-05-29 06:04:45', '2025-05-29 06:04:45'),
+(66, 3, 4, '2025-05-29 06:04:45', '2025-05-29 06:04:45'),
+(67, 2, 4, '2025-05-29 06:04:45', '2025-05-29 06:04:45'),
+(68, 3, 5, '2025-05-29 06:04:45', '2025-05-29 06:04:45'),
+(69, 2, 9, '2025-05-29 06:04:45', '2025-05-29 06:04:45'),
+(70, 3, 9, '2025-05-29 06:04:45', '2025-05-29 06:04:45'),
+(71, 4, 9, '2025-05-29 06:04:45', '2025-05-29 06:04:45'),
+(72, 2, 17, '2025-05-29 06:04:45', '2025-05-29 06:04:45'),
+(73, 3, 18, '2025-05-29 06:04:45', '2025-05-29 06:04:45'),
+(74, 2, 19, '2025-05-29 06:04:45', '2025-05-29 06:04:45'),
+(75, 4, 19, '2025-05-29 06:04:45', '2025-05-29 06:04:45'),
+(76, 2, 20, '2025-05-29 06:04:45', '2025-05-29 06:04:45'),
+(77, 3, 20, '2025-05-29 06:04:45', '2025-05-29 06:04:45'),
+(78, 4, 23, '2025-05-29 06:04:45', '2025-05-29 06:04:45'),
+(79, 2, 28, '2025-05-29 06:04:45', '2025-05-29 06:04:45'),
+(80, 3, 30, '2025-05-29 06:04:45', '2025-05-29 06:04:45'),
+(81, 2, 30, '2025-05-29 06:04:45', '2025-05-29 06:04:45'),
+(82, 3, 31, '2025-05-29 06:04:45', '2025-05-29 06:04:45'),
+(83, 2, 32, '2025-05-29 06:04:45', '2025-05-29 06:04:45'),
+(84, 3, 33, '2025-05-29 06:04:45', '2025-05-29 06:04:45'),
+(85, 4, 33, '2025-05-29 06:04:45', '2025-05-29 06:04:45'),
+(86, 2, 34, '2025-05-29 06:04:45', '2025-05-29 06:04:45'),
+(87, 4, 35, '2025-05-29 06:04:45', '2025-05-29 06:04:45'),
+(88, 3, 36, '2025-05-29 06:04:45', '2025-05-29 06:04:45'),
+(89, 4, 37, '2025-05-29 06:04:45', '2025-05-29 06:04:45'),
+(90, 3, 37, '2025-05-29 06:04:45', '2025-05-29 06:04:45'),
+(91, 2, 38, '2025-05-29 06:04:45', '2025-05-29 06:04:45'),
+(92, 3, 38, '2025-05-29 06:04:45', '2025-05-29 06:04:45'),
+(93, 2, 39, '2025-05-29 06:04:45', '2025-05-29 06:04:45'),
+(94, 4, 40, '2025-05-29 06:04:45', '2025-05-29 06:04:45'),
+(95, 3, 41, '2025-05-29 06:04:45', '2025-05-29 06:04:45'),
+(96, 2, 42, '2025-05-29 06:04:45', '2025-05-29 06:04:45'),
+(97, 4, 42, '2025-05-29 06:04:45', '2025-05-29 06:04:45');
 
 -- --------------------------------------------------------
 
@@ -277,8 +358,24 @@ CREATE TABLE `logged_exercises` (
   `ExerciseIntensity` varchar(25) NOT NULL,
   `DurationMinutes` int(11) NOT NULL,
   `Notes` varchar(255) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `logged_exercises`
+--
+
+INSERT INTO `logged_exercises` (`LoggedExerciseID`, `UserID`, `PlannedExerciseID`, `Status`, `ExerciseDateTime`, `ExerciseType`, `ExerciseIntensity`, `DurationMinutes`, `Notes`, `created_at`) VALUES
+(1, 1, 1, 'Completed', '2025-05-25 00:00:00', 'Running', 'Moderate Intensity', 30, 'Felt good during the jog', '2025-05-26 10:55:05'),
+(2, 1, 2, 'Completed', '2025-05-14 00:00:00', 'Basketball', 'High Intensity', 60, 'Intense game with friends', '2025-05-26 10:55:05'),
+(3, 1, 3, 'Missed', '2025-04-28 00:00:00', 'Cycling', 'High Intensity', 45, 'Got caught in the rain', '2025-05-26 10:55:05'),
+(4, 1, 4, 'Completed', '2025-05-12 00:00:00', 'Swimming', 'Moderate Intensity', 40, 'Worked on breathing technique', '2025-05-26 10:55:05'),
+(5, 1, 5, 'Missed', '2025-05-08 00:00:00', 'Weight Lifting', 'High Intensity', 50, 'Felt too sore to lift', '2025-05-26 10:55:05'),
+(6, 1, 6, 'Partially', '2025-05-06 00:00:00', 'Yoga', 'Low Intensity', 30, 'Partially completed', '2025-05-26 10:55:05'),
+(7, 1, NULL, 'Completed', '2025-05-11 00:00:00', 'Dance', 'Moderate Intensity', 25, 'Dance session at home', '2025-05-26 10:55:05'),
+(8, 1, NULL, 'Completed', '2025-05-15 18:55:00', 'Basketball', 'Moderate Intensity', 60, 'got some shots up', '2025-05-27 06:56:14'),
+(9, 1, 15, 'Completed', '2025-05-22 00:00:00', 'Football', 'Moderate Intensity', 70, NULL, '2025-05-27 07:06:35'),
+(10, 1, NULL, 'Completed', '2025-05-27 19:11:00', 'Boxing', 'Moderate Intensity', 20, 'light sparring', '2025-05-27 07:11:49');
 
 -- --------------------------------------------------------
 
@@ -357,7 +454,10 @@ INSERT INTO `mood_logs` (`MoodLogID`, `UserID`, `MoodDate`, `MoodRating`, `Emoti
 (69, 1, '2025-04-21', 4, '[\"Hopeful\", \"Determined\"]', 'Setting new goals for the month ahead.', '2025-05-21 10:57:19'),
 (70, 1, '2025-05-20', 2, '[\"Calm\",\"Hopeful\"]', NULL, '2025-05-21 11:43:01'),
 (71, 1, '2025-05-22', 3, '[\"Focused\",\"Frustrated\",\"Lonely\",\"Productive\",\"Stressed\"]', NULL, '2025-05-22 09:59:29'),
-(72, 1, '2025-05-25', 3, '[\"Content\"]', 'very busy', '2025-05-25 10:03:40');
+(72, 1, '2025-05-25', 3, '[\"Content\"]', 'very busy', '2025-05-25 10:03:40'),
+(73, 1, '2025-05-27', 4, '[]', NULL, '2025-05-27 07:17:23'),
+(74, 1, '2025-05-28', 5, '[\"Content\"]', NULL, '2025-05-28 03:19:55'),
+(75, 3, '2025-05-29', 4, '[\"Content\"]', 'content', '2025-05-28 12:34:02');
 
 -- --------------------------------------------------------
 
@@ -385,8 +485,32 @@ CREATE TABLE `planned_exercises` (
   `ExerciseIntensity` varchar(25) NOT NULL,
   `DurationMinutes` int(11) NOT NULL,
   `Notes` varchar(255) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `planned_exercises`
+--
+
+INSERT INTO `planned_exercises` (`PlannedExerciseID`, `UserID`, `ExerciseDateTime`, `ExerciseType`, `ExerciseIntensity`, `DurationMinutes`, `Notes`, `created_at`) VALUES
+(1, 1, '2025-05-25 00:00:00', 'Running', 'Moderate Intensity', 30, 'Morning jog at the park', '2025-05-26 10:50:15'),
+(2, 1, '2025-05-14 00:00:00', 'Basketball', 'High Intensity', 60, 'Pickup game at the gym', '2025-05-26 10:50:15'),
+(3, 1, '2025-04-28 00:00:00', 'Cycling', 'High Intensity', 45, 'Training ride with hills', '2025-05-26 10:50:15'),
+(4, 1, '2025-05-12 00:00:00', 'Swimming', 'Moderate Intensity', 40, 'Freestyle practice', '2025-05-26 10:50:15'),
+(5, 1, '2025-05-08 00:00:00', 'Weight Lifting', 'High Intensity', 50, 'Leg day at gym', '2025-05-26 10:50:15'),
+(6, 1, '2025-05-06 00:00:00', 'Yoga', 'Low Intensity', 30, 'Evening stretch routine', '2025-05-26 10:50:15'),
+(7, 1, '2025-05-13 00:00:00', 'Volleyball', 'Moderate Intensity', 60, 'Beach volleyball match', '2025-05-26 10:50:15'),
+(8, 1, '2025-05-19 00:00:00', 'Boxing', 'High Intensity', 45, 'Heavy bag training', '2025-05-26 10:50:15'),
+(9, 1, '2025-04-30 00:00:00', 'Dance', 'Moderate Intensity', 60, 'Hip hop class', '2025-05-26 10:50:15'),
+(10, 1, '2025-05-07 00:00:00', 'Football', 'High Intensity', 90, 'Practice match', '2025-05-26 10:50:15'),
+(11, 1, '2025-05-06 00:00:00', 'Walking', 'Low Intensity', 40, 'Evening stroll', '2025-05-26 10:50:15'),
+(12, 1, '2025-05-15 00:00:00', 'Hiking', 'Moderate Intensity', 120, 'Weekend trail hike', '2025-05-26 10:50:15'),
+(13, 1, '2025-04-29 00:00:00', 'Basketball', 'High Intensity', 50, 'Evening scrimmage', '2025-05-26 10:50:15'),
+(14, 1, '2025-05-15 00:00:00', 'Other', 'Moderate Intensity', 35, 'Balance and coordination drills', '2025-05-26 10:50:15'),
+(15, 1, '2025-05-22 00:00:00', 'Football', 'Moderate Intensity', 70, 'Friendly match with coworkers', '2025-05-26 10:50:15'),
+(16, 1, '2025-05-28 16:58:00', 'Basketball', 'Moderate Intensity', 60, 'Shoot around and pickup game', '2025-05-27 04:58:34'),
+(17, 1, '2025-05-28 18:25:00', 'Weight Lifting', 'High Intensity', 20, 'big legs session', '2025-05-27 06:26:14'),
+(19, 1, '2025-05-29 18:47:00', 'Basketball', 'Moderate Intensity', 50, 'dribbling drills', '2025-05-27 08:10:21');
 
 -- --------------------------------------------------------
 
@@ -401,6 +525,46 @@ CREATE TABLE `reply_likes` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `reply_likes`
+--
+
+INSERT INTO `reply_likes` (`id`, `user_id`, `forum_reply_id`, `created_at`, `updated_at`) VALUES
+(34, 3, 54, '2025-05-29 06:06:04', '2025-05-29 06:06:04'),
+(35, 4, 54, '2025-05-29 06:06:04', '2025-05-29 06:06:04'),
+(36, 2, 55, '2025-05-29 06:06:04', '2025-05-29 06:06:04'),
+(37, 5, 55, '2025-05-29 06:06:04', '2025-05-29 06:06:04'),
+(38, 3, 56, '2025-05-29 06:06:04', '2025-05-29 06:06:04'),
+(39, 2, 57, '2025-05-29 06:06:04', '2025-05-29 06:06:04'),
+(40, 4, 58, '2025-05-29 06:06:04', '2025-05-29 06:06:04'),
+(41, 2, 59, '2025-05-29 06:06:04', '2025-05-29 06:06:04'),
+(42, 3, 59, '2025-05-29 06:06:04', '2025-05-29 06:06:04'),
+(43, 3, 60, '2025-05-29 06:06:04', '2025-05-29 06:06:04'),
+(44, 5, 61, '2025-05-29 06:06:04', '2025-05-29 06:06:04'),
+(45, 3, 62, '2025-05-29 06:06:04', '2025-05-29 06:06:04'),
+(46, 1, 63, '2025-05-29 06:06:04', '2025-05-29 06:06:04'),
+(47, 2, 64, '2025-05-29 06:06:04', '2025-05-29 06:06:04'),
+(48, 1, 65, '2025-05-29 06:06:04', '2025-05-29 06:06:04'),
+(49, 3, 65, '2025-05-29 06:06:04', '2025-05-29 06:06:04'),
+(50, 5, 66, '2025-05-29 06:06:04', '2025-05-29 06:06:04'),
+(51, 4, 67, '2025-05-29 06:06:04', '2025-05-29 06:06:04'),
+(52, 2, 68, '2025-05-29 06:06:04', '2025-05-29 06:06:04'),
+(53, 4, 69, '2025-05-29 06:06:04', '2025-05-29 06:06:04'),
+(54, 1, 70, '2025-05-29 06:06:04', '2025-05-29 06:06:04'),
+(55, 3, 70, '2025-05-29 06:06:04', '2025-05-29 06:06:04'),
+(56, 2, 71, '2025-05-29 06:06:04', '2025-05-29 06:06:04'),
+(57, 1, 72, '2025-05-29 06:06:04', '2025-05-29 06:06:04'),
+(58, 4, 72, '2025-05-29 06:06:04', '2025-05-29 06:06:04'),
+(59, 5, 73, '2025-05-29 06:06:04', '2025-05-29 06:06:04'),
+(60, 3, 74, '2025-05-29 06:06:04', '2025-05-29 06:06:04'),
+(61, 1, 75, '2025-05-29 06:06:04', '2025-05-29 06:06:04'),
+(62, 2, 75, '2025-05-29 06:06:04', '2025-05-29 06:06:04'),
+(63, 4, 76, '2025-05-29 06:06:04', '2025-05-29 06:06:04'),
+(64, 2, 77, '2025-05-29 06:06:04', '2025-05-29 06:06:04'),
+(65, 5, 77, '2025-05-29 06:06:04', '2025-05-29 06:06:04'),
+(66, 1, 78, '2025-05-29 06:06:04', '2025-05-29 06:06:04'),
+(67, 3, 78, '2025-05-29 06:06:04', '2025-05-29 06:06:04');
 
 -- --------------------------------------------------------
 
@@ -443,7 +607,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('w0nRbpJcFnbKpNjbTxvEaHYQlfZmfUMV1yyDaYZR', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiaFh5ZW1kaHBMa3VRUXg3bHlPMW9NcUx6M2xnYVdaMnFYeHZZaTJEWSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mjc6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9nb2FscyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjE7fQ==', 1748167626);
+('BTe8fUZkkufXpObyCCVlDozn507PEue0ZwWAXLSO', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoidWdudmdBQjBKODdiUTRtTFNxRnc4ZmRTWWlkUk1VbzRDZ1FNRThiZyI7czozOiJ1cmwiO2E6MTp7czo4OiJpbnRlbmRlZCI7czoyNzoiaHR0cDovL2xvY2FsaG9zdDo4MDAwL2dvYWxzIjt9czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mzc6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9oZWFsdGgtaW5zaWdodHMiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX1zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToxO30=', 1748511886);
 
 -- --------------------------------------------------------
 
@@ -499,7 +663,8 @@ INSERT INTO `sleep_logs` (`SleepLogID`, `UserID`, `SleepDate`, `BedTime`, `WakeT
 (155, 1, '2025-04-21', '22:54:00', '07:35:00', 521, 5, 'Great sleep, felt refreshed.', '2025-05-21 08:47:58'),
 (173, 1, '2025-05-20', '23:11:00', '10:11:00', 660, 1, 'updated', '2025-05-22 04:10:40'),
 (174, 1, '2025-05-21', '19:46:00', '06:07:00', 621, 3, NULL, '2025-05-22 04:40:59'),
-(175, 1, '2025-05-24', '04:30:00', '13:10:00', 520, 4, NULL, '2025-05-25 10:04:23');
+(175, 1, '2025-05-24', '04:30:00', '13:10:00', 520, 4, NULL, '2025-05-25 10:04:23'),
+(176, 1, '2025-05-26', '00:39:00', '09:39:00', 540, 3, NULL, '2025-05-26 09:40:14');
 
 -- --------------------------------------------------------
 
@@ -559,7 +724,7 @@ INSERT INTO `users` (`id`, `first_name`, `last_name`, `email`, `password`, `role
 (2, 'Phil', 'Carter', 'email@example.com', '$2y$12$kjKl1ECUqkrSLuaBUXJbKeyEqD9kDmRXsSVeJYQf//dZKPh0XM0yq', 'Student', '2025-05-01 01:19:49', '2025-05-01 01:19:49'),
 (3, 'Bob', 'Ross', 'yyy@example.com', '$2y$12$cPaQjctNirx2eF4KC.WH7O9BRmWYW9l0ccIFCTpbOk1825Xb1bbPK', 'Student', '2025-05-01 01:29:28', '2025-05-18 10:10:05'),
 (4, 'Mike', 'Perry', 'email@address.com', '$2y$12$vluG8jOUF2t3gLYQjMg7NO1I7Nis236xWlVbeY8r8Bx5WYftlFYeG', 'Student', '2025-05-01 00:49:23', '2025-05-18 10:37:50'),
-(14, 'Alice', 'Smith', 'alice.smith@example.com', '$2y$10$abc123abc123abc123abcuvBo3zZzLl3AhtWc1wEupPg4pK7W52tu', 'Student', '2025-05-18 10:51:54', '2025-05-18 10:51:54'),
+(5, 'Alice', 'Smith', 'alice.smith@example.com', '$2y$10$abc123abc123abc123abcuvBo3zZzLl3AhtWc1wEupPg4pK7W52tu', 'Student', '2025-05-18 10:51:54', '2025-05-18 10:51:54'),
 (15, 'Bob', 'Johnson', 'bob.johnson@example.com', '$2y$10$abc123abc123abc123abcuvBo3zZzLl3AhtWc1wEupPg4pK7W52tu', 'Admin', '2025-05-18 10:51:54', '2025-05-18 10:51:54'),
 (16, 'Carol', 'Williams', 'carol.williams@example.com', '$2y$10$abc123abc123abc123abcuvBo3zZzLl3AhtWc1wEupPg4pK7W52tu', 'Student', '2025-05-18 10:51:54', '2025-05-18 10:51:54'),
 (17, 'David', 'Brown', 'david.brown@example.com', '$2y$10$abc123abc123abc123abcuvBo3zZzLl3AhtWc1wEupPg4pK7W52tu', 'Student', '2025-05-18 10:51:54', '2025-05-18 10:51:54'),
@@ -578,17 +743,7 @@ INSERT INTO `users` (`id`, `first_name`, `last_name`, `email`, `password`, `role
 (30, 'Quinn', 'Lee', 'quinn.lee@example.com', '$2y$10$abc123abc123abc123abcuvBo3zZzLl3AhtWc1wEupPg4pK7W52tu', 'Student', '2025-05-18 10:51:54', '2025-05-18 10:51:54'),
 (31, 'Rosa', 'Perez', 'rosa.perez@example.com', '$2y$10$abc123abc123abc123abcuvBo3zZzLl3AhtWc1wEupPg4pK7W52tu', 'Admin', '2025-05-18 10:51:54', '2025-05-18 10:51:54'),
 (32, 'Sam', 'White', 'sam.white@example.com', '$2y$10$abc123abc123abc123abcuvBo3zZzLl3AhtWc1wEupPg4pK7W52tu', 'Student', '2025-05-18 10:51:54', '2025-05-18 10:51:54'),
-(33, 'Tina', 'Harris', 'tina.harris@example.com', '$2y$10$abc123abc123abc123abcuvBo3zZzLl3AhtWc1wEupPg4pK7W52tu', 'Admin', '2025-05-18 10:51:54', '2025-05-18 10:51:54'),
-(34, 'Alex', 'Smith', 'alex.smith1@example.com', 'hashedpassword123', 'Student', '2025-05-18 11:05:57', '2025-05-18 11:05:57'),
-(35, 'Alex', 'Johnson', 'alex.johnson2@example.com', 'hashedpassword123', 'Student', '2025-05-18 11:05:57', '2025-05-18 11:05:57'),
-(36, 'Alex', 'Brown', 'alex.brown3@example.com', 'hashedpassword123', 'Student', '2025-05-18 11:05:57', '2025-05-18 11:05:57'),
-(37, 'Alex', 'Taylor', 'alex.taylor4@example.com', 'hashedpassword123', 'Student', '2025-05-18 11:05:57', '2025-05-18 11:05:57'),
-(38, 'Alex', 'Wilson', 'alex.wilson5@example.com', 'hashedpassword123', 'Student', '2025-05-18 11:05:57', '2025-05-18 11:05:57'),
-(39, 'Alex', 'Lee', 'alex.lee6@example.com', 'hashedpassword123', 'Student', '2025-05-18 11:05:57', '2025-05-18 11:05:57'),
-(40, 'Alex', 'Clark', 'alex.clark7@example.com', 'hashedpassword123', 'Student', '2025-05-18 11:05:57', '2025-05-18 11:05:57'),
-(41, 'Alex', 'Hall', 'alex.hall8@example.com', 'hashedpassword123', 'Student', '2025-05-18 11:05:57', '2025-05-18 11:05:57'),
-(42, 'Alex', 'Wright', 'alex.wright9@example.com', 'hashedpassword123', 'Student', '2025-05-18 11:05:57', '2025-05-18 11:05:57'),
-(43, 'Alex', 'Scott', 'alex.scott10@example.com', 'hashedpassword123', 'Student', '2025-05-18 11:05:57', '2025-05-18 11:05:57');
+(33, 'Tina', 'Harris', 'tina.harris@example.com', '$2y$10$abc123abc123abc123abcuvBo3zZzLl3AhtWc1wEupPg4pK7W52tu', 'Admin', '2025-05-18 10:51:54', '2025-05-18 10:51:54');
 
 --
 -- Indexes for dumped tables
@@ -761,19 +916,19 @@ ALTER TABLE `forum_posts`
 -- AUTO_INCREMENT for table `forum_replies`
 --
 ALTER TABLE `forum_replies`
-  MODIFY `ReplyID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `ReplyID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=90;
 
 --
 -- AUTO_INCREMENT for table `goals`
 --
 ALTER TABLE `goals`
-  MODIFY `GoalID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `GoalID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `goal_logs`
 --
 ALTER TABLE `goal_logs`
-  MODIFY `GoalLogID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `GoalLogID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `jobs`
@@ -785,13 +940,13 @@ ALTER TABLE `jobs`
 -- AUTO_INCREMENT for table `likes`
 --
 ALTER TABLE `likes`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=98;
 
 --
 -- AUTO_INCREMENT for table `logged_exercises`
 --
 ALTER TABLE `logged_exercises`
-  MODIFY `LoggedExerciseID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `LoggedExerciseID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `migrations`
@@ -803,19 +958,19 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT for table `mood_logs`
 --
 ALTER TABLE `mood_logs`
-  MODIFY `MoodLogID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
+  MODIFY `MoodLogID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
 
 --
 -- AUTO_INCREMENT for table `planned_exercises`
 --
 ALTER TABLE `planned_exercises`
-  MODIFY `PlannedExerciseID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `PlannedExerciseID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `reply_likes`
 --
 ALTER TABLE `reply_likes`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
 
 --
 -- AUTO_INCREMENT for table `resource_categories`
@@ -827,7 +982,7 @@ ALTER TABLE `resource_categories`
 -- AUTO_INCREMENT for table `sleep_logs`
 --
 ALTER TABLE `sleep_logs`
-  MODIFY `SleepLogID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=176;
+  MODIFY `SleepLogID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=177;
 
 --
 -- AUTO_INCREMENT for table `support_resources`
