@@ -198,13 +198,13 @@ class MoodTrackingController extends Controller
         }
 
         // Create a new mood log
-        MoodLog::create([
-            'UserID' => $userId,
-            'MoodRating' => $validatedData['MoodId'],
-            'MoodDate' => $moodDate,
-            'Emotions' => json_encode($validatedData['Emotions'] ?? []),
-            'Reflection' => $validatedData['Reflection'],
-        ]);
+        $moodLog = new MoodLog();
+        $moodLog->UserID = $userId;
+        $moodLog->MoodDate = $moodDate;
+        $moodLog->MoodRating = $validatedData['MoodId'];
+        $moodLog->Emotions = isset($validatedData['Emotions']) ? json_encode($validatedData['Emotions']) : null;
+        $moodLog->Reflection = $validatedData['Reflection'] ?? null;
+        $moodLog->save();
 
         // Redirect to the mood index with a success message
         return redirect()->route('mood.index')->with('success', 'Mood logged successfully!');
