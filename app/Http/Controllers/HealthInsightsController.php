@@ -49,9 +49,10 @@ class HealthInsightsController extends Controller
             ->get(['MoodDate', 'MoodRating']);
 
         $goalsByCategory = auth()->user()->goals()
-            ->selectRaw('GoalCategory, COUNT(*) as count, MAX(created_at) as latest_created_at')
+            ->selectRaw('GoalCategory, COUNT(*) as count, MAX(created_at) as latest_created_at, MAX(GoalTargetDate) as latest_goal_date')
             ->groupBy('GoalCategory')
-            ->orderByDesc(DB::raw('MAX(created_at)')) // Use raw aggregate expression here
+            ->orderByDesc('latest_goal_date')
+            ->orderByDesc('latest_created_at')
             ->get();
 
 
