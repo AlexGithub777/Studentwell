@@ -257,15 +257,15 @@ class SleepLogController extends Controller
         $sleepDuration = $bedTime->diffInMinutes($wakeTime, false);
 
         // Create the sleep log entry
-        SleepLog::create([
-            'UserID' => auth()->id(),
-            'SleepDate' => $adjustedDateOnly,
-            'BedTime' => $validatedData['BedTime'],
-            'WakeTime' => $validatedData['WakeTime'],
-            'SleepDurationMinutes' => $sleepDuration,
-            'SleepQuality' => $validatedData['QualityId'],
-            'Notes' => $validatedData['Notes'] ?? null,
-        ]);
+        $sleepLog = new SleepLog();
+        $sleepLog->UserID = auth()->user()->id;
+        $sleepLog->SleepDate = $adjustedDateOnly;
+        $sleepLog->BedTime = $validatedData['BedTime'];
+        $sleepLog->WakeTime = $validatedData['WakeTime'];
+        $sleepLog->SleepDurationMinutes = $sleepDuration;
+        $sleepLog->SleepQuality = $validatedData['QualityId'];
+        $sleepLog->Notes = $validatedData['Notes'] ?? null;
+        $sleepLog->save();
 
         // Redirect back to the sleep log index with success message
         return redirect()->route('sleep.index')->with('success', 'Sleep log created successfully.');
