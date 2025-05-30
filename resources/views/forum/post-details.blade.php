@@ -56,7 +56,7 @@
                         </div>
                         <div>
                             @auth
-                                @if (auth()->id() === $post->UserID)
+                                @if (auth()->id() == $post->UserID)
                                     <form action="{{ route('forum.delete', $post->ForumPostID) }}" method="POST"
                                         onsubmit="return confirm('Are you sure you want to delete this post?');"
                                         style="display: inline-block;">
@@ -108,7 +108,7 @@
                                 </form>
                                 <!-- Delete Reply Button -->
                                 @auth
-                                    @if (auth()->id() === $reply->UserID)
+                                    @if (auth()->id() == $reply->UserID)
                                         <form action="{{ route('forum.delete.reply', $reply->ReplyID) }}" method="POST"
                                             onsubmit="return confirm('Are you sure you want to delete this reply?');"
                                             style="display: inline-block;">

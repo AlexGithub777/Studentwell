@@ -211,7 +211,7 @@ class GoalSettingController extends Controller
         $goal = Goal::findOrFail($id);
 
         // Check if the authenticated user is the owner of the goal
-        if ($goal->UserID !== auth()->id()) {
+        if ($goal->UserID != auth()->id()) {
             return redirect()->route('goals.index')->with('error', 'Unauthorized access.');
         }
 
@@ -253,7 +253,7 @@ class GoalSettingController extends Controller
         $goal = Goal::findOrFail($id);
 
         // Check if the authenticated user is the owner of the goal
-        if ($goal->UserID !== auth()->id()) {
+        if ($goal->UserID != auth()->id()) {
             return redirect()->route('goals.index')->with('error', 'Unauthorized access.');
         }
 
@@ -289,7 +289,7 @@ class GoalSettingController extends Controller
         $goal = Goal::findOrFail($id);
 
         // Check if the authenticated user is the owner of the goal
-        if ($goal->UserID !== auth()->id()) {
+        if ($goal->UserID != auth()->id()) {
             return redirect()->route('goals.index')->with('error', 'Unauthorized access.');
         }
 
@@ -309,7 +309,7 @@ class GoalSettingController extends Controller
         $goal = Goal::findOrFail($goalId);
 
         // Check ownership early
-        if ($goal->UserID !== auth()->id()) {
+        if ($goal->UserID != auth()->id()) {
             return redirect()->route('goals.index')->with('error', 'Unauthorized access.');
         }
 

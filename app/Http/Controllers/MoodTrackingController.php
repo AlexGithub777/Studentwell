@@ -247,7 +247,7 @@ class MoodTrackingController extends Controller
         $moodLog = MoodLog::findOrFail($id);
 
         // Check if the authenticated user is the owner of the mood log
-        if ($moodLog->UserID !== auth()->user()->id) {
+        if ($moodLog->UserID != auth()->user()->id) {
             return redirect()->route('mood.index')->with('error', 'You do not have permission to edit this mood log.');
         }
 

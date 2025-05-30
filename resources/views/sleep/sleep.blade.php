@@ -192,7 +192,7 @@
                                     <div>
                                         <!-- Edit Button -->
                                         @auth
-                                            @if (auth()->id() === $sleepLog->UserID)
+                                            @if (auth()->id() == $sleepLog->UserID)
                                                 <!-- Add update button -->
                                                 <a href="{{ route('sleep.edit', $sleepLog->SleepLogID) }}"
                                                     class="btn btn-sm"

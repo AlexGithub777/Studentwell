@@ -291,7 +291,7 @@ class SleepLogController extends Controller
         }
 
         // Check if the authenticated user is the owner of the sleep log
-        if ($sleepLog->UserID !== auth()->user()->id) {
+        if ($sleepLog->UserID != auth()->user()->id) {
             return redirect()->route('sleep.index')->with('error', 'You do not have permission to edit this sleep log.');
         }
 
@@ -320,7 +320,7 @@ class SleepLogController extends Controller
         }
 
         // Check if the authenticated user is the owner of the sleep log
-        if ($sleepLog->UserID !== auth()->user()->id) {
+        if ($sleepLog->UserID != auth()->user()->id) {
             return redirect()->route('sleep.index')->with('error', 'You do not have permission to edit this sleep log.');
         }
 

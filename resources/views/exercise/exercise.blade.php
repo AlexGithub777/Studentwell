@@ -350,7 +350,7 @@
                                         class="d-flex flex-column flex-md-row align-items-start align-items-lg-center gap-2 mt-md-3 mt-lg-0 ">
                                         <!-- Edit and log Button -->
                                         @auth
-                                            @if (auth()->id() === $exercisePlan->UserID)
+                                            @if (auth()->id() == $exercisePlan->UserID)
                                                 <!--edit button -->
                                                 <a href="{{ route('exercise.edit', $exercisePlan->PlannedExerciseID) }}"
                                                     class="btn btn-sm {{ $exerciseDate->isPast() ? 'me-1' : '' }}"

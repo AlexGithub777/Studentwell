@@ -314,7 +314,7 @@
                                     <div>
                                         <!-- Edit and log Button -->
                                         @auth
-                                            @if (auth()->id() === $goal->UserID)
+                                            @if (auth()->id() == $goal->UserID)
                                                 <!--edit button -->
                                                 <a href="{{ route('goals.edit', $goal->GoalID) }}"
                                                     class="btn btn-sm me-1"
