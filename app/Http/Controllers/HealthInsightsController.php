@@ -48,13 +48,11 @@ class HealthInsightsController extends Controller
             ->orderBy('MoodDate')
             ->get(['MoodDate', 'MoodRating']);
 
+        //<!-- pie chart of goals by category (exercise, sleep, mood) -->
         $goalsByCategory = auth()->user()->goals()
-            ->selectRaw('GoalCategory, COUNT(*) as count, MAX(created_at) as latest_created_at, MAX(GoalTargetDate) as latest_goal_date')
+            ->selectRaw('GoalCategory, COUNT(*) as count')
             ->groupBy('GoalCategory')
-            ->orderByDesc('latest_goal_date')
-            ->orderByDesc('latest_created_at')
             ->get();
-
 
         // line graph of mood over time (30 days)
         $moodRatings30days = auth()->user()->moodLogs()
