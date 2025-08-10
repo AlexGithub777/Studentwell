@@ -23,14 +23,12 @@ class Goal extends Model
 
     // fillable fields
     protected $fillable = [
-        'GoalID',
         'UserID',
         'GoalTitle',
         'GoalCategory',
         'GoalStartDate',
         'GoalTargetDate',
         'Notes',
-        'created_at',
     ];
 
     // relationships

@@ -17,13 +17,11 @@ class GoalLog extends Model
 
     // fillable fields
     protected $fillable = [
-        'GoalLogID',
         'GoalID',
         'GoalLogDate',
         'GoalStatus',
         'Notes',
         'UserID',
-        'created_at',
     ];
 
     protected $casts = [

@@ -10,6 +10,12 @@ class MoodLog extends Model
 
     protected $primaryKey = 'MoodLogID'; // primary key
 
+    // ensure the primary key is an integer
+    protected $keyType = 'int';
+
+    // ensure the primary key is incrementing
+    public $incrementing = true;
+
     // disable timestamps
     public $timestamps = false;
 
@@ -22,13 +28,11 @@ class MoodLog extends Model
 
     // fillable fields
     protected $fillable = [
-        'MoodLogID',
         'UserID',
         'MoodDate',
         'MoodRating',
         'Emotions',
         'Reflection',
-        'created_at',
     ];
 
     // relationships
@@ -37,5 +41,5 @@ class MoodLog extends Model
         return $this->belongsTo(User::class, 'UserID', 'id');
         //                                                ^ foreign key in mood_logs
         //                                                                   ^ local key in users
-    }   
+    }
 }

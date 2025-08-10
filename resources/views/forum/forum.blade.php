@@ -100,7 +100,7 @@
                                             </a>
                                             <!-- Delete Button -->
                                             @auth
-                                                @if (auth()->id() === $post->UserID)
+                                                @if (auth()->id() == $post->UserID)
                                                     <form action="{{ route('forum.delete', $post->ForumPostID) }}"
                                                         method="POST"
                                                         onsubmit="return confirm('Are you sure you want to delete this post?');"

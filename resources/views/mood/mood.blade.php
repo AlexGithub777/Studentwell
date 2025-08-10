@@ -195,7 +195,7 @@
                                     <div>
                                         <!-- Edit Button -->
                                         @auth
-                                            @if (auth()->id() === $moodLog->UserID)
+                                            @if (auth()->id() == $moodLog->UserID)
                                                 <!-- Add update button -->
                                                 <a href="{{ route('mood.edit', $moodLog->MoodLogID) }}" class="btn btn-sm"
                                                     style="background-color: var(--secondary-colour); color: white; font-weight: bold;">

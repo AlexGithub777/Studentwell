@@ -5,7 +5,7 @@
 <nav id="sidebarMenu" class="sidebar">
     <!-- Sidebar header with logo and close button -->
     <div class="d-flex justify-content-between align-items-center ps-3 pt-4 pb-4 pe-2">
-        <img src="{{ asset('assets/images/studentwell-logo.png') }}" alt="StudentWell Logo" style="height: 30px;"
+        <img src="{{ asset('assets/images/studentwell-logo.png') }}" alt="StudentWell Logo" style="max-height: 30px;"
             class="img-fluid">
         <button class="btn btn-link text-secondary fs-5" onclick="toggleSidebar()">
             <i id="sidebar-close-btn" class="fas fa-times"></i>

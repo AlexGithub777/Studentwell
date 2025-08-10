@@ -123,7 +123,7 @@ class ForumController extends Controller
         $post = ForumPost::findOrFail($id);
 
         // Only allow the author to delete the post
-        if (auth()->id() !== $post->UserID) {
+        if (auth()->id() != $post->UserID) {
             return redirect()->route('forum.index')->with('error', 'You do not have permission to delete this forum post.');
         }
 
@@ -189,7 +189,7 @@ class ForumController extends Controller
         $reply = ForumReply::findOrFail($replyId);
 
         // Only allow the author to delete the reply
-        if (auth()->id() !== $reply->UserID) {
+        if (auth()->id() != $reply->UserID) {
             return redirect()->back()->with('error', 'You do not have permission to delete this reply.');
         }
 

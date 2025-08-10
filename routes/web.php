@@ -11,12 +11,6 @@ use App\Http\Controllers\GoalSettingController;
 use App\Http\Controllers\ExerciseController;
 use App\Http\Controllers\HealthInsightsController;
 use App\Http\Controllers\HomeController;
-use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\App;
-
-if (App::environment('production')) {
-    URL::forceScheme('https');
-}
 
 // Home Routes
 Route::get('/', [HomeController::class, 'index'])->name('home');

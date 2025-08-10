@@ -33,8 +33,8 @@
 
                 {{-- Brand/Logo --}}
                 <div class="login-brand">
-                    <img src="{{ asset('assets/images/studentwell-logo.png') }}" alt="Logo" class="logo"
-                        height="35px">
+                    <img src="{{ asset('assets/images/studentwell-logo.png') }}" alt="Logo" class="logo img-fluid"
+                        style="max-height: 35px;">
                 </div>
 
                 {{-- Login Form --}}
