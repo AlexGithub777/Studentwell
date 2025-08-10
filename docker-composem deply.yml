@@ -1,0 +1,65 @@
+version: "3.9"
+
+networks:
+  edms_app-network:
+    external: true
+
+services:
+  laravel-app:
+    build: .
+    container_name: laravel-app
+    ports:
+      - "8000:80"
+    volumes:
+      - .:/var/www/html
+    working_dir: /var/www/html
+    environment:
+      - APACHE_DOCUMENT_ROOT=/var/www/html/public
+    networks:
+      - edms_app-network
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-studentwell
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: studentwell
+      MYSQL_USER: studentwelladmin
+      MYSQL_PASSWORD: studentwell1234
+      MYSQL_ROOT_HOST: "%"
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci --bind-address=0.0.0.0
+    volumes:
+      - mysql_data:/var/lib/mysql
+      # Optional: uncomment if you have an initial SQL file to import
+      # - ./studentwell.sql:/docker-entrypoint-initdb.d/studentwell.sql
+    networks:
+      - edms_app-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-prootpassword"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: phpmyadmin-studentwell
+    environment:
+      PMA_HOST: mysql-studentwell
+      PMA_USER: studentwelladmin
+      PMA_PASSWORD: studentwell1234
+    ports:
+      - "8081:80"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - edms_app-network
+
+volumes:
+  mysql_data:
